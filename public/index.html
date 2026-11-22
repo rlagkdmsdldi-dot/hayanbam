@@ -203,7 +203,7 @@ h3.t{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.03em;line
 .ways a{display:grid;grid-template-columns:110px 1fr auto;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);transition:padding .2s}
 .ways a:first-child{border-top:1px solid var(--ink)}
 .ways a:hover{padding-left:8px}
-.ways a.talk span{color:#03c75a;font-weight:700}
+.ways a.talk span{font-weight:700;border-bottom:1px solid var(--ink)}
 .ways small{font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600}
 .ways span{font-size:16px;font-weight:500}
 .ways i{font-style:normal;color:var(--gray)}
@@ -279,7 +279,7 @@ footer{background:var(--dk);color:var(--dgray);padding:64px 0 110px;font-size:13
 .mbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);padding-bottom:env(safe-area-inset-bottom)}
 .mbar a{flex:1;text-align:center;color:#fff;padding:17px 0;font-size:14px;font-weight:600;letter-spacing:.04em}
 .mbar a+a{border-left:1px solid #333}
-.mbar a.talk-only{background:#03c75a;color:#fff}
+.mbar a.talk-only{background:var(--ink);color:#fff;letter-spacing:.08em}
 
 /* sound toggle */
 .snd{display:flex;align-items:center;gap:8px;background:none;border:0;font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--gray);padding:0 4px}
@@ -861,7 +861,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <ul class="info">
           <li><b>ADDRESS</b><span>전북 전주시 덕진구 솔내7길 40-9, 101호<small>송천동 · 전주솔빛중학교 인근</small></span></li>
           <li><b>PARKING</b><span>무료<small>공방과 전주솔빛중학교 사이 도로변</small></span></li>
-          <li><b>INQUIRY</b><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" style="color:#03c75a;font-weight:700">네이버 톡톡 문의 ↗</a></li>
+          <li><b>INQUIRY</b><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" style="font-weight:600;border-bottom:1px solid var(--ink)">네이버 톡톡 문의 ↗</a></li>
           <li><b>MAIL</b><a href="mailto:818art@naver.com">818art@naver.com</a></li>
           <li><b>HOURS</b><span>화–토 20:00–24:00 · 일 10:00–12:00<small>월요일 휴무 · 예약제</small></span></li>
         </ul>
