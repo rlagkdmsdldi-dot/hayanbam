@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하얀밤조소공방 · 전주 조소 전문 미술공방</title>
+<meta name="description" content="전주 송천동 조소 전문 미술공방 하얀밤조소공방. 조소반·유화반·원데이 클래스, 화–토 저녁 20:00–24:00 수업, 저녁 출강.">
+<meta name="keywords" content="전주 조소, 전주 공방, 전주 원데이클래스, 전주 유화, 전주 성인미술, 송천동 공방, 하얀밤조소공방">
+<meta property="og:type" content="website">
+<meta property="og:title" content="하얀밤조소공방 · HAYANBAM Sculpture Studio">
+<meta property="og:description" content="전주 송천동 조소 전문 미술공방. 조소반·유화반·원데이 클래스, 저녁 출강.">
+<meta name="theme-color" content="#fafaf8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='900' font-size='34' fill='%23fafaf8' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Pretendard';src:url('fonts/PretendardVariable.woff2') format('woff2-variations');font-weight:45 920;font-display:swap}
+:root{
+  --bg:#fafaf8; --bg2:#f1f1ee; --ink:#111111; --ink2:#3d3d3d; --gray:#8b8b88; --line:#e2e2de;
+  --dk:#0c0c0d; --dk2:#161618; --dline:#2a2a2d; --dgray:#8e8e93;
+  --f:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --serif:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:64px}
+body{font-family:var(--f);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.7;letter-spacing:-.01em;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.w{max-width:1280px;margin:0 auto;padding:0 40px}
+.todo{background:#fff3c4;color:#6b5500;padding:0 4px;font-weight:500}
+.dark .todo{background:#3a3420;color:#f1dc8f}
+.eng{font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+.it{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+
+/* ===== header ===== */
+header{position:fixed;inset:0 0 auto;z-index:50;background:rgba(250,250,248,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;height:64px;gap:40px}
+.logo{display:flex;align-items:baseline;gap:10px;margin-right:auto}
+.logo b{font-weight:800;font-size:17px;letter-spacing:.18em}
+.logo span{font-size:12px;color:var(--gray);letter-spacing:.02em}
+.gnb{display:flex;height:100%}
+.gnb>li{list-style:none;position:relative;height:100%}
+.gnb>li>a{display:flex;align-items:center;height:100%;padding:0 22px;font-size:12px;font-weight:600;letter-spacing:.2em}
+.gnb .sub{position:absolute;top:100%;left:8px;min-width:170px;background:var(--bg);border:1px solid var(--line);padding:10px 0;opacity:0;visibility:hidden;transform:translateY(-4px);transition:.18s}
+.gnb>li:hover .sub{opacity:1;visibility:visible;transform:none}
+.gnb .sub a{display:block;padding:8px 18px;font-size:14px;color:var(--ink2)}
+.gnb .sub a:hover{color:var(--ink);background:var(--bg2)}
+.hd-tel{font-size:13px;font-weight:500;border-left:1px solid var(--line);padding-left:24px;height:24px;display:flex;align-items:center}
+.burger{display:none;background:none;border:0;width:28px;height:20px;position:relative}
+.burger i{position:absolute;left:0;right:0;height:1.5px;background:var(--ink)}
+.burger i:nth-child(1){top:3px}.burger i:nth-child(2){bottom:3px}
+.mnav{display:none}
+
+/* ===== hero ===== */
+.hero{padding:64px 0 0}
+.hero-top{padding:72px 0 40px;border-bottom:1px solid var(--line)}
+.wordmark{font-weight:850;font-size:clamp(56px,14.6vw,214px);line-height:.86;letter-spacing:-.045em}
+.hero-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-top:36px;align-items:end}
+.hero-row p{color:var(--ink2);font-size:15px}
+.hero-row .it{font-size:28px;line-height:1.2;color:var(--ink)}
+.hero-img{display:grid;grid-template-columns:2fr 1fr;gap:0;border-bottom:1px solid var(--line)}
+.ph{background:#d6d6d2;position:relative;overflow:hidden}
+.ph::after{content:attr(data-l);position:absolute;left:16px;bottom:14px;font-size:11px;letter-spacing:.18em;color:rgba(0,0,0,.4)}
+.ph.d{background:#1d1d20}.ph.d::after{color:rgba(255,255,255,.3)}
+.hero-img .ph{aspect-ratio:16/9}
+.hero-img .side{display:flex;flex-direction:column;border-left:1px solid var(--line)}
+.svc{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:26px 28px;border-bottom:1px solid var(--line);transition:background .2s}
+.svc:last-child{border-bottom:0}
+.svc:hover{background:var(--bg2)}
+.svc .n{font-size:12px;color:var(--gray);font-weight:500}
+.svc h3{font-size:20px;font-weight:600;letter-spacing:-.02em;display:flex;justify-content:space-between;align-items:center}
+.svc h3 small{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--gray)}
+
+/* ===== section head ===== */
+section{padding:140px 0 0}
+.sh{display:grid;grid-template-columns:240px 1fr;gap:40px;padding-bottom:56px;border-bottom:1px solid var(--line);margin-bottom:0}
+.sh .num{font-size:13px;font-weight:600;letter-spacing:.2em}
+.sh .num span{color:var(--gray);display:block;font-weight:500;letter-spacing:.02em;margin-top:4px}
+.sh h2{font-size:clamp(40px,5.4vw,76px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.dark{background:var(--dk);color:#f2f2f0}
+.dark .sh,.dark .row{border-color:var(--dline)}
+
+/* sub rows */
+.row{display:grid;grid-template-columns:240px 1fr;gap:40px;padding:64px 0;border-bottom:1px solid var(--line)}
+.row .lab{font-size:13px;font-weight:600;position:sticky;top:96px;align-self:start}
+.row .lab small{display:block;color:var(--gray);font-weight:500;font-size:12px;letter-spacing:.18em;margin-bottom:6px}
+.dark .row .lab small{color:var(--dgray)}
+h3.t{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.03em;line-height:1.35;margin-bottom:22px}
+.txt{color:var(--ink2);font-size:16px;max-width:620px}
+.txt+.txt{margin-top:14px}
+.dark .txt,.eve .txt{color:#b4b4b8}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}
+.about-grid .ph{aspect-ratio:4/5}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);margin-top:40px}
+.kv div{padding:18px 0 0}
+.kv small{font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600}
+.kv p{font-size:16px;font-weight:600;margin-top:2px}
+.def{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:40px;border-top:1px solid var(--ink)}
+.def>div{padding:28px 28px 0 0}
+.def>div+div{padding-left:28px;border-left:1px solid var(--line)}
+.def h4{font-size:22px;font-weight:700;letter-spacing:-.02em;display:flex;gap:10px;align-items:baseline}
+.def h4 em{font-style:normal;font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600}
+.def p{color:var(--ink2);margin-top:8px}
+.hanja{font-size:56px;font-weight:200;letter-spacing:.05em;line-height:1;margin-bottom:18px}
+.teacher{display:grid;grid-template-columns:300px 1fr;gap:56px;align-items:start}
+.teacher .ph{aspect-ratio:3/4}
+.tname{font-size:30px;font-weight:700;letter-spacing:-.03em}
+.trole{font-size:12px;letter-spacing:.2em;color:var(--gray);font-weight:600;margin:4px 0 28px}
+.hist{border-top:1px solid var(--ink)}
+.hist li{list-style:none;display:grid;grid-template-columns:90px 1fr;padding:14px 0;border-bottom:1px solid var(--line);font-size:15px}
+.hist .todo{justify-self:start}
+.tname-en{font-size:14px;font-weight:400;color:var(--gray);letter-spacing:.02em;margin-left:10px}
+.hist .list{display:flex;flex-direction:column;gap:6px}
+.it-row{display:grid;grid-template-columns:76px 1fr;gap:8px;line-height:1.6}
+.it-row em{font-style:normal;color:var(--gray);font-size:13px;font-variant-numeric:tabular-nums;padding-top:1px}
+.it-row i{font-style:normal;color:var(--gray);font-size:13px;margin-left:6px}
+.it-row .exl{border-bottom:1px solid var(--ink)}
+.ph.photo{background:#eee}.ph.photo::after{display:none}
+.ph.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.teacher .ph{position:sticky;top:150px}
+.hist b.wk{font-size:15px;letter-spacing:.02em;color:var(--ink);font-weight:600;padding:0}
+.hist .aw em{font-style:normal;color:var(--gray);font-size:13px;margin-right:14px;font-variant-numeric:tabular-nums}
+.hist li b{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--gray);padding-top:2px}
+
+/* class tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;background:var(--bg);z-index:5}
+.tabs button{background:none;border:0;padding:22px 28px 20px;font-size:15px;font-weight:600;color:var(--gray);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;display:flex;gap:10px;align-items:baseline}
+.tabs button small{font-size:10px;letter-spacing:.2em}
+.tabs button.on{color:var(--ink);border-color:var(--ink)}
+.pane{display:none}.pane.on{display:block}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-left:1px solid var(--line)}
+.card{border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column}
+.card .ph{aspect-ratio:4/3}
+.cb{padding:28px 28px 32px;flex:1;display:flex;flex-direction:column}
+.cb .eng{color:var(--gray)}
+.cb h4{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:6px 0 10px}
+.cb p{color:var(--ink2);flex:1}
+.cb .pr{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:14px;margin-top:22px;font-size:13px;color:var(--gray)}
+.cb .pr b{font-size:18px;color:var(--ink);font-weight:700}
+.curri{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);margin-top:48px}
+.curri div{padding:20px 20px 0 0}
+.curri small{font-size:12px;color:var(--gray);font-weight:500}
+.curri h5{font-size:17px;font-weight:700;margin:2px 0 4px}
+.curri p{font-size:14px;color:var(--ink2)}
+.adm{display:grid;grid-template-columns:1fr 1fr;gap:56px;padding:64px 0}
+.adm-list li{list-style:none;display:flex;justify-content:space-between;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line)}
+.adm-list li:first-child{border-top:1px solid var(--ink)}
+.adm-list b{font-size:19px;font-weight:700}
+.adm-list span{font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600}
+.adm-list p{font-size:14px;color:var(--ink2);margin-top:2px}
+
+/* evening */
+.eve{background:var(--dk);color:#f2f2f0;margin:0 -40px;padding:72px 40px}
+.eve-top{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:end;padding-bottom:56px;border-bottom:1px solid var(--dline)}
+.clock{font-weight:200;font-size:clamp(84px,11vw,150px);line-height:.85;letter-spacing:-.05em}
+.clock .it{font-size:.4em;color:var(--dgray);margin-left:12px;letter-spacing:0}
+.dayline{margin-top:28px;position:relative;height:36px}
+.dayline .b{position:absolute;top:8px;left:0;right:0;height:1px;background:var(--dline)}
+.dayline .on{position:absolute;top:6px;left:83.3%;right:0;height:5px;background:#f2f2f0}
+.dayline span{position:absolute;top:18px;font-size:11px;color:var(--dgray);transform:translateX(-50%)}
+.targets{display:grid;grid-template-columns:repeat(4,1fr)}
+.targets div{padding:32px 28px 32px 0;border-bottom:1px solid var(--dline)}
+.targets div+div{padding-left:28px;border-left:1px solid var(--dline)}
+.targets small{font-size:12px;color:var(--dgray)}
+.targets h5{font-size:18px;font-weight:600;margin:4px 0 6px}
+.targets p{font-size:14px;color:var(--dgray)}
+.spec{display:grid;grid-template-columns:repeat(4,1fr);margin-top:0}
+.spec div{padding:28px 28px 0 0}
+.spec small{font-size:11px;letter-spacing:.2em;font-weight:600;color:var(--dgray)}
+.spec p{font-size:16px;margin-top:4px}
+
+/* fee */
+.fee{display:grid;grid-template-columns:1.3fr 1fr;gap:56px;padding:64px 0}
+.tbl{width:100%;border-collapse:collapse;border-top:1px solid var(--ink)}
+.tbl td{padding:16px 0;border-bottom:1px solid var(--line);font-size:15px}
+.tbl td:last-child{text-align:right;font-weight:700}
+.tbl tr.grp td{padding-top:26px;font-weight:700;font-size:13px;letter-spacing:.06em;text-align:left;color:var(--ink);border-bottom:1px solid var(--ink)}
+.tbl td small{color:var(--gray);margin-left:8px}
+.note{font-size:13px;color:var(--gray);margin-top:14px}
+.hours li{list-style:none;display:grid;grid-template-columns:90px 1fr;padding:16px 0;border-bottom:1px solid var(--line)}
+.hours li:first-child{border-top:1px solid var(--ink)}
+.hours b{font-size:12px;letter-spacing:.14em;color:var(--gray);font-weight:600;padding-top:2px}
+
+/* project */
+.proj-items{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--dline)}
+.pi{border-right:1px solid var(--dline);border-bottom:1px solid var(--dline)}
+.pi .ph{aspect-ratio:1}
+.pi div.c{padding:22px 22px 26px}
+.pi small{font-size:11px;letter-spacing:.2em;color:var(--dgray);font-weight:600}
+.pi h5{font-size:18px;font-weight:600;margin:4px 0 6px}
+.pi p{font-size:14px;color:var(--dgray)}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid #f2f2f0}
+.flow div{padding:22px 16px 0 0}
+.flow small{font-size:12px;color:var(--dgray)}
+.flow h5{font-size:16px;font-weight:600;margin:4px 0}
+.flow p{font-size:13px;color:var(--dgray)}
+
+/* contact */
+.ct{display:grid;grid-template-columns:1fr 1.5fr;gap:72px;padding:64px 0}
+.ways a{display:grid;grid-template-columns:110px 1fr auto;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);transition:padding .2s}
+.ways a:first-child{border-top:1px solid var(--ink)}
+.ways a:hover{padding-left:8px}
+.ways a.talk span{color:#03c75a;font-weight:700}
+.ways small{font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600}
+.ways span{font-size:16px;font-weight:500}
+.ways i{font-style:normal;color:var(--gray)}
+.ftabs{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--ink);margin-bottom:32px}
+.ftabs label{cursor:pointer}
+.ftabs label+label{border-left:1px solid var(--ink)}
+.ftabs input{display:none}
+.ftabs span{display:block;text-align:center;padding:16px 6px;font-size:15px;font-weight:600;transition:.15s}
+.ftabs input:checked+span{background:var(--ink);color:#fff}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+.fd{margin-bottom:22px}
+.fsec{grid-column:1/-1;font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--gray);padding:6px 0 14px;border-bottom:1px solid var(--ink);margin-bottom:22px}
+.fsec~.fsec{margin-top:12px}
+.fd.full{grid-column:1/-1}
+.fd label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink2);margin-bottom:6px}
+.fd input,.fd select,.fd textarea{width:100%;border:0;border-bottom:1px solid #c9c9c5;background:transparent;padding:10px 0;font:inherit;font-size:16px;color:var(--ink);outline:none;border-radius:0;-webkit-appearance:none;appearance:none}
+.fd select{background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6' fill='%23111'/></svg>") no-repeat right 4px center}
+.fd input:focus,.fd select:focus,.fd textarea:focus{border-color:var(--ink)}
+.fd textarea{min-height:96px;resize:vertical}
+.cond{display:none}.cond.on{display:contents}
+
+/* calendar */
+.picker{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;border:1px solid var(--line);padding:22px;background:#fff}
+.cal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cal-h b{font-size:15px;font-weight:700}
+.cal-h button{background:none;border:1px solid var(--line);width:30px;height:30px;font-size:14px}
+.cal-h button:hover{border-color:var(--ink)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.cal .dw{font-size:11px;color:var(--gray);font-weight:600;padding:4px 0 8px}
+.cal button{background:none;border:0;-webkit-text-fill-color:currentColor;height:40px;font-size:14px;color:var(--ink);transition:.12s}
+.cal button:hover:not(:disabled){background:var(--bg2)}
+.cal button:disabled{color:#cfcfcb;cursor:default}
+.cal button.sun{color:#b5482f}.cal button.sun:disabled{color:#e6c2b8}
+.cal button.today{box-shadow:inset 0 0 0 1px var(--line)}
+.cal button.sel,.cal button.sel:hover:not(:disabled){background:var(--ink);color:#fff;-webkit-text-fill-color:#fff}
+.slots h6{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink2);margin-bottom:10px}
+.slot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.slot-grid button{background:#fff;color:var(--ink);-webkit-text-fill-color:var(--ink);border:1px solid #c9c9c5;padding:9px 0;font-size:13px;font-weight:500}
+.slot-grid button:hover{border-color:var(--ink)}
+.slot-grid button.sel{background:var(--ink);color:#fff;-webkit-text-fill-color:#fff;border-color:var(--ink)}
+.picked{margin-top:14px;font-size:14px;font-weight:600;min-height:22px}
+.picked span{color:var(--gray);font-weight:400}
+.agree{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink2);margin:6px 0 22px}
+.submit{width:100%;background:var(--ink);color:#fff;border:0;padding:18px;font-size:15px;font-weight:600;letter-spacing:.04em}
+.submit:hover{background:#2b2b2b}
+.warn{color:#b5482f;font-size:13px;margin-bottom:10px;min-height:0}
+.res{display:none;margin-top:24px;border:1px solid var(--ink);padding:24px;background:#fff}
+.res.on{display:block}
+.res pre{white-space:pre-wrap;font-family:var(--f);font-size:14px;background:var(--bg2);padding:16px;margin:12px 0 16px;line-height:1.7}
+.res .bt{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.res .bt a,.res .bt button{display:block;text-align:center;border:1px solid var(--ink);padding:13px 6px;font-size:14px;font-weight:600;background:#fff}
+.res .bt a.p{background:var(--ink);color:#fff}
+.res small{display:block;font-size:12px;color:var(--gray);margin-top:12px}
+
+/* location */
+.loc{display:grid;grid-template-columns:1.4fr 1fr;gap:56px;padding:64px 0 120px}
+.map{background:#e4e4e0;min-height:380px;position:relative;display:flex;align-items:flex-end;padding:20px}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map a{position:relative;background:var(--ink);color:#fff;padding:12px 20px;font-size:13px;font-weight:600;letter-spacing:.04em}
+.info li{list-style:none;display:grid;grid-template-columns:90px 1fr;padding:15px 0;border-bottom:1px solid var(--line);font-size:15px}
+.info li:first-child{border-top:1px solid var(--ink)}
+.info b{font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600;padding-top:3px}
+.info small{display:block;color:var(--gray);font-size:13px}
+
+footer{background:var(--dk);color:var(--dgray);padding:64px 0 110px;font-size:13px}
+.ft{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px}
+.ft .logo b{color:#f2f2f0}
+.ft h6{font-size:11px;letter-spacing:.2em;color:#f2f2f0;font-weight:600;margin-bottom:12px}
+.ft a{display:block;line-height:2}
+.ft a:hover{color:#f2f2f0}
+.copy{border-top:1px solid var(--dline);margin-top:48px;padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+.mbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);padding-bottom:env(safe-area-inset-bottom)}
+.mbar a{flex:1;text-align:center;color:#fff;padding:17px 0;font-size:14px;font-weight:600;letter-spacing:.04em}
+.mbar a+a{border-left:1px solid #333}
+.mbar a.talk-only{background:#03c75a;color:#fff}
+
+/* sound toggle */
+.snd{display:flex;align-items:center;gap:8px;background:none;border:0;font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--gray);padding:0 4px}
+.snd .bars{display:flex;align-items:flex-end;gap:2px;height:12px}
+.snd .bars i{width:2px;height:3px;background:currentColor;transition:height .3s}
+.snd.on{color:var(--ink)}
+.snd.on .bars i{animation:eq 1.2s ease-in-out infinite}
+.snd.on .bars i:nth-child(2){animation-delay:.2s}.snd.on .bars i:nth-child(3){animation-delay:.45s}
+@keyframes eq{0%,100%{height:3px}50%{height:12px}}
+@media(max-width:1000px){.snd .sl{display:none}.snd{margin-right:14px}}
+
+/* timetable & guide */
+.tt-link{display:inline-block;margin-top:32px;font-weight:600;border-bottom:1px solid var(--ink);padding-bottom:2px}
+.tt-wrap{display:grid;grid-template-columns:1fr 1.6fr;gap:56px;align-items:start}
+.tt{width:100%;border-collapse:collapse;table-layout:fixed;border-top:1px solid var(--ink)}
+.tt th,.tt td{text-align:center;padding:16px 4px;border-bottom:1px solid var(--line);font-size:14px}
+.tt thead th{font-size:13px;color:var(--gray);font-weight:600}
+.tt tbody th{font-weight:700;font-size:15px;line-height:1.3;width:84px}
+.tt tbody th small{font-weight:400;color:var(--gray);font-size:12px}
+.tt td.on{background:var(--ink);color:#fff;font-weight:600;border-bottom:1px solid #333;border-left:2px solid var(--bg)}
+.tt td.off{color:var(--gray);background:var(--bg2);font-size:13px}
+.guide li{grid-template-columns:96px 1fr}
+.guide span{color:var(--ink2)}
+#nmap{position:absolute;inset:0;display:none}#nmap.on{display:block}
+@media(max-width:1000px){.tt-wrap{grid-template-columns:1fr;gap:28px}.tt tbody th{width:60px}.tt th,.tt td{padding:12px 2px;font-size:12px}}
+
+/* qna */
+.qna-wrap{display:grid;grid-template-columns:1fr 1.6fr;gap:56px;align-items:start}
+.qna{border-top:1px solid var(--ink)}
+.qna details{border-bottom:1px solid var(--line)}
+.qna summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:32px 1fr 20px;align-items:center;padding:22px 0;font-size:17px;font-weight:600;letter-spacing:-.02em}
+.qna summary::-webkit-details-marker{display:none}
+.qna .q{font-size:13px;color:var(--gray);font-weight:600}
+.qna summary i{width:12px;height:12px;position:relative;justify-self:end}
+.qna summary i::before,.qna summary i::after{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;background:var(--ink);transition:transform .2s}
+.qna summary i::after{transform:rotate(90deg)}
+.qna details[open] summary i::after{transform:rotate(0)}
+.qna details p{padding:0 0 24px 32px;color:var(--ink2);font-size:15px;line-height:1.85;text-wrap:pretty}
+@media(max-width:1000px){.qna-wrap{grid-template-columns:1fr;gap:28px}.qna summary{font-size:15px}}
+
+/* gallery (images only) */
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding-top:40px}
+.gal .ph{aspect-ratio:1}
+.gal .ph::after{display:none}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:1000px){.gal{grid-template-columns:repeat(3,1fr);gap:4px;padding-top:20px;margin:0 -22px}}
+
+/* oil */
+.oil{margin-top:72px;padding-top:64px;border-top:1px solid var(--line)}
+@media(max-width:1000px){.oil{margin-top:44px;padding-top:40px}}
+
+/* privacy */
+.policy{max-width:720px;padding:24px 0 0;border-top:1px solid var(--ink)}
+.policy h4{font-size:16px;font-weight:700;margin:32px 0 8px}
+.policy p{color:var(--ink2);font-size:15px;line-height:1.85}
+.policy .pdate{margin-top:40px;color:var(--gray);font-size:13px}
+
+/* archive */
+.arc-intro{padding:48px 0 28px;font-size:16px;color:var(--ink2)}
+.arc{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:260px;grid-auto-flow:dense;gap:16px}
+.arc figure{display:flex;flex-direction:column;min-height:0}
+.arc figure .ph{flex:1}
+.arc figure.tall{grid-row:span 2}
+.arc figure.wide{grid-column:span 2}
+.arc figcaption{display:flex;justify-content:space-between;font-size:14px;font-weight:600;padding:10px 0 0}
+.arc figcaption span{font-weight:400;color:var(--gray);font-size:13px}
+.arc-more{display:inline-block;margin-top:48px;border-bottom:1px solid var(--ink);font-weight:600;padding-bottom:2px}
+@media(max-width:700px){.arc{grid-template-columns:1fr 1fr;grid-auto-rows:180px;gap:10px}}
+
+/* pages & sub tabs */
+.view{display:none;min-height:100vh}.view.on{display:block}
+.view.page{padding-top:64px}
+.view.page>.w:first-child .sh,.view.page .sh{padding-top:96px}
+.sp{display:none}.sp.on{display:block}
+.ct.sp.on,.loc.sp.on{display:grid}
+.sp.row{grid-template-columns:1fr;border-bottom:0}
+.sp .lab{display:none}
+.stabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;background:var(--bg);z-index:5}
+.dark .stabs{background:var(--dk);border-color:var(--dline)}
+.stabs a{padding:22px 28px 20px;font-size:15px;font-weight:600;color:var(--gray);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;display:flex;gap:10px;align-items:baseline}
+.stabs a small{font-size:10px;letter-spacing:.2em}
+.stabs a.on{color:var(--ink);border-color:var(--ink)}
+.dark .stabs a.on{color:#f2f2f0;border-color:#f2f2f0}
+.view.page .sh{border-bottom:0;padding-bottom:40px}
+.gnb>li>a.on{box-shadow:inset 0 -2px 0 var(--ink)}
+/* home overview */
+.ov{border-top:1px solid var(--ink);margin-top:120px}
+.ov a{display:grid;grid-template-columns:80px 1fr 1.2fr 40px;align-items:center;gap:24px;padding:34px 0;border-bottom:1px solid var(--line);transition:padding .25s,background .25s}
+.ov a:hover{padding-left:16px;background:var(--bg2)}
+.ov .n{font-size:13px;color:var(--gray);font-weight:500}
+.ov h3{font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.ov p{color:var(--ink2);font-size:15px}
+.ov i{font-style:normal;font-size:20px;text-align:right}
+.home-cta{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding:72px 0 120px}
+.home-cta p{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.5}
+.home-cta a{background:var(--ink);color:#fff;padding:17px 32px;font-weight:600;font-size:14px}
+/* line breaks */
+.txt,.cb p,.def p,.hero-row p{text-wrap:pretty}
+h3.t,.sh h2,.home-cta p{text-wrap:balance}
+.txt{max-width:560px;line-height:1.85}
+
+@media(max-width:1000px){
+  br.pc{display:none}
+  .ov a{grid-template-columns:44px 1fr 28px}
+  .ov p{grid-column:2/3}
+  .stabs a{padding:18px 16px 16px;font-size:14px}
+  .stabs a small{display:none}
+  .w{padding:0 22px}
+  .gnb,.hd-tel{display:none}
+  .burger{display:block}
+  .mnav.open{display:block;position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--bg);padding:20px 22px;overflow:auto;z-index:49}
+  .mnav h6{font-size:12px;letter-spacing:.2em;font-weight:700;margin:22px 0 8px}
+  .mnav a{display:block;font-size:20px;font-weight:600;padding:6px 0}
+  section{padding-top:96px}
+  .hero-row,.hero-img,.sh,.row,.about-grid,.teacher,.adm,.eve-top,.fee,.ct,.loc,.picker,.ft{grid-template-columns:1fr;gap:28px}
+  .hero-img .side{border-left:0}
+  .row .lab{position:static}
+  .cards{grid-template-columns:1fr 1fr}
+  .curri,.targets,.spec,.proj-items{grid-template-columns:1fr 1fr}
+  .targets div+div{padding-left:0;border-left:0}
+  .targets div:nth-child(even){padding-left:20px;border-left:1px solid var(--dline)}
+  .flow{grid-template-columns:repeat(3,1fr);row-gap:24px}
+  .eve{margin:0 -22px;padding:56px 22px}
+  .mbar{display:flex}
+  .teacher .ph{max-width:280px}
+}
+@media(max-width:600px){
+  .cards,.def,.kv{grid-template-columns:1fr}
+  .def>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line);margin-top:24px}
+  .fg{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .ftabs span{font-size:13px;padding:14px 2px}
+  .res .bt{grid-template-columns:1fr}
+  .tabs button{padding:18px 16px 16px;font-size:14px}
+  .tabs button small{display:none}
+}
+
+/* ===== mobile refinements ===== */
+@media(max-width:1000px){
+  .hero-top{padding-top:40px;padding-bottom:28px}
+  .hero-row{margin-top:24px;gap:14px}
+  .hero-row .it{font-size:24px}
+  .hero-img .ph{aspect-ratio:4/3}
+  .svc{padding:20px 22px}
+  .svc h3{font-size:18px}
+  .ov{margin-top:56px}
+  .ov a{padding:24px 0}
+  .ov h3{font-size:30px}
+  .home-cta{padding:48px 0 80px}
+  .home-cta p{font-size:19px}
+  .view.page .sh{padding-top:44px;padding-bottom:20px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+  .sh h2{font-size:44px;order:1}
+  .sh .num{order:2;text-align:right;font-size:12px}
+  .row{padding:36px 0}
+  .sp.row{padding-top:32px}
+  h3.t{font-size:24px;margin-bottom:16px}
+  .txt{font-size:15px}
+  .about-grid .ph{aspect-ratio:4/3}
+  .kv{margin-top:28px}
+  .stabs{margin:0 -22px;padding:0 12px}
+  .stabs a{padding:16px 10px 14px;font-size:14px}
+  /* teacher */
+  .teacher .ph{position:static;max-width:220px;aspect-ratio:3/4}
+  .tname{font-size:26px}
+  .tname-en{display:block;margin:4px 0 0}
+  .hist li{grid-template-columns:1fr;gap:8px;padding:18px 0}
+  .it-row{grid-template-columns:64px 1fr}
+  /* class */
+  .card .ph{aspect-ratio:16/9}
+  .cb{padding:22px 20px 24px}
+  .tt-link{font-size:14px;line-height:1.6}
+  .tt thead th{font-size:12px}
+  .fee{padding:40px 0;gap:48px}
+  .eve{padding:44px 22px}
+  .clock{font-size:76px}
+  .spec div{padding:20px 12px 0 0}
+  /* archive */
+  .arc-intro{padding:28px 0 18px;font-size:15px}
+  /* contact */
+  .ct{padding:36px 0}
+  .ways a{grid-template-columns:96px 1fr auto;padding:16px 0}
+  .ways span{font-size:15px}
+  .ftabs span{font-size:14px;padding:14px 4px}
+  .picker{padding:16px}
+  .loc{padding:36px 0 100px}
+  .map{min-height:260px}
+  .info li{grid-template-columns:80px 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="w hd">
+    <a href="#home" class="logo"><b>HAYANBAM</b><span>하얀밤조소공방</span></a>
+    <ul class="gnb">
+      <li><a href="#about" data-v="about">ABOUT</a>
+        <div class="sub"><a href="#about-studio">공방소개</a><a href="#about-sculpture">조소·유화</a><a href="#about-teacher">강사소개</a></div></li>
+      <li><a href="#class" data-v="class">CLASS</a>
+        <div class="sub"><a href="#class-hobby">수업 종류</a><a href="#class-time">시간표</a><a href="#class-guide">수강 안내</a><a href="#class-qna">Q&amp;A</a><a href="#class-eve">야간 출강</a></div></li>
+      <li><a href="#archive" data-v="archive">ARCHIVE</a>
+        <div class="sub"><a href="#archive-works">조소반</a><a href="#archive-paint">유화반</a><a href="#archive-visit">출강</a></div></li>
+      <li><a href="#contact" data-v="contact">CONTACT</a>
+        <div class="sub"><a href="#contact-form">문의하기</a><a href="#contact-map">오시는 길</a></div></li>
+    </ul>
+    <button class="snd" id="snd" type="button" aria-pressed="false" aria-label="배경음 켜기"><span class="bars"><i></i><i></i><i></i></span><span class="sl">SOUND OFF</span></button>
+    <a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" class="hd-tel">네이버 톡톡 문의</a>
+    <button class="burger" id="burger" aria-label="메뉴"><i></i><i></i></button>
+  </div>
+</header>
+<nav class="mnav" id="mnav">
+  <h6>ABOUT</h6><a href="#about-studio">공방소개</a><a href="#about-sculpture">조소·유화</a><a href="#about-teacher">강사소개</a>
+  <h6>CLASS</h6><a href="#class-hobby">수업 종류</a><a href="#class-time">시간표</a><a href="#class-guide">수강 안내</a><a href="#class-qna">Q&amp;A</a><a href="#class-eve">야간 출강</a>
+  <h6>ARCHIVE</h6><a href="#archive-works">조소반</a><a href="#archive-paint">유화반</a><a href="#archive-visit">출강</a>
+  <h6>CONTACT</h6><a href="#contact-form">문의하기</a><a href="#contact-map">오시는 길</a>
+</nav>
+
+<!-- ================= HERO ================= -->
+<main class="view" data-v="home">
+<div class="hero">
+  <div class="w hero-top">
+    <h1 class="wordmark">HAYANBAM</h1>
+    <div class="hero-row">
+      <p class="it">Sculpture &amp; Art Studio,<br>Jeonju</p>
+      <p>전주 송천동 조소 전문 미술공방<br>조소 · 유화 수업</p>
+      <p>화–토 20:00–24:00<br>일 10:00–12:00 · 월 휴무</p>
+    </div>
+  </div>
+  <div class="w" style="padding:0">
+    <div class="hero-img">
+      <div class="ph" data-l="MAIN VISUAL — 작업실 / 작품 사진"></div>
+      <div class="side">
+        <a href="#class-hobby" class="svc"><span class="n">01</span><h3>조소 · 유화 수업<small>CLASS</small></h3></a>
+        <a href="#class-eve" class="svc"><span class="n">02</span><h3>야간 출강 20:00—<small>VISIT</small></h3></a>
+        <a href="#archive" class="svc"><span class="n">03</span><h3>작업 기록<small>ARCHIVE</small></h3></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w">
+  <nav class="ov">
+    <a href="#about"><span class="n">01</span><h3>About</h3><p>공방소개 · 조소·유화 · 강사소개</p><i>→</i></a>
+    <a href="#class"><span class="n">02</span><h3>Class</h3><p>수업 종류 · 시간표 · 수강 안내 · 야간 출강</p><i>→</i></a>
+    <a href="#archive"><span class="n">03</span><h3>Archive</h3><p>입체 작품 · 평면 작품 · 출강 현장</p><i>→</i></a>
+    <a href="#contact"><span class="n">04</span><h3>Contact</h3><p>수업 · 출강 · 제작 의뢰 문의, 오시는 길</p><i>→</i></a>
+  </nav>
+  <div class="home-cta"><p>수업, 출강, 제작 의뢰 문의는 <br class="pc">네이버 톡톡으로 받습니다.</p><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의 ↗</a></div>
+</div>
+</main>
+
+<!-- ================= 01 ABOUT ================= -->
+<main class="view page" data-v="about">
+  <div class="w">
+    <div class="sh"><p class="num">01<span>공방소개</span></p><h2>About</h2></div>
+    <nav class="stabs"><a href="#about-studio">공방소개 <small>STUDIO</small></a><a href="#about-sculpture">조소·유화 <small>SCULPTURE &amp; PAINTING</small></a><a href="#about-teacher">강사소개 <small>INSTRUCTOR</small></a></nav>
+
+    <div class="row sp" data-sp="about-studio">
+      <p class="lab"><small>01-1</small>공방소개</p>
+      <div class="about-grid">
+        <div>
+          <h3 class="t">조소 전문 미술공방,<br>하얀밤조소공방</h3>
+          <p class="txt">전주 하얀밤조소공방은 조소를 중심으로 <br class="pc">유화까지 배울 수 있는 미술공방입니다.</p>
+          <p class="txt">조소는 기초 조형에서 시작해 <br class="pc">피규어 제작, 두상 조소, 인체 구조를 활용한 조형까지 <br class="pc">단계적으로 익힐 수 있도록 구성했습니다.</p>
+          <p class="txt">모든 수업은 소수 정원제로 진행하며, <br class="pc">수강생의 수준에 맞춰 단계별로 운영합니다.</p>
+          <div class="kv">
+            <div><small>METHOD</small><p>소수 정원제</p></div>
+            <div><small>CLASS</small><p>조소 · 유화</p></div>
+            <div><small>TIME</small><p>화–토 저녁 · 일 오전</p></div>
+          </div>
+        </div>
+        <div class="ph" data-l="STUDIO — 공방 내부"></div>
+      </div>
+    </div>
+
+    <div class="row sp" data-sp="about-sculpture">
+      <p class="lab"><small>01-2</small>조소·유화</p>
+      <div>
+        <p class="hanja">彫塑</p>
+        <h3 class="t">조소: 깎아내는 조각, 붙여 쌓는 소조</h3>
+        <p class="txt">조소는 재료를 깎거나 붙여 입체 형태를 만드는 미술입니다. <br class="pc">평면에 그리는 회화와 달리 <br class="pc">앞·옆·뒤 모든 방향에서 형태를 완성합니다.</p>
+        <div class="def">
+          <div><h4>조각 <em>CARVING</em></h4><p>덩어리 재료를 깎고 다듬어 형태를 찾는 방식</p></div>
+          <div><h4>소조 <em>MODELING</em></h4><p>점토를 붙여 쌓아 올리며 형태를 만드는 방식<br>공방 수업의 중심</p></div>
+        </div>
+
+        <div class="oil">
+          <p class="hanja">油畫</p>
+          <h3 class="t">유화: 겹겹이 쌓아 올리는 색</h3>
+          <p class="txt">유화는 기름에 갠 물감으로 캔버스 위에 그리는 회화입니다. <br class="pc">천천히 마르는 물감을 여러 번 덧칠하며 <br class="pc">색과 질감을 쌓아 화면을 완성합니다.</p>
+          <div class="def">
+            <div><h4>레이어링 <em>LAYERING</em></h4><p>물감을 얇게 여러 겹 올려 색의 깊이를 만드는 방식</p></div>
+            <div><h4>임파스토 <em>IMPASTO</em></h4><p>물감을 두껍게 올려 붓 자국과 질감을 살리는 방식</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row sp" data-sp="about-teacher">
+      <p class="lab"><small>01-3</small>강사소개</p>
+      <div class="teacher">
+        <div class="ph photo"><img src="images/profile.jpg" alt="황아현 강사 프로필" loading="lazy"></div>
+        <div>
+          <p class="tname">황아현 <span class="tname-en">黃雅賢 · A Hyeon Hwang</span></p>
+          <p class="trole">하얀밤조소공방 대표 · 강사</p>
+          <ul class="hist">
+            <li><b>학력</b><span class="list"><span class="it-row"><em>2019.02</em><span>전북대학교 예술대학 미술학과 조소전공 졸업</span></span></span></li>
+            <li><b>전시</b><span class="list"><span class="it-row"><em>2021.01</em><span><a href="https://www.volkswagen.co.kr/ko/promotion_news/news/2021/2021-01-06.html" target="_blank" rel="noopener" class="exl">폭스바겐 콜라보레이션 전시</a> <i>‘지지지지지지지지금’, 폭스바겐 전주 전시장</i></span></span><span class="it-row"><em>2020.07</em><span>‘Damage Recipe’ 단체전 <i>Cement, 전주</i></span></span><span class="it-row"><em>2018.12</em><span>‘새로운 여정’ 단체전 <i>팔복예술공장, 전주</i></span></span><span class="it-row"><em>2017.12</em><span>‘내려놓다’ 단체전 <i>동문길 60, 전주</i></span></span><span class="it-row"><em>2017.09</em><span>‘첫 번째’ 단체전 <i>동문길 60, 전주</i></span></span><span class="it-row"><em>2017.07</em><span>NonColor X 내려놓다 Collaboration <i>NonColor, 전주</i></span></span><span class="it-row"><em>2017.05</em><span>‘욕망’ 단체전 <i>동문길 60, 전주</i></span></span><span class="it-row"><em>2017.05</em><span>DANYA International Art Fair 참여</span></span><span class="it-row"><em>2016.11</em><span>‘나와 나’ 단체전 <i>Third Well, 전주</i></span></span></span></li>
+            <li><b>수상</b><span class="list"><span class="it-row"><em>2018.05</em><span>제50회 전라북도 미술대전 특선</span></span><span class="it-row"><em>2017.05</em><span>제9회 한국구상대전 입체부문 우수상</span></span><span class="it-row"><em>2016.07</em><span>제48회 전라북도 미술대전 특선</span></span></span></li>
+            <li><b>소장</b><span class="list"><span class="it-row"><em></em><span><b class='wk'>〈METHUSELAH〉</b> 대형 작품, 금구 신세계병원 소장</span></span></span></li>
+            <li><b>활동</b><span class="list"><span class="it-row"><em>2020.08~</em><span>전주시 문화정책과 ‘우리동네 예술작품 만들기’ 사업</span></span><span class="it-row"><em><span class="todo">2020.03</span>~</em><span>‘요즘것들 탐구생활’ 지역 내 예술인 네트워크 사업</span></span><span class="it-row"><em>2019.03</em><span>내려놓다 참여형 설치미술 퍼포먼스 <i>전북대학교 구 정문</i></span></span><span class="it-row"><em>2017–2019</em><span>거리예술단체 ‘내려놓다’ 활동</span></span></span></li>
+            <li><b>분야</b><span class="list"><span class="it-row"><em></em><span>조소 · 유화</span></span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= 02 CLASS ================= -->
+<main class="view page" data-v="class" style="padding-bottom:120px">
+  <div class="w">
+    <div class="sh"><p class="num">02<span>수업안내</span></p><h2>Class</h2></div>
+  </div>
+  <div class="w">
+    <nav class="stabs"><a href="#class-hobby">수업 종류 <small>CLASSES</small></a><a href="#class-time">시간표 <small>TIMETABLE</small></a><a href="#class-guide">수강 안내 <small>GUIDE</small></a><a href="#class-qna">Q&amp;A <small>FAQ</small></a><a href="#class-eve">야간 출강 <small>EVENING VISIT</small></a></nav>
+
+    <!-- hobby -->
+    <div class="sp" data-sp="class-hobby" style="padding-top:56px">
+      <div class="cards">
+        <div class="card"><div class="ph" data-l="SCULPTURE"></div><div class="cb"><span class="eng">Sculpture</span><h4>조소반</h4><p>기초 조형부터 두상·인체까지<br>개인 진도에 맞춘 4주 단위 과정</p><div class="pr"><span>주 1회 · 4주</span><b>160,000원~</b></div></div></div>
+        <div class="card"><div class="ph" data-l="OIL PAINTING"></div><div class="cb"><span class="eng">Oil Painting</span><h4>유화반</h4><p>캔버스와 유화 물감으로 진행하는<br>4주 단위 회화 과정</p><div class="pr"><span>주 1회 · 4주</span><b>200,000원~</b></div></div></div>
+        <div class="card"><div class="ph" data-l="ONE-DAY"></div><div class="cb"><span class="eng">One-day</span><h4>원데이 클래스</h4><p>2시간 동안 소형 작품 1점 완성<br>조소를 처음 접하는 분을 위한 체험 과정</p><div class="pr"><span>2시간</span><b>50,000원</b></div></div></div>
+        
+      </div>
+      <a href="#class-time" class="tt-link">수업 시간 · 화–토 20:00–24:00 / 일 10:00–12:00 / 월 휴무 →</a>
+    </div>
+
+    <!-- timetable -->
+    <div class="sp" data-sp="class-time" style="padding-top:56px">
+      <div class="tt-wrap">
+        <div>
+          <span class="eng" style="color:var(--gray)">Timetable</span>
+          <h3 class="t" style="margin-top:8px">수업 시간표</h3>
+          <p class="txt">화요일부터 토요일까지는 저녁, <br class="pc">일요일은 오전에 수업합니다. <br class="pc">모든 수업은 예약제로 운영합니다.</p>
+        </div>
+        <table class="tt">
+          <thead><tr><th></th><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr></thead>
+          <tbody>
+            <tr><th>10:00<br><small>–12:00</small></th><td class="on">수업</td><td class="off" rowspan="3">휴무</td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><th>20:00<br><small>–22:00</small></th><td></td><td class="on">수업</td><td class="on">수업</td><td class="on">수업</td><td class="on">수업</td><td class="on">수업</td></tr>
+            <tr><th>22:00<br><small>–24:00</small></th><td></td><td class="on">수업</td><td class="on">수업</td><td class="on">수업</td><td class="on">수업</td><td class="on">수업</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- qna -->
+    <div class="sp" data-sp="class-qna" style="padding-top:56px">
+      <div class="qna-wrap">
+        <div>
+          <span class="eng" style="color:var(--gray)">Q&amp;A</span>
+          <h3 class="t" style="margin-top:8px">자주 묻는 질문</h3>
+          <p class="txt">그 밖의 문의는 <a href="#contact-form" style="border-bottom:1px solid var(--ink)">문의하기</a>로 남겨주시면 <br class="pc">확인 후 회신드립니다.</p>
+        </div>
+        <div class="qna">
+        <details open><summary><span class="q">Q</span>준비물이 필요한가요?<i></i></summary><p>도구와 점토는 공방에서 제공합니다.<br>앞치마, 팔토시 등 개인용품은 따로 준비하시는 것을 권장합니다.<br>석고·유토 작업을 하거나, 캐스팅으로 작품을 보존해 가져가고 싶은 경우 추가 재료비가 발생할 수 있습니다.</p></details>
+        <details><summary><span class="q">Q</span>저녁 수업은 몇 시에 시작하나요?<i></i></summary><p>저녁 수업은 20:00 이후에만 진행합니다.<br>화–토 20:00–22:00 / 22:00–24:00, 일요일 10:00–12:00에 수업하며 월요일은 휴무입니다.</p></details>
+        <details><summary><span class="q">Q</span>조소를 처음 배워도 괜찮나요?<i></i></summary><p>기초 조형부터 단계적으로 시작하므로 처음 배우는 분도 수강할 수 있습니다.</p></details>
+        <details><summary><span class="q">Q</span>예약은 어떻게 하나요?<i></i></summary><p>네이버 톡톡 또는 홈페이지 문의하기로 예약합니다.<br>작업 중에는 통화가 어려울 수 있어 톡톡 문의를 권장합니다.</p></details>
+        <details><summary><span class="q">Q</span>주차가 가능한가요?<i></i></summary><p>공방과 전주솔빛중학교 사이 도로변에 무료로 주차할 수 있습니다.</p></details>
+        </div>
+      </div>
+    </div>
+
+    <!-- evening -->
+    <div class="sp" data-sp="class-eve">
+      <div class="eve" style="margin-top:0">
+        <div class="eve-top">
+          <div>
+            <span class="eng" style="color:var(--dgray)">Evening Visiting Class</span>
+            <h3 class="t" style="margin-top:8px">야간 출강</h3>
+            <p class="txt">저녁 20:00 이후 진행하는 출강 조소 수업입니다. <br class="pc">기관·단체의 저녁 일정에 맞춰 운영하며, <br class="pc">출강 희망일 최소 2주 전까지 문의를 받습니다.</p>
+          </div>
+          <div>
+            <p class="clock">20:00<span class="it">onward</span></p>
+            <div class="dayline"><div class="b"></div><div class="on"></div>
+              <span style="left:0">00</span><span style="left:25%">06</span><span style="left:50%">12</span><span style="left:75%">18</span><span style="left:83.3%;color:#f2f2f0">20</span><span style="left:100%">24</span></div>
+          </div>
+        </div>
+        <div class="targets">
+          <div><small>01</small><h5>기업 · 공공기관</h5><p>직원 대상 문화 프로그램</p></div>
+          <div><small>02</small><h5>도서관 · 평생학습관</h5><p>야간 문화강좌, 단기 특강</p></div>
+          <div><small>03</small><h5>학교 · 교육기관</h5><p>방과후, 교원 연수</p></div>
+          <div><small>04</small><h5>지역 커뮤니티</h5><p>아파트 커뮤니티센터, 주민 프로그램</p></div>
+        </div>
+        <div class="spec">
+          <div><small>TIME</small><p>저녁 20:00 이후<br><span style="color:var(--dgray);font-size:14px">희망일 최소 2주 전 문의</span></p></div>
+          <div><small>PEOPLE</small><p>5명 ~ 10명<br><span style="color:var(--dgray);font-size:14px">10명 이상은 별도 문의</span></p></div>
+          <div><small>AREA</small><p>전주 및 인근 지역</p></div>
+          <div><small>FEE</small><p>인원·회차별 견적<br><span style="color:var(--dgray);font-size:14px">재료비 별도</span></p></div>
+        </div>
+        <a href="#contact-form" data-ftype="출강 문의" style="display:inline-block;margin-top:40px;background:#f2f2f0;color:var(--dk);padding:15px 28px;font-weight:600;font-size:14px">출강 문의 →</a>
+      </div>
+    </div>
+
+    <!-- guide -->
+    <div class="sp" data-sp="class-guide">
+      <div class="fee">
+        <div>
+          <span class="eng" style="color:var(--gray)">Fee</span>
+          <h3 class="t" style="margin-top:8px">수강료</h3>
+          <table class="tbl">
+            <tr class="grp"><td colspan="2">조소반</td></tr>
+            <tr><td>주 1회<small>4주</small></td><td>160,000원</td></tr>
+            <tr><td>주 2회<small>4주</small></td><td>320,000원</td></tr>
+            <tr><td>주 3회<small>4주</small></td><td>480,000원</td></tr>
+            <tr><td>주 4회<small>4주</small></td><td>640,000원</td></tr>
+            <tr class="grp"><td colspan="2">유화반</td></tr>
+            <tr><td>주 1회<small>4주</small></td><td>200,000원</td></tr>
+            <tr><td>주 2회<small>4주</small></td><td>400,000원</td></tr>
+            <tr><td>주 3회<small>4주</small></td><td>600,000원</td></tr>
+            <tr><td>주 4회<small>4주</small></td><td>800,000원</td></tr>
+            <tr class="grp"><td colspan="2">원데이 클래스</td></tr>
+            <tr><td>1회<small>2시간</small></td><td>50,000원</td></tr>
+          </table>
+          <p class="note">1회 수업 2시간 기준</p>
+        </div>
+        <div>
+          <span class="eng" style="color:var(--gray)">Guide</span>
+          <h3 class="t" style="margin-top:8px">예약 · 변경 · 환불</h3>
+          <p class="txt" style="margin-bottom:20px">모든 수강생이 예약한 시간에 <br class="pc">충분히 지도받을 수 있도록 <br class="pc">아래 기준으로 운영합니다.</p>
+          <ul class="hours guide">
+            <li><b>예약</b><span>모든 수업은 예약제로 운영합니다.</span></li>
+            <li><b>일정 변경</b><span>수업 전날 20:00까지 연락 시 <br>횟수 차감 없이 변경 가능합니다.</span></li>
+            <li><b>당일 취소</b><span>당일 취소 및 연락 없는 불참은 <br>1회 수업으로 차감됩니다.</span></li>
+            <li><b>수강 기간</b><span>4주 과정은 시작일로부터 5주 안에 <br>수강하는 것을 기준으로 합니다. <br><small style="color:var(--gray)">예: 주 1회 4회 수업 → 5주 이내 수강</small></span></li>
+            <li><b>환불</b><span>수강 시작 전 전액 환불, <br>시작 후에는 <span class="todo">남은 횟수 기준</span>으로 환불합니다.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= 03 ARCHIVE ================= -->
+<main class="view page" data-v="archive" style="padding-bottom:120px">
+  <div class="w">
+    <div class="sh"><p class="num">03<span>작업 기록</span></p><h2>Archive</h2></div>
+    <nav class="stabs"><a href="#archive-works">조소반 <small>SCULPTURE</small></a><a href="#archive-paint">유화반 <small>PAINTING</small></a><a href="#archive-visit">출강 <small>VISIT</small></a></nav>
+    <div class="sp" data-sp="archive-works"><div class="gal">
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+    </div></div>
+    <div class="sp" data-sp="archive-paint"><div class="gal">
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+    </div></div>
+    <div class="sp" data-sp="archive-visit"><div class="gal">
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+        <div class="ph"></div>
+    </div></div>
+    <a class="arc-more" style="margin-top:36px" href="https://www.instagram.com/hayan.bam" target="_blank" rel="noopener">더 많은 작업 · Instagram @hayan.bam ↗</a>
+  </div>
+</main>
+
+<!-- ================= 04 CONTACT ================= -->
+<main class="view page" data-v="contact">
+  <div class="w">
+    <div class="sh"><p class="num">04<span>문의</span></p><h2>Contact</h2></div>
+    <nav class="stabs"><a href="#contact-form">문의하기 <small>INQUIRY</small></a><a href="#contact-map">오시는 길 <small>LOCATION</small></a></nav>
+
+    <div class="ct sp" data-sp="contact-form">
+      <div>
+        <p class="lab" style="display:none"><small style="display:block;color:var(--gray);font-size:12px;letter-spacing:.18em;margin-bottom:6px">04-1</small>문의하기</p>
+        <p class="txt" style="margin-bottom:32px">수업, 출강, 제작 의뢰 문의를 접수합니다. <br class="pc">작업 중에는 통화가 어려울 수 있어 <br class="pc">네이버 톡톡 문의를 권장합니다.</p>
+        <div class="ways">
+          <a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" class="talk"><small>NAVER TALK</small><span>네이버 톡톡 문의</span><i>↗</i></a>
+          <a href="mailto:818art@naver.com"><small>MAIL</small><span>818art@naver.com</span><i>→</i></a>
+          <a href="https://www.instagram.com/hayan.bam" target="_blank" rel="noopener"><small>INSTAGRAM</small><span>@hayan.bam</span><i>↗</i></a>
+          <a href="https://blog.naver.com/rea-son" target="_blank" rel="noopener"><small>BLOG</small><span>blog.naver.com/rea-son</span><i>↗</i></a>
+        </div>
+      </div>
+
+      <form id="f" novalidate>
+        <div class="ftabs">
+          <label><input type="radio" name="type" value="수업 문의" checked><span>수업 문의</span></label>
+          <label><input type="radio" name="type" value="출강 문의"><span>출강 문의</span></label>
+          <label><input type="radio" name="type" value="조형물 제작"><span>제작 의뢰</span></label>
+        </div>
+
+        <div class="fg">
+          <p class="fsec">문의자 정보</p>
+          <div class="fd"><label>이름</label><input name="name"></div>
+          <div class="fd"><label>연락처</label><input name="phone" inputmode="tel" placeholder="010-0000-0000"></div>
+          <div class="cond" data-for="출강 문의"><div class="fd full"><label>소속 (선택)</label><input name="org2" placeholder="예: ○○도서관, ○○회사"></div></div>
+          <div class="cond" data-for="조형물 제작"><div class="fd full"><label>소속 (선택)</label><input name="org3" placeholder="예: ○○시청, ○○재단"></div></div>
+
+          <p class="fsec">문의 내용</p>
+          <div class="cond on" data-for="수업 문의">
+            <div class="fd full"><label>수업 선택</label><select name="cls"><option>조소반</option><option>유화반</option><option>원데이 클래스</option></select></div>
+          </div>
+          <div class="cond" data-for="출강 문의">
+            <div class="fd"><label>예상 인원</label><input name="people" inputmode="numeric" placeholder="5~10명 (10명 이상 별도 문의)"></div>
+            <div class="fd"><label>장소</label><input name="place" placeholder="예: 전주시 ○○도서관"></div>
+          </div>
+          <div class="cond" data-for="조형물 제작">
+            <div class="fd"><label>조형물 종류</label><select name="kind"><option>공공 조형물</option><option>기념 조형물 (흉상·부조 등)</option><option>캐릭터·상징 입체물</option><option>전시·공간 조형</option><option>기타</option></select></div>
+            <div class="fd"><label>규모 / 설치 장소</label><input name="size" placeholder="예: 높이 2m / 실외 광장"></div>
+            <div class="fd full"><label>예산 범위 (선택)</label><input name="budget" placeholder="예: 3,000만 원 내외"></div>
+          </div>
+
+          <div class="fd full">
+            <label id="dlabel">희망 일시</label>
+            <div class="picker">
+              <div>
+                <div class="cal-h"><button type="button" id="prev" aria-label="이전 달">‹</button><b id="ym"></b><button type="button" id="next" aria-label="다음 달">›</button></div>
+                <div class="cal" id="cal"></div>
+              </div>
+              <div class="slots" id="slots">
+                <h6 id="slotTitle">시간 선택</h6>
+                <div class="slot-grid" id="slotGrid"></div>
+                <p class="picked" id="picked"><span>날짜와 시간을 선택해 주세요</span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="fd full"><label>상세 내용</label><textarea name="msg"></textarea></div>
+        </div>
+        <label class="agree"><input type="checkbox" name="ok"> 문의 응대를 위한 개인정보(이름·연락처) 수집·이용 동의 <a href="#privacy" style="border-bottom:1px solid var(--ink2);margin-left:4px">보기</a></label>
+        <p class="warn" id="warn"></p>
+        <button class="submit" type="submit">문의 접수</button>
+
+        <div class="res" id="res">
+          <b style="font-size:15px">문의 내용</b>
+          <pre id="out"></pre>
+          <div class="bt">
+            <a class="p" id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">복사 후 톡톡 열기</a>
+                        <a id="mail" href="#">메일로 보내기</a>
+          </div>
+          <small>‘복사 후 톡톡 열기’를 누르면 내용이 복사됩니다. 톡톡 창에 붙여넣어 보내주세요.</small>
+        </div>
+      </form>
+    </div>
+
+    <div class="loc sp" data-sp="contact-map">
+      <div class="map">
+        <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="600" height="400" fill="#e4e4e0"/>
+          <g stroke="#fafaf8" fill="none"><path d="M-20 110L620 150" stroke-width="16"/><path d="M190-20L230 420" stroke-width="16"/><path d="M-20 300L620 270" stroke-width="16"/><path d="M440-20L410 420" stroke-width="12"/><path d="M-20 205L620 205" stroke-width="6"/><path d="M320-20L320 420" stroke-width="6"/></g>
+          <rect x="310" y="195" width="20" height="20" fill="#111"/>
+        </svg>
+        <div id="nmap"></div>
+        <a href="https://map.naver.com/p/entry/place/2022069020" target="_blank" rel="noopener">네이버 지도에서 길찾기 ↗</a>
+      </div>
+      <div>
+        <p class="lab" style="display:none"><small style="display:block;color:var(--gray);font-size:12px;letter-spacing:.18em;margin-bottom:6px">04-2</small>오시는 길</p>
+        <ul class="info">
+          <li><b>ADDRESS</b><span>전북 전주시 덕진구 솔내7길 40-9, 101호<small>송천동 · 전주솔빛중학교 인근</small></span></li>
+          <li><b>PARKING</b><span>무료<small>공방과 전주솔빛중학교 사이 도로변</small></span></li>
+          <li><b>INQUIRY</b><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" style="color:#03c75a;font-weight:700">네이버 톡톡 문의 ↗</a></li>
+          <li><b>MAIL</b><a href="mailto:818art@naver.com">818art@naver.com</a></li>
+          <li><b>HOURS</b><span>화–토 20:00–24:00 · 일 10:00–12:00<small>월요일 휴무 · 예약제</small></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= PRIVACY ================= -->
+<main class="view page" data-v="privacy" style="padding-bottom:120px">
+  <div class="w">
+    <div class="sh"><p class="num">—<span>Privacy</span></p><h2 style="font-size:clamp(32px,4vw,52px)">개인정보처리방침</h2></div>
+    <div class="policy">
+      <p>하얀밤조소공방(이하 ‘공방’)은 홈페이지 문의 응대를 위해 아래와 같이 개인정보를 처리합니다.</p>
+      <h4>1. 수집 항목</h4>
+      <p>필수: 이름, 연락처<br>선택: 소속, 문의 내용(희망 일시, 인원, 장소 등)</p>
+      <h4>2. 수집·이용 목적</h4>
+      <p>수업·출강·제작 의뢰 문의 응대 및 예약 안내</p>
+      <h4>3. 보유 및 이용 기간</h4>
+      <p>문의 응대가 끝난 후 지체 없이 파기합니다. 다만 관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.</p>
+      <h4>4. 제3자 제공</h4>
+      <p>공방은 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만 이용자가 네이버 톡톡 또는 이메일로 문의 내용을 직접 보내는 경우, 해당 서비스의 개인정보처리방침이 함께 적용됩니다.</p>
+      <h4>5. 동의를 거부할 권리</h4>
+      <p>이용자는 개인정보 수집·이용에 동의하지 않을 수 있으며, 이 경우 홈페이지 문의 접수가 제한됩니다. 네이버 톡톡으로 직접 문의하실 수 있습니다.</p>
+      <h4>6. 이용자의 권리</h4>
+      <p>이용자는 언제든지 본인의 개인정보 열람, 정정, 삭제를 요청할 수 있습니다.</p>
+      <h4>7. 개인정보 보호책임자</h4>
+      <p>성명: 황아현 (대표)<br>문의: 818art@naver.com</p>
+      <p class="pdate">시행일: 2026년 11월 22일</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="w">
+    <div class="ft">
+      <div>
+        <div class="logo" style="margin-bottom:14px"><b>HAYANBAM</b></div>
+        <p>하얀밤조소공방<br>전북 전주시 덕진구 솔내7길 40-9, 101호<br>40-9, Solnae 7-gil, Deokjin-gu, Jeonju, Korea</p>
+      </div>
+      <div><h6>CONTACT</h6><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의</a><a href="mailto:818art@naver.com">M. 818art@naver.com</a></div>
+      <div><h6>SNS</h6><a href="https://blog.naver.com/rea-son" target="_blank" rel="noopener">Blog</a><a href="https://www.instagram.com/hayan.bam" target="_blank" rel="noopener">Instagram</a><a href="https://www.youtube.com/@%ED%95%98%EC%96%80%EB%B0%A4-u5l" target="_blank" rel="noopener">YouTube</a></div>
+    </div>
+    <div class="copy"><span>대표 황아현 · 사업자등록번호 345-15-02851</span><span><a href="#privacy" style="display:inline;color:#f2f2f0;margin-right:16px">개인정보처리방침</a>© HAYANBAM SCULPTURE STUDIO</span></div>
+  </div>
+</footer>
+
+<div class="mbar"><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" class="talk-only">네이버 톡톡 문의</a></div>
+
+<script>
+// ---- mobile nav
+const mnav=document.getElementById('mnav');
+document.getElementById('burger').onclick=()=>mnav.classList.toggle('open');
+mnav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mnav.classList.remove('open')));
+
+
+// ---- page router (#home, #about, #about-teacher ...)
+const VIEWS=['home','about','class','archive','contact','privacy'];
+function route(){
+  const h=(location.hash||'#home').slice(1);
+  let v=h.split('-')[0]; if(!VIEWS.includes(v)) v='home';
+  document.querySelectorAll('.view').forEach(el=>el.classList.toggle('on',el.dataset.v===v));
+  document.querySelectorAll('.gnb>li>a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));
+  const view=document.querySelector(`.view[data-v="${v}"]`);
+  const sps=view.querySelectorAll('.sp');
+  if(sps.length){
+    let target=[...sps].find(x=>x.dataset.sp===h)||sps[0];
+    sps.forEach(x=>x.classList.toggle('on',x===target));
+    view.querySelectorAll('.stabs a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+target.dataset.sp));
+  }
+  window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),0);
+}
+window.addEventListener('hashchange',route);
+window.addEventListener('load',()=>setTimeout(()=>window.scrollTo(0,0),30));
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+
+// ---- form type
+const f=document.getElementById('f');
+const SLOTS={
+  '수업 문의':{title:'수업 시간',byDay:d=>d===0?['10:00–12:00']:d===1?[]:['20:00–22:00','22:00–24:00'],closed:[1],label:'희망 일시 (첫 수업)'},
+  '출강 문의':{title:'출강 시작 시간',list:['20:00','22:30'],minDays:14,label:'희망 일시 (최소 2주 후부터 선택 가능)'},
+  '조형물 제작':{title:'',list:[],label:'납품 희망일'}
+};
+let curType='수업 문의',selDate=null,selTime=null;
+function setType(t){
+  curType=t;
+  f.querySelectorAll('input[name=type]').forEach(r=>r.checked=r.value===t);
+  f.querySelectorAll('.cond').forEach(c=>c.classList.toggle('on',c.dataset.for===t));
+  document.getElementById('dlabel').textContent=SLOTS[t].label;
+  selTime=null;const md=new Date(today);md.setDate(md.getDate()+(SLOTS[t].minDays||0));if(selDate&&((SLOTS[t].closed||[]).includes(selDate.getDay())||selDate<md))selDate=null;renderCal();renderSlots();updatePicked();
+}
+f.querySelectorAll('input[name=type]').forEach(r=>r.onchange=()=>setType(r.value));
+document.querySelectorAll('[data-ftype]').forEach(a=>a.addEventListener('click',()=>setType(a.dataset.ftype)));
+
+// ---- calendar
+const today=new Date();today.setHours(0,0,0,0);
+let view=new Date(today.getFullYear(),today.getMonth(),1);
+const cal=document.getElementById('cal'),ym=document.getElementById('ym');
+function renderCal(){
+  ym.textContent=`${view.getFullYear()}. ${String(view.getMonth()+1).padStart(2,'0')}`;
+  cal.innerHTML='';
+  ['일','월','화','수','목','금','토'].forEach(d=>{const s=document.createElement('span');s.className='dw';s.textContent=d;cal.appendChild(s)});
+  const first=view.getDay(),days=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+  for(let i=0;i<first;i++)cal.appendChild(document.createElement('span'));
+  for(let d=1;d<=days;d++){
+    const dt=new Date(view.getFullYear(),view.getMonth(),d);
+    const b=document.createElement('button');b.type='button';b.textContent=d;
+    if(dt.getDay()===0)b.classList.add('sun');
+    const minD=new Date(today);minD.setDate(minD.getDate()+(SLOTS[curType].minDays||0));
+    if(dt<minD||(SLOTS[curType].closed||[]).includes(dt.getDay()))b.disabled=true;
+    if(+dt===+today)b.classList.add('today');
+    if(selDate&&+dt===+selDate)b.classList.add('sel');
+    b.onclick=()=>{selDate=dt;selTime=null;renderCal();renderSlots();updatePicked()};
+    cal.appendChild(b);
+  }
+  document.getElementById('prev').disabled=(view.getFullYear()===today.getFullYear()&&view.getMonth()===today.getMonth());
+}
+document.getElementById('prev').onclick=()=>{view.setMonth(view.getMonth()-1);renderCal()};
+document.getElementById('next').onclick=()=>{view.setMonth(view.getMonth()+1);renderCal()};
+function renderSlots(){
+  const s=SLOTS[curType],g=document.getElementById('slotGrid'),t=document.getElementById('slotTitle');
+  const list=s.byDay?(selDate?s.byDay(selDate.getDay()):[]):(s.list||[]);
+  t.textContent=s.byDay&&!selDate?'날짜를 먼저 선택해 주세요':s.title;t.style.display=(s.title)?'block':'none';g.innerHTML='';
+  list.forEach(x=>{const b=document.createElement('button');b.type='button';b.textContent=x;if(x===selTime)b.classList.add('sel');
+    b.onclick=()=>{selTime=x;renderSlots();updatePicked()};g.appendChild(b)});
+}
+const W=['일','월','화','수','목','금','토'];
+const fmt=d=>`${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} (${W[d.getDay()]})`;
+function updatePicked(){
+  const p=document.getElementById('picked');
+  if(!selDate){p.innerHTML='<span>날짜를 선택해 주세요</span>';return}
+  p.textContent=fmt(selDate)+(selTime?'  '+selTime:'');
+}
+renderCal();renderSlots();route();
+
+// ---- background sound (코드로 생성하는 앰비언트 사운드, 기본 꺼짐)
+const Snd=(()=>{
+  let ctx,master,verb,on=false,chordT,pluckT,ci=0;
+  const hz=m=>440*Math.pow(2,(m-69)/12);
+  const CH=[[53,57,60,64],[50,57,60,65],[46,53,57,62],[48,55,60,64]];
+  const PL=[65,67,69,72,74,77,79,81];
+  function build(){
+    ctx=new (window.AudioContext||window.webkitAudioContext)();
+    master=ctx.createGain();master.gain.value=0;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2200;
+    verb=ctx.createConvolver();
+    const len=ctx.sampleRate*3.5,ir=ctx.createBuffer(2,len,ctx.sampleRate);
+    for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}
+    verb.buffer=ir;
+    const wet=ctx.createGain();wet.gain.value=.55;
+    verb.connect(wet);wet.connect(lp);
+    master.connect(lp);master.connect(verb);lp.connect(ctx.destination);
+  }
+  function pad(notes,t,dur){
+    notes.forEach(n=>[-4,4].forEach(dt=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type='triangle';o.frequency.value=hz(n);o.detune.value=dt;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.022,t+3);
+      g.gain.setValueAtTime(.022,t+dur-1);g.gain.linearRampToValueAtTime(0,t+dur+3);
+      o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+3.2);
+    }));
+  }
+  function pluck(){
+    if(!on)return;
+    const t=ctx.currentTime,n=PL[Math.floor(Math.random()*PL.length)];
+    [1,2].forEach((h,k)=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type='sine';o.frequency.value=hz(n)*h;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(k?.008:.035,t+.01);
+      g.gain.exponentialRampToValueAtTime(.0001,t+(k?1.2:3.2));
+      o.connect(g);g.connect(master);o.start(t);o.stop(t+3.4);
+    });
+    pluckT=setTimeout(pluck,1400+Math.random()*2600);
+  }
+  function chord(){if(!on)return;pad(CH[ci++%CH.length],ctx.currentTime+.05,8);chordT=setTimeout(chord,8000)}
+  function start(){
+    if(!ctx)build();
+    ctx.resume().then(()=>{if(on)sndUI(true)}).catch(()=>{});on=true;
+    master.gain.cancelScheduledValues(ctx.currentTime);
+    master.gain.setValueAtTime(master.gain.value,ctx.currentTime);
+    master.gain.linearRampToValueAtTime(.9,ctx.currentTime+2.5);
+    chord();pluckT=setTimeout(pluck,1800);
+  }
+  function stop(){
+    on=false;clearTimeout(chordT);clearTimeout(pluckT);
+    if(!ctx)return;
+    master.gain.cancelScheduledValues(ctx.currentTime);
+    master.gain.setValueAtTime(master.gain.value,ctx.currentTime);
+    master.gain.linearRampToValueAtTime(0,ctx.currentTime+1.2);
+    setTimeout(()=>{if(!on)ctx.suspend()},1400);
+  }
+  document.addEventListener('visibilitychange',()=>{if(!ctx||!on)return;document.hidden?ctx.suspend():ctx.resume()});
+  return{toggle(){on?stop():start();return on},ensure(){if(!on)start();else ctx.resume().then(()=>sndUI(true)).catch(()=>{})},isOn(){return on&&ctx&&ctx.state==='running'}};
+})();
+const sndBtn=document.getElementById('snd');
+let sndOn=false,userOff=false;
+function sndUI(st){sndOn=st;sndBtn.classList.toggle('on',st);sndBtn.setAttribute('aria-pressed',st);
+  sndBtn.setAttribute('aria-label',st?'배경음 끄기':'배경음 켜기');sndBtn.querySelector('.sl').textContent=st?'SOUND ON':'SOUND OFF';}
+sndBtn.addEventListener('click',e=>{e.stopPropagation();try{if(sndOn){Snd.toggle();userOff=true;sndUI(false)}else{userOff=false;Snd.ensure();sndUI(true)}}catch(_){}});
+// 첫 방문 시 자동 재생: 브라우저가 허용하면 바로, 막히면 첫 터치·클릭·키 입력 때 시작
+function autoStart(){
+  if(sndOn||userOff)return;
+  try{Snd.ensure();sndUI(Snd.isOn())}catch(_){}
+}
+autoStart();
+['pointerdown','touchend','keydown'].forEach(ev=>document.addEventListener(ev,function h(){autoStart();document.removeEventListener(ev,h)},{once:true,capture:true}));
+
+// ---- naver map (실제 배포 시 NCP Maps 키 입력)
+const NAVER_MAP_KEY=''; // 네이버 클라우드 플랫폼 Maps Client ID
+if(NAVER_MAP_KEY){
+  const sc=document.createElement('script');
+  sc.src=`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_KEY}&submodules=geocoder`;
+  sc.onload=()=>naver.maps.Service.geocode({query:'전북특별자치도 전주시 덕진구 솔내7길 40-9'},(st,res)=>{
+    if(st!==naver.maps.Service.Status.OK||!res.v2.addresses.length)return;
+    const a=res.v2.addresses[0],pos=new naver.maps.LatLng(+a.y,+a.x);
+    const m=new naver.maps.Map('nmap',{center:pos,zoom:17});
+    new naver.maps.Marker({position:pos,map:m});
+    document.getElementById('nmap').classList.add('on');
+  });
+  document.head.appendChild(sc);
+}
+
+// ---- submit (static preview: compose message for SMS / mail)
+f.addEventListener('submit',e=>{
+  e.preventDefault();
+  const d=new FormData(f),t=curType,warn=document.getElementById('warn');
+  const L=[`[하얀밤조소공방 홈페이지 · ${t}]`];
+  if(!d.get('name')||!d.get('phone')){warn.textContent='이름과 연락처를 입력해 주세요.';return}
+  L.push(`이름: ${d.get('name')}`,`연락처: ${d.get('phone')}`);
+  if(t==='수업 문의') L.push(`수업: ${d.get('cls')}`);
+  else if(t==='출강 문의') L.push(`소속: ${d.get('org2')||'-'}`,`인원: ${d.get('people')||'-'}`,`장소: ${d.get('place')||'-'}`);
+  else L.push(`소속: ${d.get('org3')||'-'}`,`종류: ${d.get('kind')}`,`규모/장소: ${d.get('size')||'-'}`,`예산: ${d.get('budget')||'-'}`);
+  if(!d.get('ok')){warn.textContent='개인정보 수집·이용에 동의해 주세요.';return}
+  warn.textContent='';
+  L.push(`${SLOTS[t].label}: ${selDate?fmt(selDate):'-'}${selTime?' '+selTime:''}`,`내용: ${d.get('msg')||'-'}`);
+  const text=L.join('\n');
+  document.getElementById('out').textContent=text;
+  document.getElementById('mail').href='mailto:818art@naver.com?subject='+encodeURIComponent('[홈페이지 '+t+']')+'&body='+encodeURIComponent(text);
+  document.getElementById('res').classList.add('on');
+});
+document.getElementById('talkSend').addEventListener('click',async e=>{
+  try{await navigator.clipboard.writeText(document.getElementById('out').textContent);e.currentTarget.textContent='복사됨 · 톡톡에 붙여넣기'}catch(_){}
+});
+</script>
+</body>
+</html>

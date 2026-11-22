@@ -1,0 +1,9 @@
+{
+  "name": "hayanbam-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "하얀밤조소공방 홈페이지",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
