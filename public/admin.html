@@ -104,6 +104,19 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 .card p{color:var(--gray);font-size:13px;margin-bottom:16px}
 .ok{color:#2f6b3a;font-size:13px;min-height:20px;margin-top:8px}
 
+.hint{font-size:13px;color:var(--ink2);background:var(--bg2);padding:10px 12px;margin-bottom:12px;line-height:1.6}
+.help-btn{border:1px solid var(--ink)!important;padding:5px 10px;color:var(--ink)!important}
+.drawer.help{width:440px;z-index:51}
+#hDim{z-index:50}
+.help-top{display:flex;justify-content:space-between;align-items:center}
+.help-top button{border:0;background:none;font-size:18px;color:var(--gray)}
+.hs{border-top:1px solid var(--line);padding:18px 0}
+.hs h4{font-size:16px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hs h4 span{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;background:var(--ink);color:#fff;font-size:12px;border-radius:50%}
+.hs ol,.hs ul{padding-left:18px;font-size:14px;color:var(--ink2);line-height:1.8}
+.hs ul.keys{list-style:none;padding:0}
+.hs ul.keys i{display:inline-block;width:14px;height:14px;margin-right:8px;vertical-align:-2px}
+.hs .tip{font-size:13px;color:var(--gray);margin-top:8px;line-height:1.6}
 .toast{white-space:nowrap;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 
@@ -151,7 +164,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 <!-- 관리 화면 -->
 <div id="vApp" class="hidden">
   <header>
-    <div class="hd"><b>HAYANBAM</b><span>관리자</span><div class="sp"></div><a href="/" target="_blank" rel="noopener">홈페이지 ↗</a><button id="logout">로그아웃</button></div>
+    <div class="hd"><b>HAYANBAM</b><span>관리자</span><div class="sp"></div><button id="helpBtn" class="help-btn">? 사용법</button><a href="/" target="_blank" rel="noopener">홈페이지 ↗</a><button id="logout">로그아웃</button></div>
     <nav class="tabs">
       <button data-t="cal" class="on">예약 캘린더</button>
       <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
@@ -161,6 +174,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   <main>
     <section id="tCal">
       <div class="mh"><button id="mPrev" aria-label="이전 달">‹</button><h2 id="mTitle"></h2><button id="mNext" aria-label="다음 달">›</button></div>
+      <p class="hint">수업 타임 칸을 누르면 예약 인원·정원·휴강·메모를 바꿀 수 있어요. 처음이라면 오른쪽 위 <b>? 사용법</b>을 눌러 보세요.</p>
       <div class="legend"><span><i style="background:#fff;border:1px solid #e2e2de"></i>예약 없음</span><span><i style="background:#f4f1e8;border:1px solid #e2d9bd"></i>예약 있음</span><span><i style="background:#111"></i>마감</span><span><i style="background:repeating-linear-gradient(45deg,#ddd,#ddd 2px,#fff 2px,#fff 4px)"></i>휴강</span><span>✎ 메모</span></div>
       <div class="grid" id="grid"></div>
     </section>
@@ -208,6 +222,67 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   <label class="toggle"><span><b style="font-weight:600">휴강 / 예약 막기</b><br><small style="color:var(--gray)">홈페이지에서 선택할 수 없게 됩니다</small></span><input type="checkbox" id="dClosed"></label>
   <div class="fd"><label>메모 (관리자만 보임)</label><textarea id="dMemo" placeholder="예: 김OO, 이OO / 유화 1명"></textarea></div>
   <div class="acts"><button class="btn line" type="button" id="dCancel">닫기</button><button class="btn" type="button" id="dSave">저장</button></div>
+</aside>
+
+<div class="dim hidden" id="hDim"></div>
+<aside class="drawer help hidden" id="help" role="dialog" aria-modal="true" aria-labelledby="hTitle">
+  <div class="help-top"><p class="eng">HOW TO USE</p><button id="hClose" aria-label="닫기">✕</button></div>
+  <h3 id="hTitle">관리자 페이지 사용법</h3>
+  <p class="sub">홈페이지에 보이는 잔여석과 문의를 여기서 관리합니다.</p>
+
+  <section class="hs"><h4><span>1</span>예약이 들어오면</h4>
+    <ol>
+      <li><b>예약 캘린더</b>에서 해당 날짜의 수업 타임 칸을 누릅니다.</li>
+      <li><b>＋</b> 버튼으로 예약 인원을 올리고 <b>저장</b>을 누릅니다.</li>
+      <li>홈페이지 문의 달력에 <b>“잔여 n석”</b>이 바로 바뀌어 보입니다.</li>
+      <li>정원이 차면 자동으로 <b>“마감”</b>이 되어 손님이 그 시간을 고를 수 없습니다.</li>
+    </ol>
+    <p class="tip">취소되면 <b>−</b> 버튼으로 인원을 줄이고 저장하면 다시 열립니다.</p>
+  </section>
+
+  <section class="hs"><h4><span>2</span>칸 색깔 보는 법</h4>
+    <ul class="keys">
+      <li><i style="background:#fff;border:1px solid #e2e2de"></i>예약 없음</li>
+      <li><i style="background:#f4f1e8;border:1px solid #e2d9bd"></i>예약 있음 (자리 남음)</li>
+      <li><i style="background:#111"></i>마감 (정원 참)</li>
+      <li><i style="background:repeating-linear-gradient(45deg,#ddd,#ddd 2px,#fff 2px,#fff 4px)"></i>휴강</li>
+      <li><i style="background:none;text-align:center;font-style:normal">✎</i>메모 있음</li>
+    </ul>
+    <p class="tip">칸에 적힌 <b>2/6</b>은 “예약 2명 / 정원 6명”이라는 뜻입니다.</p>
+  </section>
+
+  <section class="hs"><h4><span>3</span>쉬는 날·특별한 날</h4>
+    <ul>
+      <li><b>휴강:</b> 타임을 눌러 <b>휴강 / 예약 막기</b>를 켜고 저장하면 홈페이지에서 선택할 수 없습니다.</li>
+      <li><b>그날만 정원 변경:</b> 타임을 눌러 <b>이 타임 정원</b> 숫자를 바꿉니다.</li>
+      <li><b>메모:</b> 예약자 이름, 수업 종류 등을 적어 두세요. 손님에게는 보이지 않습니다.</li>
+    </ul>
+  </section>
+
+  <section class="hs"><h4><span>4</span>문의 확인</h4>
+    <ul>
+      <li>홈페이지 문의 폼으로 들어온 내용은 <b>문의</b> 탭에 쌓입니다. 새 문의는 탭에 숫자로 표시됩니다.</li>
+      <li>연락한 뒤 상태를 <b>확인함 → 예약 확정 → 완료</b>로 바꿔 두면 정리가 쉽습니다.</li>
+      <li>예약이 확정되면 <b>예약 캘린더</b>에서 인원도 꼭 +1 해 주세요. (문의만으로는 자리가 잡히지 않습니다)</li>
+      <li>삭제는 <b>삭제</b>를 두 번 눌러야 됩니다.</li>
+    </ul>
+  </section>
+
+  <section class="hs"><h4><span>5</span>설정</h4>
+    <ul>
+      <li><b>기본 정원:</b> 모든 타임의 기본 정원입니다. (현재 기본값 6명)</li>
+      <li><b>비밀번호 변경:</b> 바꾸면 다른 기기의 로그인은 모두 풀립니다.</li>
+    </ul>
+  </section>
+
+  <section class="hs"><h4><span>＋</span>휴대폰에서 앱처럼 쓰기</h4>
+    <ul>
+      <li><b>아이폰(사파리):</b> 공유 버튼 → 홈 화면에 추가</li>
+      <li><b>갤럭시(크롬·삼성인터넷):</b> 메뉴(⋮) → 홈 화면에 추가</li>
+    </ul>
+    <p class="tip">로그인은 7일 동안 유지됩니다.</p>
+  </section>
+  <button class="btn" id="hOk" type="button" style="margin-top:8px">확인</button>
 </aside>
 
 <div class="toast" id="toast"></div>
@@ -367,6 +442,13 @@ $('#fPw').addEventListener('submit',async e=>{
   if(f.get('next')!==f.get('next2')){er.textContent='새 비밀번호 확인이 일치하지 않습니다.';return}
   try{await api('/api/admin/password',{current:f.get('current'),next:f.get('next')});e.target.reset();toast('비밀번호를 바꿨습니다')}catch(x){er.textContent=x.message}
 });
+
+// ---------- 사용법 ----------
+function openHelp(){$('#hDim').classList.remove('hidden');$('#help').classList.remove('hidden');$('#help').scrollTop=0}
+function closeHelp(){$('#hDim').classList.add('hidden');$('#help').classList.add('hidden');try{localStorage.setItem('hb_help_seen','1')}catch(_){}}
+$('#helpBtn').onclick=openHelp;$('#hClose').onclick=closeHelp;$('#hOk').onclick=closeHelp;$('#hDim').onclick=closeHelp;
+const _start=startApp;
+startApp=function(){_start();let seen=null;try{seen=localStorage.getItem('hb_help_seen')}catch(_){}if(!seen)setTimeout(openHelp,300)};
 
 boot();
 </script>
