@@ -81,7 +81,7 @@ function save() {
 
 // ---------- 수업 시간표 ----------
 // 0=일 … 6=토 / 월요일 휴무
-const EVENING = ['20:00-22:00', '22:00-24:00'];
+const EVENING = ['18:00-20:00', '20:00-22:00', '22:00-24:00']; // 18–20시는 유화반
 const SCHEDULE = { 0: ['10:00-12:00'], 1: [], 2: EVENING, 3: EVENING, 4: EVENING, 5: EVENING, 6: EVENING };
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 function dow(date) { const [y, m, d] = date.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)).getUTCDay(); }
@@ -129,6 +129,24 @@ function cleanPattern(raw) {
     .filter(p => p.dow >= 0 && p.dow <= 6 && (SCHEDULE[p.dow] || []).includes(p.slot))
     .filter(p => { const k = p.dow + '|' + p.slot; if (seen.has(k)) return false; seen.add(k); return true; })
     .sort((a, b) => ((a.dow + 6) % 7) - ((b.dow + 6) % 7) || a.slot.localeCompare(b.slot));
+}
+const PAY_METHODS = ['카드', '현금', '계좌이체'];
+function cleanPay(b) {
+  const amount = Math.max(0, Math.min(99999999, parseInt(String(b.payAmount || '').replace(/[^0-9]/g, ''), 10) || 0));
+  return { amount, method: PAY_METHODS.includes(b.payMethod) ? b.payMethod : '', paid: !!b.paid };
+}
+// 정규 수강 한 회를 쉬고 맨 뒤로 한 회 미루기
+function postpone(e, bookingId) {
+  const bk = db.bookings.find(x => x.id === bookingId && x.enr === e.id);
+  if (!bk) return null;
+  db.bookings = db.bookings.filter(x => x.id !== bookingId);
+  const mine = db.bookings.filter(x => x.enr === e.id).map(x => x.date).sort();
+  const last = mine.length ? mine[mine.length - 1] : bk.date;
+  const from = addDays(last > bk.date ? last : bk.date, 1);
+  const taken = new Set(db.bookings.filter(x => x.enr === e.id).map(x => x.date + '|' + x.slot));
+  const add = genSessions(e.pattern, from, 1, taken)[0];
+  if (add) db.bookings.push({ id: crypto.randomUUID(), date: add.date, slot: add.slot, name: e.name, course: e.course, enr: e.id });
+  return { removed: bk, added: add || null };
 }
 function enrollmentView(e) {
   const list = db.bookings.filter(b => b.enr === e.id).sort((a, b) => (a.date + a.slot).localeCompare(b.date + b.slot));
@@ -312,10 +330,17 @@ async function api(req, res, url) {
     const cap = b.capacity === '' || b.capacity == null ? undefined : Math.max(0, Math.min(99, parseInt(b.capacity, 10) || 0));
     const next = { booked, closed: !!b.closed, memo: str(b.memo, 300) };
     if (cap !== undefined && cap !== db.settings.capacity) next.capacity = cap;
+    let moved = 0;
+    if (next.closed && b.postpone) {
+      for (const bk of slotBookings(b.date, b.slot).filter(x => x.enr)) {
+        const e = db.enrollments.find(x => x.id === bk.enr);
+        if (e && postpone(e, bk.id)) moved++;
+      }
+    }
     if (!next.booked && !next.closed && !next.memo && next.capacity === undefined) delete db.slots[key];
     else db.slots[key] = next;
     save();
-    return send(res, 200, { ok: true, slot: slotInfo(b.date, b.slot, true) });
+    return send(res, 200, { ok: true, moved, slot: slotInfo(b.date, b.slot, true) });
   }
 
   // ----- 수강생 · 예약 -----
@@ -356,11 +381,62 @@ async function api(req, res, url) {
     const dates = genSessions(pattern, b.startDate, sessions);
     if (p.endsWith('/preview')) return send(res, 200, { dates, sessions });
     if (!dates.length) return send(res, 400, { error: '들어갈 수 있는 수업 날짜가 없습니다.' });
-    const e = { id: crypto.randomUUID(), name, phone: str(b.phone, 30), course, pattern, startDate: b.startDate, sessions, memo: str(b.memo, 300), createdAt: new Date().toISOString() };
+    const e = { id: crypto.randomUUID(), name, phone: str(b.phone, 30), course, pattern, startDate: b.startDate, sessions, memo: str(b.memo, 300), pay: cleanPay(b), createdAt: new Date().toISOString() };
     db.enrollments.unshift(e);
     for (const d of dates) db.bookings.push({ id: crypto.randomUUID(), date: d.date, slot: d.slot, name, course, enr: e.id });
     save();
     return send(res, 200, { ok: true, enrollment: enrollmentView(e) });
+  }
+
+  // 수강 정보 수정: 이름·연락처·메모·수업 종류 변경, 일정 변경 시 오늘 이후 일정만 다시 생성
+  if (p === '/api/admin/enrollment/update' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const e = db.enrollments.find(x => x.id === b.id);
+    if (!e) return send(res, 404, { error: '수강 정보를 찾을 수 없습니다.' });
+    const name = str(b.name, 30); if (!name) return send(res, 400, { error: '수강생 이름을 입력해 주세요.' });
+    const course = COURSES.includes(b.course) ? b.course : e.course;
+    const t = todayKST();
+    const past = db.bookings.filter(x => x.enr === e.id && x.date < t);
+    let pattern = e.pattern, sessions = e.sessions, newDates = null;
+    if (b.reschedule) {
+      const start = DATE_RE.test(b.startDate || '') && b.startDate >= t ? b.startDate : t;
+      if (course === '원데이 클래스') {
+        if (!slotsFor(start).includes(b.slot)) return send(res, 400, { error: '그날 수업 시간을 선택해 주세요.' });
+        pattern = [{ dow: dow(start), slot: b.slot }]; sessions = past.length + 1;
+      } else {
+        pattern = cleanPattern(b.pattern);
+        if (!pattern.length) return send(res, 400, { error: '반복할 요일과 시간을 선택해 주세요.' });
+        sessions = Math.max(past.length + 1, Math.min(60, parseInt(b.sessions, 10) || e.sessions));
+      }
+      const remain = sessions - past.length;
+      // 이 수강생의 오늘 이후 일정은 계산에서 빼고 다시 만듦
+      db.bookings = db.bookings.filter(x => !(x.enr === e.id && x.date >= t));
+      newDates = genSessions(pattern, start, remain);
+      for (const d of newDates) db.bookings.push({ id: crypto.randomUUID(), date: d.date, slot: d.slot, name, course, enr: e.id });
+      sessions = past.length + newDates.length;
+    }
+    Object.assign(e, { name, phone: str(b.phone, 30), memo: str(b.memo, 300), course, pattern, sessions, pay: cleanPay(b) });
+    db.bookings.forEach(x => { if (x.enr === e.id) { x.name = name; x.course = course; } });
+    save();
+    return send(res, 200, { ok: true, enrollment: enrollmentView(e) });
+  }
+
+  if (p === '/api/admin/enrollment/skip' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const e = db.enrollments.find(x => x.id === b.id);
+    if (!e) return send(res, 404, { error: '수강 정보를 찾을 수 없습니다.' });
+    const r = postpone(e, b.bookingId);
+    if (!r) return send(res, 400, { error: '해당 수업을 찾을 수 없습니다.' });
+    save();
+    return send(res, 200, { ok: true, added: r.added });
+  }
+
+  if (p === '/api/admin/enrollment/pay' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const e = db.enrollments.find(x => x.id === b.id);
+    if (!e) return send(res, 404, { error: '수강 정보를 찾을 수 없습니다.' });
+    e.pay = Object.assign({ amount: 0, method: '', paid: false }, e.pay || {}, { paid: !!b.paid }); save();
+    return send(res, 200, { ok: true });
   }
 
   if (p === '/api/admin/enrollment/extend' && req.method === 'POST') {

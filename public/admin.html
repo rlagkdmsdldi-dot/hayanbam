@@ -92,6 +92,13 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 .linkbtn{border:0;background:none;font-size:13px;font-weight:600;text-decoration:underline;padding:10px 0 0;color:var(--ink)}
 .xtra{margin:6px 0 4px}
 .xtra summary{font-size:13px;color:var(--gray);cursor:pointer;padding:6px 0}
+.dim2{opacity:.4}
+.stu .ds .dchip{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;padding:2px 7px;color:var(--ink);cursor:pointer}
+.stu .ds .dchip.next{border-color:var(--ink);font-weight:700}
+.stu .hint2{font-size:12px;color:var(--gray);margin:-4px 0 10px}
+.stu .pay{display:flex;align-items:center;gap:6px;font-size:14px;border-top:1px solid var(--line);padding-top:10px;margin-bottom:10px}
+.stu .pay .paid{margin-left:auto;border:1px solid var(--warn);color:var(--warn);background:#fff;font-size:12px;font-weight:700;padding:4px 10px}
+.stu .pay .paid.on{border-color:var(--ink);background:var(--ink);color:#fff}
 .stu-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .stu-top .filters{margin:0}
 .sbtn{width:auto;padding:11px 18px;font-size:14px}
@@ -274,7 +281,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   <ol><li><b>+ 수강 등록</b>을 누르고 이름을 입력합니다.</li><li><b>조소반</b> 또는 <b>유화반</b>을 고르고 <b>주 몇 회</b>인지 선택합니다.</li><li>요일과 시간, 시작일을 고르면 4주치 일정이 자동으로 계산됩니다.</li><li><b>등록</b>을 누르면 예약 캘린더에 이름이 들어갑니다.</li></ol>
   <p class="t">휴강으로 막힌 날은 자동으로 건너뛰고 다음 수업으로 채워집니다.</p>
   <h5>원데이 클래스</h5><p>날짜와 시간만 고르면 그날 한 번 등록됩니다.</p>
-  <h5>연장 · 결석 · 보강</h5><p>4주가 끝나면 <b>다음 4주 연장</b>. 빠지는 날은 캘린더에서 그 칸을 눌러 <b>빼기</b>, 보강은 다른 날 칸에서 <b>이 날 추가</b>로 넣으면 됩니다.</p>
+  <h5>쉬는 날 · 연장</h5><p>수강생 카드에서 쉬는 날짜를 누르면 그 회차가 <b>맨 뒤로 한 회 미뤄집니다</b>. 공방 전체 휴강은 캘린더에서 그 칸을 <b>휴강</b>으로 바꾸면 정규 수강생이 자동으로 미뤄집니다. 4주가 끝나면 <b>다음 4주 연장</b>.</p><h5>수정 · 결제</h5><p><b>수정</b>에서 이름·연락처·결제 정보를 바꾸고, 요일·시간도 바꿀 수 있습니다(지난 수업은 그대로). 카드 아래 <b>미결제/결제 완료</b>를 눌러 바로 바꿀 수 있습니다.</p>
 </div></details></aside><div class="pc">
       <div class="stu-top"><div class="filters" id="stuFilters"><button data-f="all" class="on">전체</button><button data-f="조소반">조소반</button><button data-f="유화반">유화반</button><button data-f="원데이 클래스">원데이</button></div><button class="btn sbtn" id="newEnroll">+ 수강 등록</button></div>
       <div id="stuList"></div>
@@ -353,6 +360,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   </details>
   <div class="fd"><label>이 타임 정원</label><input id="dCap" type="number" min="0" max="99" inputmode="numeric"><small id="dCapHint"></small></div>
   <label class="toggle"><span><b style="font-weight:600">휴강 / 예약 막기</b><br><small style="color:var(--gray)">홈페이지에서 선택할 수 없게 됩니다</small></span><input type="checkbox" id="dClosed"></label>
+  <label class="agree hidden" id="dPpWrap" style="margin:-8px 0 16px"><input type="checkbox" id="dPp" checked> 정규 수강생은 이번 회를 쉬고 맨 뒤로 미루기</label>
   <div class="fd"><label>메모 (관리자만 보임)</label><textarea id="dMemo" placeholder="예: 김OO, 이OO / 유화 1명"></textarea></div>
   <div class="acts"><button class="btn line" type="button" id="dCancel">닫기</button><button class="btn" type="button" id="dSave">저장</button></div>
 </aside>
@@ -365,6 +373,8 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   <form id="fEnroll" autocomplete="off">
     <div class="fd"><label>수강생 이름</label><input name="name" required maxlength="30"></div>
     <div class="fd"><label>연락처 (선택)</label><input name="phone" inputmode="tel" maxlength="14" placeholder="010-0000-0000"></div>
+    <label class="toggle hidden" id="eResWrap"><span><b style="font-weight:600">요일·시간·회차도 변경</b><br><small style="color:var(--gray)">끄면 이름·연락처·메모만 바뀝니다</small></span><input type="checkbox" id="eRes"></label>
+    <div id="eSched">
     <label class="eng" style="display:block;margin-bottom:8px">수업 종류</label>
     <div class="seg" id="eCourse"><button type="button" data-v="원데이 클래스">원데이 클래스</button><button type="button" data-v="조소반" class="on">조소반</button><button type="button" data-v="유화반">유화반</button></div>
     <div id="eRegular">
@@ -377,6 +387,13 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <div class="fd" id="eSessWrap"><label>총 회차</label><input type="number" name="sessions" min="1" max="60" inputmode="numeric"></div>
       <div class="fd hidden" id="eOneSlot"><label>시간</label><select name="slot"></select></div>
     </div>
+    </div>
+    <label class="eng" style="display:block;margin:6px 0 8px">결제</label>
+    <div class="row2">
+      <div class="fd"><label>결제 금액 (원)</label><input name="payAmount" inputmode="numeric" placeholder="160,000"></div>
+      <div class="fd"><label>결제 방법</label><select name="payMethod"><option value="">선택</option><option>카드</option><option>현금</option><option>계좌이체</option></select></div>
+    </div>
+    <label class="agree" style="margin:-4px 0 16px"><input type="checkbox" name="paid"> 결제 완료</label>
     <div class="fd"><label>메모 (선택)</label><input name="memo" maxlength="300" placeholder="예: 두상 진행 중"></div>
     <div class="prev" id="ePrev"></div>
     <p class="err" id="eErr"></p>
@@ -389,8 +406,8 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 <script>
 const $=s=>document.querySelector(s);
 const W=['일','월','화','수','목','금','토'];
-const SL={'10:00-12:00':'10시','20:00-22:00':'20시','22:00-24:00':'22시'};
-const SLF={'10:00-12:00':'10–12시','20:00-22:00':'20–22시','22:00-24:00':'22–24시'};
+const SL={'10:00-12:00':'10시','18:00-20:00':'18시','20:00-22:00':'20시','22:00-24:00':'22시'};
+const SLF={'10:00-12:00':'10–12시','18:00-20:00':'18–20시','20:00-22:00':'20–22시','22:00-24:00':'22–24시'};
 const STATUS={new:'새 문의',checked:'확인함',confirmed:'예약 확정',done:'완료'};
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
 async function api(path,body){
@@ -487,7 +504,7 @@ function openDrawer(ds,s){
   $('#dTitle').textContent=`${m}월 ${d}일 (${w}) ${SLF[s.slot]||s.slot}`;
   $('#dSub').textContent=s.slot.replace('-',' – ');
   $('#dCap').value=s.capacity;$('#dCapHint').textContent=`기본 정원 ${defaultCap}명`;
-  $('#dClosed').checked=s.closed;$('#dMemo').value=s.memo||'';
+  $('#dClosed').checked=s.closed;$('#dPpWrap').classList.add('hidden');$('#dMemo').value=s.memo||'';
   updStep();
   $('#dim').classList.remove('hidden');$('#drawer').classList.remove('hidden');
 }
@@ -516,20 +533,21 @@ function updStep(){
 $('#plus').onclick=()=>{cur.booked=Math.min(99,cur.booked+1);updStep()};
 $('#minus').onclick=()=>{cur.booked=Math.max(0,cur.booked-1);updStep()};
 $('#dCap').oninput=updStep;
+$('#dClosed').onchange=()=>{$('#dPpWrap').classList.toggle('hidden',!($('#dClosed').checked&&cur&&cur.people.some(p=>p.enr)))};
 function closeDrawer(){$('#dim').classList.add('hidden');$('#drawer').classList.add('hidden');cur=null}
 $('#dim').onclick=closeDrawer;$('#dCancel').onclick=closeDrawer;
 $('#dSave').onclick=async()=>{
   if(!cur)return;
   try{
-    await api('/api/admin/slot',{date:cur.date,slot:cur.slot,extra:cur.booked,capacity:$('#dCap').value,closed:$('#dClosed').checked,memo:$('#dMemo').value});
-    closeDrawer();toast('저장했습니다');loadMonth();
+    const j=await api('/api/admin/slot',{date:cur.date,slot:cur.slot,extra:cur.booked,capacity:$('#dCap').value,closed:$('#dClosed').checked,memo:$('#dMemo').value,postpone:$('#dPp').checked&&!$('#dPpWrap').classList.contains('hidden')});
+    closeDrawer();toast(j.moved?`저장 · 정규 수강생 ${j.moved}명을 뒤로 미뤘습니다`:'저장했습니다');loadMonth();if(j.moved)loadStu();
   }catch(x){toast(x.message)}
 };
 
 // ---------- 수강생 ----------
 const WD=[0,2,3,4,5,6]; // 일, 화~토 (월 휴무)
-const DSL={0:['10:00-12:00'],2:['20:00-22:00','22:00-24:00'],3:['20:00-22:00','22:00-24:00'],4:['20:00-22:00','22:00-24:00'],5:['20:00-22:00','22:00-24:00'],6:['20:00-22:00','22:00-24:00']};
-let stuItems=[],stuFilter='all',stuToday=todayKST(),eCourse='조소반',eTimes=1,ePat=[{dow:2,slot:'20:00-22:00'}];
+const EV=['18:00-20:00','20:00-22:00','22:00-24:00'];const DSL={0:['10:00-12:00'],2:EV,3:EV,4:EV,5:EV,6:EV};
+let stuItems=[],stuFilter='all',stuToday=todayKST(),eCourse='조소반',eTimes=1,ePat=[{dow:2,slot:'20:00-22:00'}],eEdit=null;
 document.querySelectorAll('#stuFilters button').forEach(b=>b.onclick=()=>{stuFilter=b.dataset.f;document.querySelectorAll('#stuFilters button').forEach(x=>x.classList.toggle('on',x===b));renderStu()});
 async function loadStu(){try{const j=await api('/api/admin/enrollments');stuItems=j.items;stuToday=j.today;renderStu()}catch(_){}}
 const dLabel=(ds,slot)=>{const [y,m,d]=ds.split('-').map(Number);return `${m}/${d}(${W[new Date(Date.UTC(y,m-1,d)).getUTCDay()]}) ${SL[slot]||''}`};
@@ -542,27 +560,42 @@ function renderStu(){
     return `<article class="stu"><div class="h"><b>${esc(e.name)}</b><span class="tag">${esc(e.course)}</span>${e.phone?`<span class="ph2">${esc(e.phone)}</span>`:''}</div>
       <p class="sch">${sch}</p>
       <p class="prg">${e.dates.length}회 중 ${done}회 지남${next?` · 다음 수업 ${dLabel(next.date,next.slot)}`:' · 남은 수업 없음'}</p>
-      <div class="ds">${e.dates.map(d=>`<span class="${d.date<stuToday?'past':(next&&d.id===next.id?'next':'')}">${dLabel(d.date,d.slot)}</span>`).join('')}</div>
+      <div class="ds">${e.dates.map(d=>d.date<stuToday?`<span class="past">${dLabel(d.date,d.slot)}</span>`:(e.course==='원데이 클래스'?`<span class="${next&&d.id===next.id?'next':''}">${dLabel(d.date,d.slot)}</span>`:`<button type="button" class="dchip ${next&&d.id===next.id?'next':''}" data-skip="${e.id}" data-bk="${d.id}" title="눌러서 이 날 쉬기">${dLabel(d.date,d.slot)}</button>`)).join('')}</div>
+      ${e.course!=='원데이 클래스'?'<p class="hint2">쉬는 날은 해당 날짜를 누르면 맨 뒤로 한 회 미뤄집니다.</p>':''}
+      <div class="pay">${e.pay&&e.pay.amount?`<b>${won(e.pay.amount)}원</b>`:'<b>금액 미입력</b>'}${e.pay&&e.pay.method?` · ${esc(e.pay.method)}`:''}<button type="button" class="paid ${e.pay&&e.pay.paid?'on':''}" data-paid="${e.id}">${e.pay&&e.pay.paid?'결제 완료':'미결제'}</button></div>
       ${e.memo?`<p class="memo">${esc(e.memo)}</p>`:''}
-      <div class="bt">${e.course!=='원데이 클래스'?`<button class="mini" data-ext="${e.id}">다음 4주 연장</button>`:''}<button class="mini" data-delf="${e.id}">남은 일정 삭제</button><button class="mini" data-dela="${e.id}">전체 삭제</button></div></article>`;
+      <div class="bt"><button class="mini" data-edit="${e.id}">수정</button>${e.course!=='원데이 클래스'?`<button class="mini" data-ext="${e.id}">다음 4주 연장</button>`:''}<button class="mini" data-delf="${e.id}">남은 일정 삭제</button><button class="mini" data-dela="${e.id}">전체 삭제</button></div></article>`;
   }).join('');
+  el.querySelectorAll('[data-skip]').forEach(b=>b.onclick=async()=>{
+    if(b.dataset.c!=='1'){b.dataset.c='1';const o=b.textContent;b.textContent='쉬기? 한 번 더';setTimeout(()=>{b.dataset.c='';b.textContent=o},2500);return}
+    try{const j=await api('/api/admin/enrollment/skip',{id:b.dataset.skip,bookingId:b.dataset.bk});toast(j.added?`쉬기 처리 · ${dLabel(j.added.date,j.added.slot)}로 미뤘습니다`:'쉬기 처리했습니다');loadStu();loadMonth()}catch(x){toast(x.message)}
+  });
+  el.querySelectorAll('[data-paid]').forEach(b=>b.onclick=async()=>{const it=stuItems.find(x=>x.id===b.dataset.paid);try{await api('/api/admin/enrollment/pay',{id:it.id,paid:!(it.pay&&it.pay.paid)});loadStu()}catch(x){toast(x.message)}});
+  el.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openEnroll(null,stuItems.find(x=>x.id===b.dataset.edit)));
   el.querySelectorAll('[data-ext]').forEach(b=>b.onclick=async()=>{try{const j=await api('/api/admin/enrollment/extend',{id:b.dataset.ext});toast(`${j.added}회 연장했습니다`);loadStu();loadMonth()}catch(x){toast(x.message)}});
   el.querySelectorAll('[data-delf]').forEach(b=>b.onclick=()=>confirmDel(b,()=>api('/api/admin/enrollment/delete',{id:b.dataset.delf,scope:'future'}).then(()=>{loadStu();loadMonth();return {photos}})));
   el.querySelectorAll('[data-dela]').forEach(b=>b.onclick=()=>confirmDel(b,()=>api('/api/admin/enrollment/delete',{id:b.dataset.dela,scope:'all'}).then(()=>{loadStu();loadMonth();return {photos}})));
 }
 function slotOpts(dw,sel){return (DSL[dw]||[]).map(s=>`<option value="${s}" ${s===sel?'selected':''}>${SLF[s]}</option>`).join('')}
 function renderPattern(){
+  if(eCourse==='유화반')ePat.forEach(p=>{if(p.dow!==0&&!p._set)p.slot='18:00-20:00'});
   while(ePat.length<eTimes)ePat.push({dow:WD[(WD.indexOf(ePat[ePat.length-1]?.dow??2)+1)%WD.length]||2,slot:''});
   ePat=ePat.slice(0,eTimes);
   ePat.forEach(p=>{if(!(DSL[p.dow]||[]).includes(p.slot))p.slot=(DSL[p.dow]||[])[0]});
   $('#ePattern').innerHTML=ePat.map((p,i)=>`<div class="prow"><span>${i+1}번째</span><select data-pd="${i}">${WD.map(d=>`<option value="${d}" ${d===p.dow?'selected':''}>${W[d]}요일</option>`).join('')}</select><select data-ps="${i}">${slotOpts(p.dow,p.slot)}</select></div>`).join('');
   document.querySelectorAll('[data-pd]').forEach(s=>s.onchange=()=>{ePat[+s.dataset.pd].dow=+s.value;ePat[+s.dataset.pd].slot='';renderPattern();preview()});
-  document.querySelectorAll('[data-ps]').forEach(s=>s.onchange=()=>{ePat[+s.dataset.ps].slot=s.value;preview()});
+  document.querySelectorAll('[data-ps]').forEach(s=>s.onchange=()=>{ePat[+s.dataset.ps].slot=s.value;ePat[+s.dataset.ps]._set=1;preview()});
 }
 function setSeg(id,v){document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)))}
-document.querySelectorAll('#eCourse button').forEach(b=>b.onclick=()=>{eCourse=b.dataset.v;setSeg('eCourse',eCourse);syncCourse();preview()});
-document.querySelectorAll('#eTimes button').forEach(b=>b.onclick=()=>{eTimes=+b.dataset.v;setSeg('eTimes',eTimes);$('#fEnroll [name=sessions]').value=eTimes*4;renderPattern();preview()});
+document.querySelectorAll('#eCourse button').forEach(b=>b.onclick=()=>{eCourse=b.dataset.v;setSeg('eCourse',eCourse);syncCourse();renderPattern();preview()});
+document.querySelectorAll('#eTimes button').forEach(b=>b.onclick=()=>{eTimes=+b.dataset.v;setSeg('eTimes',eTimes);autoPay();$('#fEnroll [name=sessions]').value=eTimes*4;renderPattern();preview()});
+const PRICE={'조소반':160000,'유화반':200000,'원데이 클래스':50000};
+const won=n=>Number(n||0).toLocaleString('ko-KR');
+let payTouched=false;
+function autoPay(){if(payTouched)return;const f=$('#fEnroll');const n=eCourse==='원데이 클래스'?1:eTimes;f.payAmount.value=won(PRICE[eCourse]*n)}
+$('#fEnroll [name=payAmount]').addEventListener('input',e=>{payTouched=true;const d=e.target.value.replace(/\D/g,'');e.target.value=d?won(d):''});
 function syncCourse(){
+  autoPay();
   const one=eCourse==='원데이 클래스';
   $('#eRegular').classList.toggle('hidden',one);$('#eSessWrap').classList.toggle('hidden',one);$('#eOneSlot').classList.toggle('hidden',!one);
   $('#eStartLbl').textContent=one?'수업 날짜':'시작일';
@@ -574,16 +607,37 @@ $('#fEnroll [name=startDate]').onchange=()=>{syncOneSlot();preview()};
 $('#fEnroll [name=slot]').onchange=preview;
 $('#fEnroll [name=sessions]').oninput=preview;
 $('#fEnroll [name=phone]').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,11);e.target.value=d.length<4?d:d.length<8?d.slice(0,3)+'-'+d.slice(3):d.length<11?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7)});
-function enrollBody(){const f=new FormData($('#fEnroll'));return {name:f.get('name')||'미입력',phone:f.get('phone'),course:eCourse,startDate:f.get('startDate'),slot:f.get('slot'),pattern:ePat,sessions:f.get('sessions'),memo:f.get('memo')}}
+function enrollBody(){const f=new FormData($('#fEnroll'));return {name:f.get('name')||'미입력',phone:f.get('phone'),course:eCourse,startDate:f.get('startDate'),slot:f.get('slot'),pattern:ePat,sessions:f.get('sessions'),memo:f.get('memo'),payAmount:f.get('payAmount'),payMethod:f.get('payMethod'),paid:!!f.get('paid')}}
+function pastCount(){return eEdit?eEdit.dates.filter(d=>d.date<todayKST()).length:0}
+function syncRes(){const on=!eEdit||$('#eRes').checked;$('#eSched').classList.toggle('dim2',!on);$('#eSched').querySelectorAll('button,select,input').forEach(x=>x.disabled=!on);$('#ePrev').style.display=on?'':'none';if(on)preview()}
+$('#eRes').onchange=syncRes;
 let pvT;
 function preview(){clearTimeout(pvT);pvT=setTimeout(async()=>{
   const b=enrollBody();if(!b.startDate){$('#ePrev').innerHTML='';return}
+  if(eEdit){if(!$('#eRes').checked)return;const pc=pastCount();b.sessions=Math.max(1,(parseInt(b.sessions,10)||eEdit.sessions)-pc);}
   try{const j=await api('/api/admin/enrollment/preview',b);const full=j.dates.filter(d=>d.full).length;
     $('#ePrev').innerHTML=`<b>들어갈 일정 ${j.dates.length}회${j.dates.length<j.sessions?` (요청 ${j.sessions}회 중)`:''}</b>`+j.dates.map(d=>`<span class="d ${d.full?'full':''}">${dLabel(d.date,d.slot)}${d.full?' 정원참':''}</span>`).join('')+(full?`<br><small style="color:var(--warn)">정원이 찬 날이 ${full}회 있습니다. 그대로 등록하면 정원을 넘습니다.</small>`:'');
   }catch(x){$('#ePrev').textContent=x.message}
 },250)}
-function openEnroll(pre){
+function openEnroll(pre,edit){
   const f=$('#fEnroll');f.reset();$('#eErr').textContent='';
+  eEdit=edit||null;payTouched=!!eEdit;
+  $('#eTitle').textContent=eEdit?'수강 정보 수정':'수강 등록';
+  $('#eDrawer .sub').textContent=eEdit?`지난 수업 ${pastCount()}회는 그대로 두고, 바꾼 내용은 적용일부터 반영됩니다.`:'등록하면 예약 캘린더에 이름이 자동으로 들어갑니다.';
+  $('#fEnroll button[type=submit]').textContent=eEdit?'저장':'등록';
+  $('#eResWrap').classList.toggle('hidden',!eEdit);$('#eRes').checked=false;
+  if(eEdit){
+    eCourse=eEdit.course;eTimes=Math.min(4,Math.max(1,eEdit.pattern.length));ePat=eEdit.pattern.map(p=>({dow:p.dow,slot:p.slot}));
+    f.name.value=eEdit.name;f.phone.value=eEdit.phone||'';f.memo.value=eEdit.memo||'';
+    const py=eEdit.pay||{};f.payAmount.value=py.amount?won(py.amount):'';f.payMethod.value=py.method||'';f.paid.checked=!!py.paid;
+    const nx=eEdit.dates.find(d=>d.date>=todayKST());f.startDate.value=eCourse==='원데이 클래스'&&nx?nx.date:todayKST();f.sessions.value=eEdit.sessions;
+    setSeg('eCourse',eCourse);setSeg('eTimes',eTimes);syncCourse();renderPattern();
+    if(eCourse==='원데이 클래스'&&nx){$('#fEnroll [name=slot]').value=nx.slot}
+    $('#eStartLbl').textContent=eCourse==='원데이 클래스'?'수업 날짜':'변경 적용일';
+    syncRes();
+    $('#eDim').classList.remove('hidden');$('#eDrawer').classList.remove('hidden');return;
+  }
+  syncRes();
   eCourse='조소반';eTimes=1;
   const start=pre&&pre.date?pre.date:todayKST();
   if(pre&&pre.date){const [y,m,d]=pre.date.split('-').map(Number);ePat=[{dow:new Date(Date.UTC(y,m-1,d)).getUTCDay(),slot:pre.slot}]}else ePat=[{dow:2,slot:'20:00-22:00'}];
@@ -596,7 +650,9 @@ $('#newEnroll').onclick=()=>openEnroll();$('#eCancel').onclick=closeEnroll;$('#e
 $('#fEnroll').addEventListener('submit',async e=>{
   e.preventDefault();$('#eErr').textContent='';
   const b=enrollBody();if(!new FormData(e.target).get('name')){$('#eErr').textContent='수강생 이름을 입력해 주세요.';return}
-  try{const j=await api('/api/admin/enrollment',b);closeEnroll();toast(`${j.enrollment.name}님 ${j.enrollment.dates.length}회 등록했습니다`);loadStu();loadMonth()}catch(x){$('#eErr').textContent=x.message}
+  try{
+    if(eEdit){const j=await api('/api/admin/enrollment/update',Object.assign(b,{id:eEdit.id,reschedule:$('#eRes').checked}));closeEnroll();toast(`${j.enrollment.name}님 정보를 수정했습니다`);loadStu();loadMonth();return}
+    const j=await api('/api/admin/enrollment',b);closeEnroll();toast(`${j.enrollment.name}님 ${j.enrollment.dates.length}회 등록했습니다`);loadStu();loadMonth()}catch(x){$('#eErr').textContent=x.message}
 });
 
 // ---------- 문의 ----------
