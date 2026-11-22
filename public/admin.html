@@ -93,6 +93,46 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 .xtra{margin:6px 0 4px}
 .xtra summary{font-size:13px;color:var(--gray);cursor:pointer;padding:6px 0}
 .dim2{opacity:.4}
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.sum div{background:#fff;border:1px solid var(--line);padding:14px}
+.sum div.k{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sum small{display:block;font-size:11px;letter-spacing:.06em;color:var(--gray);font-weight:600}
+.sum .k small{color:#bbb}
+.sum b{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+.sum em{display:block;font-style:normal;font-size:11px;color:var(--gray);margin-top:2px}
+.sum .k em{color:#aaa}
+.acts2{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.acts2 .btn.line{background:#fff;color:var(--ink);border:1px solid var(--ink)}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.bar{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;font-size:13px;margin-bottom:6px}
+.bar i{display:block;height:8px;background:var(--ink)}
+.bar.out i{background:#b5482f}
+.bar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar b{font-weight:600;font-variant-numeric:tabular-nums}
+.none2{font-size:13px;color:var(--gray)}
+.lrow{display:grid;grid-template-columns:52px 1fr auto auto;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-left:3px solid var(--ink);padding:10px 12px;margin-bottom:6px;font-size:14px}
+.lrow.out{border-left-color:#b5482f}
+.lrow.unpaid{opacity:.6;border-left-style:dashed}
+.lrow time{font-size:12px;color:var(--gray)}
+.lrow .c b{display:block;font-weight:600}
+.lrow .c small{font-size:12px;color:var(--gray)}
+.lrow .a{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.lrow .a small{display:block;font-weight:400;font-size:11px;color:var(--gray)}
+.lrow button{border:1px solid var(--line);background:#fff;font-size:12px;padding:4px 8px}
+.frow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:10px 12px;margin-bottom:6px;font-size:14px;flex-wrap:wrap}
+.frow b{font-weight:600}.frow small{color:var(--gray);font-size:12px}
+.frow .sp2{flex:1}
+.frow button{border:1px solid var(--line);background:#fff;font-size:12px;padding:4px 8px}
+.ytbl-wrap{overflow-x:auto}
+.ytbl{width:100%;border-collapse:collapse;font-size:13px;min-width:520px;background:#fff}
+.ytbl th,.ytbl td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.ytbl th:first-child,.ytbl td:first-child{text-align:left}
+.ytbl thead th{border-top:1px solid var(--ink);font-size:12px;color:var(--gray);font-weight:600}
+.ytbl tr.cur td{background:#f4f1e8;font-weight:700}
+.ytbl tr.tot td{border-top:1px solid var(--ink);font-weight:800}
+.ytbl td.neg{color:#b5482f}
+.vatcalc{font-size:12px;color:var(--gray);margin:6px 0 14px;min-height:16px}
+@media(max-width:700px){.sum{grid-template-columns:1fr 1fr}.cols2{grid-template-columns:1fr}.sum b{font-size:17px}.bar{grid-template-columns:96px 1fr auto}}
 .stu .ds .dchip{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;padding:2px 7px;color:var(--ink);cursor:pointer}
 .stu .ds .dchip.next{border-color:var(--ink);font-weight:700}
 .stu .hint2{font-size:12px;color:var(--gray);margin:-4px 0 10px}
@@ -257,6 +297,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <button data-t="cal" class="on">예약 캘린더</button>
       <button data-t="stu">수강생</button>
       <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
+      <button data-t="acc">정산</button>
       <button data-t="pho">사진</button>
       <button data-t="set">설정</button>
     </nav>
@@ -285,6 +326,27 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 </div></details></aside><div class="pc">
       <div class="stu-top"><div class="filters" id="stuFilters"><button data-f="all" class="on">전체</button><button data-f="조소반">조소반</button><button data-f="유화반">유화반</button><button data-f="원데이 클래스">원데이</button></div><button class="btn sbtn" id="newEnroll">+ 수강 등록</button></div>
       <div id="stuList"></div>
+    </div></section>
+
+    <section id="tAcc" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>자동으로 들어가는 것</h5><p><b>수강료</b>는 수강생 탭의 결제 정보에서 자동으로 집계됩니다. <b>결제 완료</b>한 날짜의 달에 매출로 잡히고, 미결제는 <b>미수금</b>으로 따로 보입니다.</p>
+  <h5>직접 입력하는 것</h5><p><b>+ 매출</b>: 출강, 제작 의뢰, 작품 판매 등<br><b>+ 지출</b>: 재료비, 공과금, 장비 등</p>
+  <h5>매월 고정 지출</h5><p>월세·관리비처럼 매달 같은 금액은 한 번만 등록하면 매달 자동으로 들어갑니다. 금액이 바뀌면 <b>이번 달부터 중지</b> 후 새로 등록하세요.</p>
+  <h5>부가세</h5><p>금액마다 <b>부가세 포함 / 별도 / 해당 없음</b>을 고릅니다. 순이익은 부가세를 뺀 금액 기준이고, <b>예상 부가세</b> = 매출 부가세 − 지출 부가세입니다.</p>
+  <p class="t">세금 신고용 공식 장부가 아닌 참고용 계산입니다. 신고 전에는 세무사나 홈택스 자료로 확인해 주세요.</p>
+</div></details></aside><div class="pc">
+      <div class="mh"><button id="aPrev" aria-label="이전 달">‹</button><h2 id="aTitle"></h2><button id="aNext" aria-label="다음 달">›</button></div>
+      <div class="sum" id="aSum"></div>
+      <div class="acts2"><button class="btn sbtn" id="addIn">+ 매출</button><button class="btn sbtn line" id="addOut">+ 지출</button><button class="btn sbtn line" id="addFix">+ 매월 고정 지출</button></div>
+      <div class="cols2"><div><h3 class="sec">매출 구성</h3><div id="aInCat"></div><h3 class="sec" style="margin-top:18px">결제 수단별 매출</h3><div id="aMethod"></div></div><div><h3 class="sec">지출 구성</h3><div id="aOutCat"></div></div></div>
+      <h3 class="sec" style="margin-top:28px">이번 달 내역</h3>
+      <div id="aList"></div>
+      <h3 class="sec" style="margin-top:28px">매월 고정 지출</h3>
+      <div id="aFixed"></div>
+      <h3 class="sec" style="margin-top:28px"><span id="aYearT"></span> 월별 요약</h3>
+      <div class="ytbl-wrap"><table class="ytbl" id="aYear"></table></div>
+      <div class="card" style="margin-top:24px;max-width:none"><h3>수강료 부가세</h3><p>수강생 탭에 입력한 수강료 금액을 어떻게 볼지 정합니다.</p>
+        <div class="seg" id="tVat"><button type="button" data-v="incl">부가세 포함</button><button type="button" data-v="excl">부가세 별도</button><button type="button" data-v="none">해당 없음(면세)</button></div></div>
     </div></section>
 
     <section id="tInq" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
@@ -401,6 +463,23 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   </form>
 </aside>
 
+<div class="dim hidden" id="lDim"></div>
+<aside class="drawer hidden" id="lDrawer" role="dialog" aria-modal="true" aria-labelledby="lTitle">
+  <p class="eng" id="lEng">LEDGER</p><h3 id="lTitle">매출 입력</h3><p class="sub" id="lSub"></p>
+  <form id="fLed" autocomplete="off">
+    <div class="row2"><div class="fd" id="lDateWrap"><label>날짜</label><input type="date" name="date"></div><div class="fd hidden" id="lFromWrap"><label>시작 월</label><input type="month" name="from"></div>
+      <div class="fd"><label>항목</label><select name="category"></select></div></div>
+    <div class="fd"><label>금액 (원)</label><input name="amount" inputmode="numeric" placeholder="0"></div>
+    <label class="eng" style="display:block;margin-bottom:8px">부가세</label>
+    <div class="seg" id="lVat"><button type="button" data-v="incl">포함</button><button type="button" data-v="excl">별도</button><button type="button" data-v="none" class="on">해당 없음</button></div>
+    <p class="vatcalc" id="lCalc"></p>
+    <div class="fd"><label>결제 수단 (선택)</label><select name="method"><option value="">선택 안 함</option><option>카드</option><option>현금</option><option>계좌이체</option></select></div>
+    <div class="fd"><label>메모 (선택)</label><input name="memo" maxlength="200" placeholder="예: 점토 20kg, ○○도서관 출강"></div>
+    <p class="err" id="lErr"></p>
+    <div class="acts"><button class="btn line" type="button" id="lCancel">닫기</button><button class="btn" type="submit">저장</button></div>
+  </form>
+</aside>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -448,7 +527,8 @@ $('#logout').onclick=async()=>{try{await api('/api/admin/logout',{})}catch(_){}s
 // ---------- 탭 ----------
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  ['cal','stu','inq','pho','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  ['cal','stu','inq','acc','pho','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  if(b.dataset.t==='acc')loadAcc();
   if(b.dataset.t==='stu')loadStu();
   if(b.dataset.t==='pho')loadPho();
   if(b.dataset.t==='inq')loadInq();
@@ -657,6 +737,75 @@ $('#fEnroll').addEventListener('submit',async e=>{
   try{
     if(eEdit){const j=await api('/api/admin/enrollment/update',Object.assign(b,{id:eEdit.id,reschedule:schedChanged()}));closeEnroll();toast(`${j.enrollment.name}님 정보를 수정했습니다`);loadStu();loadMonth();return}
     const j=await api('/api/admin/enrollment',b);closeEnroll();toast(`${j.enrollment.name}님 ${j.enrollment.dates.length}회 등록했습니다`);loadStu();loadMonth()}catch(x){$('#eErr').textContent=x.message}
+});
+
+// ---------- 정산 ----------
+let ay=t0[0],am=t0[1],accData=null,lType='income',lVat='none';
+const W0=n=>Number(n||0).toLocaleString('ko-KR');
+const VATL={incl:'부가세 포함',excl:'부가세 별도',none:'해당 없음'};
+$('#aPrev').onclick=()=>{am--;if(am<1){am=12;ay--}loadAcc()};
+$('#aNext').onclick=()=>{am++;if(am>12){am=1;ay++}loadAcc()};
+async function loadAcc(){
+  const ym=`${ay}-${pad(am)}`;$('#aTitle').textContent=`${ay}. ${pad(am)}`;$('#aYearT').textContent=`${ay}년`;
+  try{accData=await api('/api/admin/ledger?ym='+ym);renderAcc();const y=await api('/api/admin/ledger/year?y='+ay);renderYear(y.months)}catch(_){}
+}
+function bars(obj,cls){const e=Object.entries(obj).sort((a,b)=>b[1]-a[1]);if(!e.length)return '<p class="none2">내역 없음</p>';const mx=e[0][1]||1;return e.map(([k,v])=>`<div class="bar ${cls||''}"><span>${esc(k)}</span><i style="width:${Math.max(4,v/mx*100)}%"></i><b>${W0(v)}</b></div>`).join('')}
+function renderAcc(){
+  const S=accData.summary;
+  $('#aSum').innerHTML=`<div><small>총 매출</small><b>${W0(S.income.total)}</b><em>부가세 ${W0(S.income.vat)} 포함</em></div>
+    <div><small>총 지출</small><b>${W0(S.expense.total)}</b><em>부가세 ${W0(S.expense.vat)} 포함</em></div>
+    <div class="k"><small>순이익 (부가세 제외)</small><b>${W0(S.profit)}</b><em>매출 ${W0(S.income.supply)} − 지출 ${W0(S.expense.supply)}</em></div>
+    <div><small>예상 부가세</small><b>${W0(Math.max(0,S.vatDue))}</b><em>${S.unpaid?`미수금 ${W0(S.unpaid)}`:'미수금 없음'}</em></div>`;
+  $('#aInCat').innerHTML=bars(S.byCat.income);$('#aOutCat').innerHTML=bars(S.byCat.expense,'out');$('#aMethod').innerHTML=bars(S.byMethod);
+  const L=accData.entries;
+  $('#aList').innerHTML=L.length?L.map(x=>{const v=x.vat==='excl'?Math.round(x.amount*1.1):x.amount;const d=x.date.slice(5).replace('-','/');
+    const tag=x.source==='tuition'?(x.unpaid?'미수금 · 수강생 탭에서 결제 완료 시 매출 반영':'수강생 탭 자동'):x.source==='fixed'?'매월 고정':'';
+    return `<div class="lrow ${x.type==='expense'?'out':''} ${x.unpaid?'unpaid':''}"><time>${d}</time><div class="c"><b>${esc(x.sub?x.category+' · '+x.sub:x.category)}</b><small>${esc([x.memo,x.method,VATL[x.vat]].filter(Boolean).join(' · '))}${tag?' · '+tag:''}</small></div>
+      <div class="a">${x.type==='expense'?'−':'+'}${W0(v)}<small>${x.vat==='excl'?'공급 '+W0(x.amount)+' + 부가세':''}</small></div>${x.source==='manual'?`<span><button data-led-edit="${x.id}">수정</button> <button data-led-del="${x.id}">삭제</button></span>`:'<span></span>'}</div>`}).join(''):'<p class="empty">이번 달 내역이 없습니다</p>';
+  $('#aList').querySelectorAll('[data-led-del]').forEach(b=>b.onclick=()=>{if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='한 번 더';setTimeout(()=>{b.dataset.c='';b.textContent='삭제'},2500);return}api('/api/admin/ledger/delete',{id:b.dataset.ledDel}).then(()=>{toast('삭제했습니다');loadAcc()}).catch(x=>toast(x.message))});
+  $('#aList').querySelectorAll('[data-led-edit]').forEach(b=>b.onclick=()=>openLed(null,L.find(x=>x.id===b.dataset.ledEdit)));
+  const ym=`${ay}-${pad(am)}`;
+  const F=accData.fixed.filter(f=>!f.until||f.until>=ym);
+  $('#aFixed').innerHTML=F.length?F.map(f=>`<div class="frow"><b>${esc(f.category)}</b><span>${W0(f.amount)}원</span><small>${VATL[f.vat]}${f.memo?' · '+esc(f.memo):''} · ${f.from}부터</small><span class="sp2"></span><button data-fx-stop="${f.id}">이번 달부터 중지</button><button data-fx-del="${f.id}">삭제</button></div>`).join(''):'<p class="none2">등록된 고정 지출이 없습니다. 월세·관리비를 <b>+ 매월 고정 지출</b>로 등록해 보세요.</p>';
+  $('#aFixed').querySelectorAll('[data-fx-stop]').forEach(b=>b.onclick=()=>{if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='중지할까요?';setTimeout(()=>{b.dataset.c='';b.textContent='이번 달부터 중지'},2500);return}api('/api/admin/fixed/stop',{id:b.dataset.fxStop,ym}).then(()=>{toast('이번 달부터 제외했습니다');loadAcc()}).catch(x=>toast(x.message))});
+  $('#aFixed').querySelectorAll('[data-fx-del]').forEach(b=>b.onclick=()=>{if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='전체 기간 삭제?';setTimeout(()=>{b.dataset.c='';b.textContent='삭제'},2500);return}api('/api/admin/fixed/stop',{id:b.dataset.fxDel,remove:true}).then(()=>{toast('삭제했습니다');loadAcc()}).catch(x=>toast(x.message))});
+  setSeg('tVat',accData.tuitionVat);
+}
+function renderYear(M){
+  const cur=`${ay}-${pad(am)}`;let ti=0,te=0,tp=0,tv=0;
+  $('#aYear').innerHTML='<thead><tr><th>월</th><th>매출</th><th>지출</th><th>순이익</th><th>예상 부가세</th></tr></thead><tbody>'+M.map(m=>{ti+=m.income;te+=m.expense;tp+=m.profit;tv+=m.vatDue;
+    return `<tr class="${m.ym===cur?'cur':''}" data-ym="${m.ym}" style="cursor:pointer"><td>${+m.ym.slice(5)}월</td><td>${W0(m.income)}</td><td>${W0(m.expense)}</td><td class="${m.profit<0?'neg':''}">${W0(m.profit)}</td><td>${W0(Math.max(0,m.vatDue))}</td></tr>`}).join('')+`<tr class="tot"><td>합계</td><td>${W0(ti)}</td><td>${W0(te)}</td><td class="${tp<0?'neg':''}">${W0(tp)}</td><td>${W0(Math.max(0,tv))}</td></tr></tbody>`;
+  $('#aYear').querySelectorAll('tr[data-ym]').forEach(r=>r.onclick=()=>{am=+r.dataset.ym.slice(5);loadAcc();window.scrollTo({top:0,behavior:'smooth'})});
+}
+document.querySelectorAll('#tVat button').forEach(b=>b.onclick=()=>api('/api/admin/ledger/settings',{tuitionVat:b.dataset.v}).then(()=>{toast('수강료 부가세 기준을 바꿨습니다');loadAcc()}));
+let lEditId=null,lFixed=false;
+function calcVat(){const a=parseInt(($('#fLed').amount.value||'').replace(/\D/g,''),10)||0;if(!a){$('#lCalc').textContent='';return}
+  if(lVat==='incl'){const sp=Math.round(a/1.1);$('#lCalc').textContent=`공급가 ${W0(sp)} + 부가세 ${W0(a-sp)} = ${W0(a)}원`}
+  else if(lVat==='excl'){const v=Math.round(a*.1);$('#lCalc').textContent=`공급가 ${W0(a)} + 부가세 ${W0(v)} = ${W0(a+v)}원`}else $('#lCalc').textContent='부가세 없이 계산합니다'}
+document.querySelectorAll('#lVat button').forEach(b=>b.onclick=()=>{lVat=b.dataset.v;setSeg('lVat',lVat);calcVat()});
+$('#fLed').amount.addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'');e.target.value=d?W0(d):'';calcVat()});
+function openLed(type,edit,fixed){
+  const f=$('#fLed');f.reset();$('#lErr').textContent='';lEditId=edit?edit.id:null;lFixed=!!fixed;lType=edit?edit.type:(fixed?'expense':type);
+  const cats=accData.cats[lType];f.category.innerHTML=cats.map(c=>`<option>${c}</option>`).join('');
+  $('#lTitle').textContent=fixed?'매월 고정 지출 등록':(edit?'내역 수정':(lType==='income'?'매출 입력':'지출 입력'));
+  $('#lSub').textContent=fixed?'선택한 달부터 매달 자동으로 지출에 들어갑니다.':(lType==='income'?'수강료는 수강생 탭에서 자동으로 들어오니, 그 밖의 매출을 입력하세요.':'');
+  $('#lDateWrap').classList.toggle('hidden',lFixed);$('#lFromWrap').classList.toggle('hidden',!lFixed);
+  const ym=`${ay}-${pad(am)}`,today=todayKST();
+  f.date.value=edit?edit.date:(today.slice(0,7)===ym?today:ym+'-01');f.from.value=ym;
+  if(fixed){f.category.value='월세'}
+  if(edit){f.category.value=edit.category;f.amount.value=W0(edit.amount);f.method.value=edit.method||'';f.memo.value=edit.memo||''}
+  lVat=edit?edit.vat:(lType==='expense'&&!fixed?'incl':'none');setSeg('lVat',lVat);calcVat();
+  $('#lDim').classList.remove('hidden');$('#lDrawer').classList.remove('hidden');
+}
+function closeLed(){$('#lDim').classList.add('hidden');$('#lDrawer').classList.add('hidden')}
+$('#lCancel').onclick=closeLed;$('#lDim').onclick=closeLed;
+$('#addIn').onclick=()=>openLed('income');$('#addOut').onclick=()=>openLed('expense');$('#addFix').onclick=()=>openLed('expense',null,true);
+$('#fLed').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.target);$('#lErr').textContent='';
+  try{
+    if(lFixed)await api('/api/admin/fixed',{category:f.get('category'),amount:f.get('amount'),vat:lVat,method:f.get('method'),memo:f.get('memo'),from:f.get('from')});
+    else await api('/api/admin/ledger',{id:lEditId,type:lType,date:f.get('date'),category:f.get('category'),amount:f.get('amount'),vat:lVat,method:f.get('method'),memo:f.get('memo')});
+    closeLed();toast('저장했습니다');loadAcc();
+  }catch(x){$('#lErr').textContent=x.message}
 });
 
 // ---------- 문의 ----------

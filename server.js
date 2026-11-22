@@ -58,6 +58,9 @@ fs.mkdirSync(DATA_DIR, { recursive: true });
 let db = { admin: null, settings: { capacity: 6 }, slots: {}, inquiries: [], photos: { fixed: {}, gallery: { works: [], paint: [], visit: [] } } };
 try { db = Object.assign(db, JSON.parse(fs.readFileSync(DB_FILE, 'utf8'))); } catch (_) {}
 db.bookings = db.bookings || [];
+db.ledger = db.ledger || [];
+db.fixed = db.fixed || [];
+db.settings.tuitionVat = db.settings.tuitionVat || 'incl';
 db.enrollments = db.enrollments || [];
 db.photos = db.photos || { fixed: {}, gallery: {} };
 db.photos.fixed = db.photos.fixed || {};
@@ -133,7 +136,7 @@ function cleanPattern(raw) {
 const PAY_METHODS = ['카드', '현금', '계좌이체'];
 function cleanPay(b) {
   const amount = Math.max(0, Math.min(99999999, parseInt(String(b.payAmount || '').replace(/[^0-9]/g, ''), 10) || 0));
-  return { amount, method: PAY_METHODS.includes(b.payMethod) ? b.payMethod : '', paid: !!b.paid };
+  return { amount, method: PAY_METHODS.includes(b.payMethod) ? b.payMethod : '', paid: !!b.paid, paidAt: b.paid ? (DATE_RE.test(b.paidAt || '') ? b.paidAt : todayKST()) : '' };
 }
 // 정규 수강 한 회를 쉬고 맨 뒤로 한 회 미루기
 function postpone(e, bookingId) {
@@ -147,6 +150,42 @@ function postpone(e, bookingId) {
   const add = genSessions(e.pattern, from, 1, taken)[0];
   if (add) db.bookings.push({ id: crypto.randomUUID(), date: add.date, slot: add.slot, name: e.name, course: e.course, enr: e.id });
   return { removed: bk, added: add || null };
+}
+// ---------- 정산 ----------
+const VAT_MODES = ['incl', 'excl', 'none']; // 부가세 포함 / 별도 / 해당 없음
+const INCOME_CATS = ['수강료', '출강', '제작 의뢰', '작품 판매', '기타 매출'];
+const EXPENSE_CATS = ['재료비', '월세', '관리비', '공과금', '장비·도구', '광고·홍보', '기타 지출'];
+function vatSplit(amount, mode) {
+  if (mode === 'incl') { const supply = Math.round(amount / 1.1); return { supply, vat: amount - supply, total: amount }; }
+  if (mode === 'excl') { const vat = Math.round(amount * 0.1); return { supply: amount, vat, total: amount + vat }; }
+  return { supply: amount, vat: 0, total: amount };
+}
+function monthEntries(ym) {
+  const out = [];
+  for (const x of db.ledger) if (x.date.slice(0, 7) === ym) out.push(Object.assign({ source: 'manual' }, x));
+  for (const f of db.fixed) if ((!f.from || f.from <= ym) && (!f.until || f.until >= ym))
+    out.push({ id: 'fixed:' + f.id, fixedId: f.id, source: 'fixed', type: 'expense', date: ym + '-01', category: f.category, amount: f.amount, vat: f.vat, method: f.method || '', memo: f.memo || '매월 고정' });
+  for (const e of db.enrollments) {
+    const pay = e.pay || {}; if (!pay.amount) continue;
+    const d = pay.paid ? (pay.paidAt || e.startDate) : e.startDate;
+    if (!d || d.slice(0, 7) !== ym) continue;
+    out.push({ id: 'enr:' + e.id, enr: e.id, source: 'tuition', type: 'income', date: d, category: '수강료', sub: e.course, amount: pay.amount, vat: db.settings.tuitionVat, method: pay.method || '', memo: e.name, unpaid: !pay.paid });
+  }
+  return out.sort((a, b) => a.date.localeCompare(b.date));
+}
+function summarize(list) {
+  const r = { income: { total: 0, supply: 0, vat: 0 }, expense: { total: 0, supply: 0, vat: 0 }, unpaid: 0, byCat: { income: {}, expense: {} }, byMethod: {} };
+  for (const x of list) {
+    if (x.unpaid) { r.unpaid += x.amount; continue; }
+    const v = vatSplit(x.amount, x.vat), g = r[x.type];
+    g.total += v.total; g.supply += v.supply; g.vat += v.vat;
+    const cat = x.sub ? `${x.category} · ${x.sub}` : x.category;
+    r.byCat[x.type][cat] = (r.byCat[x.type][cat] || 0) + v.total;
+    if (x.type === 'income' && x.method) r.byMethod[x.method] = (r.byMethod[x.method] || 0) + v.total;
+  }
+  r.profit = r.income.supply - r.expense.supply;   // 부가세 제외 기준 순이익
+  r.vatDue = r.income.vat - r.expense.vat;          // 예상 부가세(매출세액 − 매입세액)
+  return r;
 }
 function enrollmentView(e) {
   const list = db.bookings.filter(b => b.enr === e.id).sort((a, b) => (a.date + a.slot).localeCompare(b.date + b.slot));
@@ -420,7 +459,8 @@ async function api(req, res, url) {
       for (const d of newDates) db.bookings.push({ id: crypto.randomUUID(), date: d.date, slot: d.slot, name, course, enr: e.id });
       sessions = keep.length + newDates.length;
     }
-    Object.assign(e, { name, phone: str(b.phone, 30), memo: str(b.memo, 300), course, pattern, sessions, startDate, pay: cleanPay(b) });
+    const np = cleanPay(b); if (np.paid && e.pay && e.pay.paid && e.pay.paidAt) np.paidAt = e.pay.paidAt;
+    Object.assign(e, { name, phone: str(b.phone, 30), memo: str(b.memo, 300), course, pattern, sessions, startDate, pay: np });
     db.bookings.forEach(x => { if (x.enr === e.id) { x.name = name; x.course = course; } });
     save();
     return send(res, 200, { ok: true, enrollment: enrollmentView(e) });
@@ -440,7 +480,7 @@ async function api(req, res, url) {
     let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
     const e = db.enrollments.find(x => x.id === b.id);
     if (!e) return send(res, 404, { error: '수강 정보를 찾을 수 없습니다.' });
-    e.pay = Object.assign({ amount: 0, method: '', paid: false }, e.pay || {}, { paid: !!b.paid }); save();
+    e.pay = Object.assign({ amount: 0, method: '', paid: false }, e.pay || {}, { paid: !!b.paid, paidAt: b.paid ? todayKST() : '' }); save();
     return send(res, 200, { ok: true });
   }
 
@@ -467,6 +507,65 @@ async function api(req, res, url) {
       db.bookings = db.bookings.filter(x => x.enr !== b.id);
       db.enrollments = db.enrollments.filter(x => x.id !== b.id);
     }
+    save();
+    return send(res, 200, { ok: true });
+  }
+
+  // ----- 정산 -----
+  if (p === '/api/admin/ledger' && req.method === 'GET') {
+    const ym = url.searchParams.get('ym') || '';
+    if (!/^\d{4}-\d{2}$/.test(ym)) return send(res, 400, { error: 'bad month' });
+    const entries = monthEntries(ym);
+    return send(res, 200, { entries, summary: summarize(entries), fixed: db.fixed, tuitionVat: db.settings.tuitionVat, cats: { income: INCOME_CATS, expense: EXPENSE_CATS } });
+  }
+  if (p === '/api/admin/ledger/year' && req.method === 'GET') {
+    const y = url.searchParams.get('y') || '';
+    if (!/^\d{4}$/.test(y)) return send(res, 400, { error: 'bad year' });
+    const months = [];
+    for (let m = 1; m <= 12; m++) { const ym = `${y}-${String(m).padStart(2, '0')}`; const s2 = summarize(monthEntries(ym)); months.push({ ym, income: s2.income.total, expense: s2.expense.total, profit: s2.profit, vatDue: s2.vatDue, unpaid: s2.unpaid }); }
+    return send(res, 200, { months });
+  }
+  if (p === '/api/admin/ledger' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const type = b.type === 'expense' ? 'expense' : 'income';
+    if (!DATE_RE.test(b.date || '')) return send(res, 400, { error: '날짜를 선택해 주세요.' });
+    const amount = parseInt(String(b.amount || '').replace(/[^0-9]/g, ''), 10) || 0;
+    if (!amount) return send(res, 400, { error: '금액을 입력해 주세요.' });
+    const cats = type === 'income' ? INCOME_CATS : EXPENSE_CATS;
+    const item = { id: crypto.randomUUID(), type, date: b.date, category: cats.includes(b.category) ? b.category : cats[cats.length - 1], amount, vat: VAT_MODES.includes(b.vat) ? b.vat : 'none', method: PAY_METHODS.includes(b.method) ? b.method : '', memo: str(b.memo, 200) };
+    if (b.id) { const i = db.ledger.findIndex(x => x.id === b.id); if (i >= 0) { item.id = b.id; db.ledger[i] = item; } else db.ledger.push(item); } else db.ledger.push(item);
+    save();
+    return send(res, 200, { ok: true });
+  }
+  if (p === '/api/admin/ledger/delete' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    db.ledger = db.ledger.filter(x => x.id !== b.id); save();
+    return send(res, 200, { ok: true });
+  }
+  if (p === '/api/admin/fixed' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const amount = parseInt(String(b.amount || '').replace(/[^0-9]/g, ''), 10) || 0;
+    if (!amount) return send(res, 400, { error: '금액을 입력해 주세요.' });
+    if (!/^\d{4}-\d{2}$/.test(b.from || '')) return send(res, 400, { error: '시작 월을 선택해 주세요.' });
+    db.fixed.push({ id: crypto.randomUUID(), category: EXPENSE_CATS.includes(b.category) ? b.category : '기타 지출', amount, vat: VAT_MODES.includes(b.vat) ? b.vat : 'none', method: PAY_METHODS.includes(b.method) ? b.method : '', memo: str(b.memo, 100), from: b.from, until: '' });
+    save();
+    return send(res, 200, { ok: true });
+  }
+  if (p === '/api/admin/fixed/stop' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const f = db.fixed.find(x => x.id === b.id); if (!f) return send(res, 404, { error: 'not found' });
+    if (b.remove) db.fixed = db.fixed.filter(x => x.id !== b.id);
+    else { // 지정한 달 직전까지만 적용
+      const [y, m] = String(b.ym || '').split('-').map(Number);
+      const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, '0')}`;
+      f.until = prev;
+    }
+    save();
+    return send(res, 200, { ok: true });
+  }
+  if (p === '/api/admin/ledger/settings' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    if (VAT_MODES.includes(b.tuitionVat)) db.settings.tuitionVat = b.tuitionVat;
     save();
     return send(res, 200, { ok: true });
   }
