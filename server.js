@@ -19,13 +19,29 @@ const SETUP_CODE = process.env.SETUP_CODE || '';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || '818art@naver.com';
 const MAIL_FROM = process.env.MAIL_FROM || '하얀밤 홈페이지 <onboarding@resend.dev>';
+const SITE_URL = process.env.SITE_URL || 'https://hayanbam-web-production.up.railway.app';
 async function notify(it) {
-  if (!RESEND_API_KEY) return;
   const label = it.type === '조형물 제작' ? '제작 의뢰' : it.type;
   const rows = [['이름', it.name], ['연락처', it.phone], ['소속', it.org], ['수업', it.cls], ['인원', it.people], ['장소', it.place],
     ['종류', it.kind], ['규모', it.size], ['예산', it.budget], ['희망 일시', [it.date, it.time].filter(Boolean).join(' ')], ['내용', it.msg]]
     .filter(r => r[1]);
   const text = `[하얀밤 조소공방 홈페이지] 새 ${label}\n\n` + rows.map(r => `${r[0]}: ${r[1]}`).join('\n') + '\n\n관리자 페이지에서 확인하기: /admin';
+  if (!RESEND_API_KEY) {
+    // 기본: FormSubmit으로 공방 메일(818art@naver.com)에 전달 (첫 문의 때 인증 메일 1회 클릭 필요)
+    try {
+      const body = { _subject: `[홈페이지 ${label}] ${it.name}님 문의`, _template: 'table', _captcha: 'false' };
+      rows.forEach(r => { body[r[0]] = r[1]; });
+      body['관리자 페이지'] = SITE_URL + '/admin';
+      const r = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json', Origin: SITE_URL, Referer: SITE_URL + '/' },
+        body: JSON.stringify(body),
+      });
+      const t = await r.text();
+      if (!r.ok) console.error('[mail] FormSubmit 실패', r.status, t.slice(0, 200)); else console.log('[mail] FormSubmit', t.slice(0, 200));
+    } catch (e) { console.error('[mail] FormSubmit 오류', e.message); }
+    return;
+  }
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',

@@ -523,7 +523,19 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
 .cal-h button:disabled{color:#c9c9c5;-webkit-text-fill-color:#c9c9c5;border-color:var(--line);cursor:default}
 button,select,input{color-scheme:light}
 
-.about-grid{grid-template-columns:1fr!important;max-width:720px}
+
+
+/* 공방소개: PC에서는 제목 왼쪽, 본문 오른쪽 2단 / 모바일은 그대로 */
+br.m{display:none}
+@media(min-width:1001px){
+  .about-grid{grid-template-columns:1fr!important}
+  .about-grid>div{display:grid;grid-template-columns:5fr 7fr;column-gap:72px;align-items:start}
+  .about-grid>div>h3.t{grid-column:1;grid-row:1/span 4;font-size:clamp(28px,2.8vw,38px);margin:0}
+  .about-grid>div>.txt,.about-grid>div>.kv{grid-column:2}
+  .about-grid>div>.txt{max-width:none;font-size:17px}
+  .about-grid>div>.txt+.txt{margin-top:18px}
+}
+@media(max-width:1000px){br.m{display:inline}}
 </style>
 </head>
 <body>
@@ -599,9 +611,9 @@ button,select,input{color-scheme:light}
       <div class="about-grid">
         <div>
           <h3 class="t">조소 전문 미술공방,<br>하얀밤 조소공방</h3>
-          <p class="txt">전주 하얀밤 조소공방은<br>조소를 중심으로 유화까지 배울 수 있는<br>미술공방입니다.</p>
-          <p class="txt">조소는 기초 조형에서 시작해<br>피규어 제작, 두상 조소,<br>인체 구조를 활용한 조형까지<br>단계적으로 익힐 수 있도록 구성했습니다.</p>
-          <p class="txt">모든 수업은 소수 정원제로 진행하며,<br>수강생의 수준에 맞춰 단계별로 운영합니다.</p>
+          <p class="txt">전주 하얀밤 조소공방은<br class="m"> 조소를 중심으로 유화까지 배울 수 있는<br class="m"> 미술공방입니다.</p>
+          <p class="txt">조소는 기초 조형에서 시작해<br class="m"> 피규어 제작, 두상 조소,<br class="m"> 인체 구조를 활용한 조형까지<br> 단계적으로 익힐 수 있도록 구성했습니다.</p>
+          <p class="txt">모든 수업은 소수 정원제로 진행하며,<br class="m"> 수강생의 수준에 맞춰 단계별로 운영합니다.</p>
           <div class="kv">
             <div><small>METHOD</small><p>소수 정원제</p></div>
             <div><small>CLASS</small><p>조소 · 유화</p></div>
@@ -934,7 +946,7 @@ button,select,input{color-scheme:light}
       <h4>3. 보유 및 이용 기간</h4>
       <p>문의 응대가 끝난 후 지체 없이 파기합니다. 다만 관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.</p>
       <h4>4. 제3자 제공</h4>
-      <p>공방은 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만 이용자가 네이버 톡톡 또는 이메일로 문의 내용을 직접 보내는 경우, 해당 서비스의 개인정보처리방침이 함께 적용됩니다.</p>
+      <p>접수된 문의 내용은 공방 이메일(818art@naver.com)로 전달되며, 이 과정에서 메일 전달 서비스(FormSubmit)를 이용합니다. 그 밖에 공방은 이용자의 개인정보를 제3자에게 제공하지 않습니다. 다만 이용자가 네이버 톡톡 또는 이메일로 문의 내용을 직접 보내는 경우, 해당 서비스의 개인정보처리방침이 함께 적용됩니다.</p>
       <h4>5. 동의를 거부할 권리</h4>
       <p>이용자는 개인정보 수집·이용에 동의하지 않을 수 있으며, 이 경우 홈페이지 문의 접수가 제한됩니다. 네이버 톡톡으로 직접 문의하실 수 있습니다.</p>
       <h4>6. 이용자의 권리</h4>
@@ -1234,7 +1246,8 @@ f.addEventListener('submit',e=>{
   const rt=document.getElementById('resTitle'),rm=document.getElementById('resMsg'),btn=f.querySelector('.submit');
   const resEl=document.getElementById('res'),bt=document.getElementById('resBt'),hint=document.getElementById('resHint'),out=document.getElementById('out');
   btn.disabled=true;btn.textContent='접수 중…';
-  const fallback=()=>{rt.textContent='문의 내용';rm.textContent='일시적으로 접수가 되지 않았습니다. 아래 내용을 톡톡이나 메일로 보내주시면 확인 후 연락드립니다.';
+  const isPreview=location.protocol==='file:'||!/railway\.app$|hayanbam/.test(location.hostname);
+  const fallback=()=>{rt.textContent='문의 내용';rm.textContent=isPreview?'미리보기 화면에서는 접수되지 않습니다. 실제 홈페이지에서 접수해 주세요.':'일시적으로 접수가 되지 않았습니다. 아래 내용을 톡톡이나 메일로 보내주시면 확인 후 연락드립니다.';
     out.style.display='';bt.style.display='';hint.style.display='';resEl.classList.add('on');btn.disabled=false;btn.textContent='문의 접수'};
   fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
     .then(r=>r.ok?r.json():Promise.reject(r))
