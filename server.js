@@ -32,7 +32,7 @@ async function notify(it) {
       const body = { _subject: `[홈페이지 ${label}] ${it.name}님 문의`, _template: 'table', _captcha: 'false' };
       rows.forEach(r => { body[r[0]] = r[1]; });
       body['관리자 페이지'] = SITE_URL + '/admin';
-      const r = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(NOTIFY_EMAIL), {
+      const r = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(process.env.FORMSUBMIT_KEY || NOTIFY_EMAIL), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json', Origin: SITE_URL, Referer: SITE_URL + '/' },
         body: JSON.stringify(body),
