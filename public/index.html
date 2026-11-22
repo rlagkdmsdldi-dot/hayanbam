@@ -394,8 +394,20 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
   .gnb,.hd-tel{display:none}
   .burger{display:block}
   .mnav.open{display:block;position:fixed;top:64px;left:0;right:0;bottom:0;background:var(--bg);padding:20px 22px;overflow:auto;z-index:49}
-  .mnav h6{font-size:12px;letter-spacing:.2em;font-weight:700;margin:22px 0 8px}
-  .mnav a{display:block;font-size:20px;font-weight:600;padding:6px 0}
+  .mnav.open{padding:8px 22px 90px}
+  .mg{border-bottom:1px solid var(--line)}
+  .mg-h{width:100%;display:flex;align-items:baseline;gap:10px;background:none;border:0;padding:22px 0;text-align:left;color:var(--ink)}
+  .mg-h span{font-size:26px;font-weight:800;letter-spacing:-.03em}
+  .mg-h small{font-size:13px;color:var(--gray);font-weight:500}
+  .mg-h i{margin-left:auto;width:12px;height:12px;position:relative;align-self:center}
+  .mg-h i::before,.mg-h i::after{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;background:var(--ink);transition:transform .2s}
+  .mg-h i::after{transform:rotate(90deg)}
+  .mg.open .mg-h i::after{transform:rotate(0)}
+  .mg-s{display:none;padding:0 0 18px 2px}
+  .mg.open .mg-s{display:block}
+  .mg-s a{display:block;font-size:15px;font-weight:500;color:var(--ink2);padding:7px 0 7px 14px;border-left:1px solid var(--line)}
+  .mg-s a:active{color:var(--ink);border-color:var(--ink)}
+  .mg-talk{display:block;margin-top:28px;font-size:14px;font-weight:600;border-bottom:1px solid var(--ink);width:max-content;padding-bottom:2px}
   section{padding-top:96px}
   .hero-row,.hero-img,.sh,.row,.about-grid,.teacher,.adm,.eve-top,.fee,.ct,.loc,.picker,.ft{grid-template-columns:1fr;gap:28px}
   .hero-img .side{border-left:0}
@@ -494,10 +506,11 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
   </div>
 </header>
 <nav class="mnav" id="mnav">
-  <h6>ABOUT</h6><a href="#about-studio">공방소개</a><a href="#about-sculpture">조소·유화</a><a href="#about-teacher">강사소개</a>
-  <h6>CLASS</h6><a href="#class-hobby">수업 종류</a><a href="#class-time">시간표</a><a href="#class-guide">수강 안내</a><a href="#class-qna">Q&amp;A</a><a href="#class-eve">야간 출강</a>
-  <h6>ARCHIVE</h6><a href="#archive-works">조소반</a><a href="#archive-paint">유화반</a><a href="#archive-visit">출강</a>
-  <h6>CONTACT</h6><a href="#contact-form">문의하기</a><a href="#contact-map">오시는 길</a>
+  <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>ABOUT</span><small>공방소개</small><i></i></button><div class="mg-s"><a href="#about-studio">공방소개</a><a href="#about-sculpture">조소·유화</a><a href="#about-teacher">강사소개</a></div></div>
+  <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>CLASS</span><small>수업안내</small><i></i></button><div class="mg-s"><a href="#class-hobby">수업 종류</a><a href="#class-time">시간표</a><a href="#class-guide">수강 안내</a><a href="#class-qna">Q&amp;A</a><a href="#class-eve">야간 출강</a></div></div>
+  <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>ARCHIVE</span><small>작업 기록</small><i></i></button><div class="mg-s"><a href="#archive-works">조소반</a><a href="#archive-paint">유화반</a><a href="#archive-visit">출강</a></div></div>
+  <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>CONTACT</span><small>문의</small><i></i></button><div class="mg-s"><a href="#contact-form">문의하기</a><a href="#contact-map">오시는 길</a></div></div>
+  <a class="mg-talk" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의 ↗</a>
 </nav>
 
 <!-- ================= HERO ================= -->
@@ -842,11 +855,11 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
           <b style="font-size:15px" id="resTitle">문의 내용</b>
           <p id="resMsg" style="font-size:14px;color:var(--ink2);margin-top:6px"></p>
           <pre id="out"></pre>
-          <div class="bt">
+          <div class="bt" id="resBt">
             <a class="p" id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">복사 후 톡톡 열기</a>
                         <a id="mail" href="#">메일로 보내기</a>
           </div>
-          <small>‘복사 후 톡톡 열기’를 누르면 내용이 복사됩니다. 톡톡 창에 붙여넣어 보내주세요.</small>
+          <small id="resHint">‘복사 후 톡톡 열기’를 누르면 내용이 복사됩니다. 톡톡 창에 붙여넣어 보내주세요.</small>
         </div>
       </form>
     </div>
@@ -921,6 +934,11 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
 const mnav=document.getElementById('mnav');
 document.getElementById('burger').onclick=()=>mnav.classList.toggle('open');
 mnav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mnav.classList.remove('open')));
+mnav.querySelectorAll('.mg-h').forEach(h=>h.addEventListener('click',()=>{
+  const g=h.parentElement,open=!g.classList.contains('open');
+  mnav.querySelectorAll('.mg').forEach(x=>{x.classList.remove('open');x.querySelector('.mg-h').setAttribute('aria-expanded','false')});
+  if(open){g.classList.add('open');h.setAttribute('aria-expanded','true')}
+}));
 
 
 // ---- page router (#home, #about, #about-teacher ...)
@@ -1100,6 +1118,24 @@ function autoStart(){
 autoStart();
 ['pointerdown','touchend','keydown'].forEach(ev=>document.addEventListener(ev,function h(){autoStart();document.removeEventListener(ev,h)},{once:true,capture:true}));
 
+// ---- 관리자 페이지에서 올린 사진 반영 (실제 사이트)
+(async()=>{
+  try{
+    const r=await fetch('/api/photos');if(!r.ok)return;const P=await r.json(),F=P.fixed||{},G=P.gallery||{};
+    const put=(el,u)=>{if(!el||!u)return;el.classList.add('photo');el.innerHTML=`<img src="${u}" alt="" loading="lazy">`};
+    put(document.querySelector('.hero-img > .ph'),F.hero);
+    put(document.querySelector('.about-grid .ph'),F.studio);
+    if(F.teacher){const t=document.querySelector('.teacher .ph img');if(t)t.src=F.teacher}
+    put(document.querySelector('.card .ph[data-l="SCULPTURE"]'),F.c_sculpture);
+    put(document.querySelector('.card .ph[data-l="OIL PAINTING"]'),F.c_oil);
+    put(document.querySelector('.card .ph[data-l="ONE-DAY"]'),F.c_oneday);
+    [['works','archive-works'],['paint','archive-paint'],['visit','archive-visit']].forEach(([k,sp])=>{
+      const list=G[k]||[],g=document.querySelector(`[data-sp="${sp}"] .gal`);
+      if(g&&list.length)g.innerHTML=list.map(u=>`<div class="ph photo"><img src="${u}" alt="" loading="lazy"></div>`).join('');
+    });
+  }catch(_){}
+})();
+
 // ---- naver map (실제 배포 시 NCP Maps 키 입력)
 const NAVER_MAP_KEY=''; // 네이버 클라우드 플랫폼 Maps Client ID
 if(NAVER_MAP_KEY){
@@ -1131,17 +1167,22 @@ f.addEventListener('submit',e=>{
   const text=L.join('\n');
   document.getElementById('out').textContent=text;
   document.getElementById('mail').href='mailto:818art@naver.com?subject='+encodeURIComponent('[홈페이지 '+t+']')+'&body='+encodeURIComponent(text);
-  document.getElementById('res').classList.add('on');
-  // 서버에 문의 저장 (실제 사이트)
+  // 서버에 문의 저장 (실제 사이트) → 성공하면 접수 완료만 표시, 실패할 때만 톡톡·메일 안내
   const payload={type:t,name:d.get('name'),phone:d.get('phone'),org:d.get('org2')||d.get('org3')||'',cls:t==='수업 문의'?d.get('cls'):'',
     people:t==='출강 문의'?d.get('people'):'',place:t==='출강 문의'?d.get('place'):'',kind:t==='조형물 제작'?d.get('kind'):'',
     size:t==='조형물 제작'?d.get('size'):'',budget:t==='조형물 제작'?d.get('budget'):'',date:selDate?fmt(selDate):'',time:selTime||'',msg:d.get('msg')||'',website:d.get('website')||''};
   const rt=document.getElementById('resTitle'),rm=document.getElementById('resMsg'),btn=f.querySelector('.submit');
-  btn.disabled=true;
+  const resEl=document.getElementById('res'),bt=document.getElementById('resBt'),hint=document.getElementById('resHint'),out=document.getElementById('out');
+  btn.disabled=true;btn.textContent='접수 중…';
+  const fallback=()=>{rt.textContent='문의 내용';rm.textContent='일시적으로 접수가 되지 않았습니다. 아래 내용을 톡톡이나 메일로 보내주시면 확인 후 연락드립니다.';
+    out.style.display='';bt.style.display='';hint.style.display='';resEl.classList.add('on');btn.disabled=false;btn.textContent='문의 접수'};
   fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
     .then(r=>r.ok?r.json():Promise.reject(r))
-    .then(()=>{rt.textContent='문의가 접수되었습니다';rm.textContent='확인 후 기재하신 연락처로 연락드립니다. 더 빠른 답변이 필요하시면 아래 내용을 톡톡으로도 보내주세요.'})
-    .catch(()=>{rt.textContent='문의 내용';rm.textContent='아래 내용을 톡톡이나 메일로 보내주시면 확인 후 연락드립니다.';btn.disabled=false});
+    .then(()=>{rt.textContent='문의가 접수되었습니다';rm.textContent='확인 후 기재하신 연락처로 연락드립니다. 감사합니다.';
+      out.style.display='none';bt.style.display='none';hint.style.display='none';resEl.classList.add('on');btn.textContent='접수 완료';
+      f.querySelectorAll('input:not([type=radio]):not([type=checkbox]),textarea').forEach(i=>{if(i.name!=='website')i.value=''});
+      resEl.scrollIntoView({behavior:'smooth',block:'center'})})
+    .catch(fallback);
 });
 document.getElementById('talkSend').addEventListener('click',async e=>{
   try{await navigator.clipboard.writeText(document.getElementById('out').textContent);e.currentTarget.textContent='복사됨 · 톡톡에 붙여넣기'}catch(_){}

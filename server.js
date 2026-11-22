@@ -15,12 +15,46 @@ const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const DB_FILE = path.join(DATA_DIR, 'db.json');
 const SESSION_SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
 const SETUP_CODE = process.env.SETUP_CODE || '';
+// 새 문의 메일 알림 (Resend). RESEND_API_KEY가 있을 때만 발송
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || '818art@naver.com';
+const MAIL_FROM = process.env.MAIL_FROM || '하얀밤 홈페이지 <onboarding@resend.dev>';
+async function notify(it) {
+  if (!RESEND_API_KEY) return;
+  const label = it.type === '조형물 제작' ? '제작 의뢰' : it.type;
+  const rows = [['이름', it.name], ['연락처', it.phone], ['소속', it.org], ['수업', it.cls], ['인원', it.people], ['장소', it.place],
+    ['종류', it.kind], ['규모', it.size], ['예산', it.budget], ['희망 일시', [it.date, it.time].filter(Boolean).join(' ')], ['내용', it.msg]]
+    .filter(r => r[1]);
+  const text = `[하얀밤조소공방 홈페이지] 새 ${label}\n\n` + rows.map(r => `${r[0]}: ${r[1]}`).join('\n') + '\n\n관리자 페이지에서 확인하기: /admin';
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: MAIL_FROM, to: [NOTIFY_EMAIL], subject: `[홈페이지 ${label}] ${it.name}님 문의`, text }),
+    });
+    if (!r.ok) console.error('[mail] 발송 실패', r.status, await r.text());
+  } catch (e) { console.error('[mail] 발송 오류', e.message); }
+}
 if (!process.env.SESSION_SECRET) console.warn('[warn] SESSION_SECRET 미설정: 재시작 시 로그인이 풀립니다.');
 
 // ---------- 저장소 (JSON 파일, Railway 볼륨에 보관) ----------
 fs.mkdirSync(DATA_DIR, { recursive: true });
-let db = { admin: null, settings: { capacity: 6 }, slots: {}, inquiries: [] };
+let db = { admin: null, settings: { capacity: 6 }, slots: {}, inquiries: [], photos: { fixed: {}, gallery: { works: [], paint: [], visit: [] } } };
 try { db = Object.assign(db, JSON.parse(fs.readFileSync(DB_FILE, 'utf8'))); } catch (_) {}
+db.photos = db.photos || { fixed: {}, gallery: {} };
+db.photos.fixed = db.photos.fixed || {};
+db.photos.gallery = Object.assign({ works: [], paint: [], visit: [] }, db.photos.gallery || {});
+const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+const FIXED_KEYS = ['hero', 'studio', 'teacher', 'c_sculpture', 'c_oil', 'c_oneday'];
+const GALLERY_KEYS = ['works', 'paint', 'visit'];
+function removeUpload(name) { if (name && /^[a-f0-9-]+\.jpg$/.test(name)) fs.unlink(path.join(UPLOAD_DIR, name), () => {}); }
+function photosPublic() {
+  const url = n => '/uploads/' + n;
+  const fixed = {}; for (const k of FIXED_KEYS) if (db.photos.fixed[k]) fixed[k] = url(db.photos.fixed[k]);
+  const gallery = {}; for (const k of GALLERY_KEYS) gallery[k] = (db.photos.gallery[k] || []).map(url);
+  return { fixed, gallery };
+}
 function save() {
   const tmp = DB_FILE + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(db));
@@ -139,6 +173,9 @@ async function api(req, res, url) {
     return send(res, 200, { days });
   }
 
+  // 공개: 사진 목록
+  if (p === '/api/photos' && req.method === 'GET') return send(res, 200, photosPublic());
+
   // 공개: 홈페이지 문의 저장
   if (p === '/api/inquiry' && req.method === 'POST') {
     if (limited('inq:' + ip(req), 5, 10 * 60e3)) return send(res, 429, { error: '잠시 후 다시 시도해 주세요.' });
@@ -157,6 +194,7 @@ async function api(req, res, url) {
     db.inquiries.unshift(item);
     db.inquiries = db.inquiries.slice(0, 2000);
     save();
+    notify(item);
     return send(res, 200, { ok: true });
   }
 
@@ -225,6 +263,48 @@ async function api(req, res, url) {
     return send(res, 200, { ok: true, slot: slotInfo(b.date, b.slot, true) });
   }
 
+  if (p === '/api/admin/photos' && req.method === 'GET') return send(res, 200, photosPublic());
+
+  if (p === '/api/admin/photo' && req.method === 'POST') {
+    let b; try { b = await readBody(req, 8 * 1024 * 1024); } catch (_) { return send(res, 413, { error: '사진 용량이 너무 큽니다.' }); }
+    const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(b.data || ''));
+    if (!m) return send(res, 400, { error: '사진 형식이 올바르지 않습니다.' });
+    const buf = Buffer.from(m[1], 'base64');
+    if (buf[0] !== 0xff || buf[1] !== 0xd8) return send(res, 400, { error: '사진 형식이 올바르지 않습니다.' });
+    const name = crypto.randomUUID() + '.jpg';
+    if (FIXED_KEYS.includes(b.key)) {
+      fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      removeUpload(db.photos.fixed[b.key]);
+      db.photos.fixed[b.key] = name;
+    } else if (GALLERY_KEYS.includes(b.key)) {
+      if ((db.photos.gallery[b.key] || []).length >= 60) return send(res, 400, { error: '한 묶음에 사진은 60장까지 올릴 수 있습니다.' });
+      fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      db.photos.gallery[b.key].push(name);
+    } else return send(res, 400, { error: '사진 자리가 올바르지 않습니다.' });
+    save();
+    return send(res, 200, { ok: true, photos: photosPublic() });
+  }
+
+  if (p === '/api/admin/photo/delete' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const name = String(b.url || '').replace('/uploads/', '');
+    if (FIXED_KEYS.includes(b.key) && db.photos.fixed[b.key] === name) { delete db.photos.fixed[b.key]; removeUpload(name); }
+    else if (GALLERY_KEYS.includes(b.key)) {
+      const list = db.photos.gallery[b.key]; const i = list.indexOf(name);
+      if (i >= 0) { list.splice(i, 1); removeUpload(name); }
+    }
+    save();
+    return send(res, 200, { ok: true, photos: photosPublic() });
+  }
+
+  if (p === '/api/admin/photo/move' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    if (!GALLERY_KEYS.includes(b.key)) return send(res, 400, { error: 'bad key' });
+    const list = db.photos.gallery[b.key], name = String(b.url || '').replace('/uploads/', ''), i = list.indexOf(name), j = i + (b.dir < 0 ? -1 : 1);
+    if (i >= 0 && j >= 0 && j < list.length) { [list[i], list[j]] = [list[j], list[i]]; save(); }
+    return send(res, 200, { ok: true, photos: photosPublic() });
+  }
+
   if (p === '/api/admin/inquiries' && req.method === 'GET') {
     return send(res, 200, { items: db.inquiries });
   }
@@ -286,6 +366,15 @@ http.createServer(async (req, res) => {
   }
   if (url.pathname === '/admin' || url.pathname === '/admin/') {
     return serveFile(res, path.join(ROOT, 'admin.html'), { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store' });
+  }
+  if (url.pathname.startsWith('/uploads/')) {
+    const n = url.pathname.slice(9);
+    if (!/^[a-f0-9-]+\.jpg$/.test(n)) { res.writeHead(404); return res.end(); }
+    return fs.readFile(path.join(UPLOAD_DIR, n), (err, data) => {
+      if (err) { res.writeHead(404); return res.end(); }
+      res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=31536000, immutable' });
+      res.end(data);
+    });
   }
   let p = decodeURIComponent(url.pathname);
   if (p === '/') p = '/index.html';

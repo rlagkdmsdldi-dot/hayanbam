@@ -104,19 +104,50 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 .card p{color:var(--gray);font-size:13px;margin-bottom:16px}
 .ok{color:#2f6b3a;font-size:13px;min-height:20px;margin-top:8px}
 
-.hint{font-size:13px;color:var(--ink2);background:var(--bg2);padding:10px 12px;margin-bottom:12px;line-height:1.6}
-.help-btn{border:1px solid var(--ink)!important;padding:5px 10px;color:var(--ink)!important}
-.drawer.help{width:440px;z-index:51}
-#hDim{z-index:50}
-.help-top{display:flex;justify-content:space-between;align-items:center}
-.help-top button{border:0;background:none;font-size:18px;color:var(--gray)}
-.hs{border-top:1px solid var(--line);padding:18px 0}
-.hs h4{font-size:16px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.hs h4 span{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;background:var(--ink);color:#fff;font-size:12px;border-radius:50%}
-.hs ol,.hs ul{padding-left:18px;font-size:14px;color:var(--ink2);line-height:1.8}
-.hs ul.keys{list-style:none;padding:0}
-.hs ul.keys i{display:inline-block;width:14px;height:14px;margin-right:8px;vertical-align:-2px}
-.hs .tip{font-size:13px;color:var(--gray);margin-top:8px;line-height:1.6}
+.pg{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:28px;align-items:start}
+.pg.hidden{display:none}
+.pg .ph{order:2;position:sticky;top:130px}
+.pg .pc{order:1;min-width:0}
+.ph-d{background:var(--bg2);border:1px solid var(--line);padding:16px 16px 6px}
+.ph-d summary{list-style:none;font-size:11px;font-weight:700;letter-spacing:.2em;color:var(--gray);margin-bottom:10px;cursor:default}
+.ph-d summary::-webkit-details-marker{display:none}
+.ph-b h5{font-size:13px;font-weight:700;margin:12px 0 4px}
+.ph-b h5:first-child{margin-top:0}
+.ph-b ol{padding-left:16px;font-size:13px;color:var(--ink2);line-height:1.7}
+.ph-b p{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:6px}
+.ph-b p.t{color:var(--gray);font-size:12px}
+@media(max-width:900px){
+  .pg{grid-template-columns:1fr;gap:12px}
+  .pg .ph{order:0;position:static}
+  .ph-d{padding:0}
+  .ph-d summary{cursor:pointer;margin:0;padding:11px 14px;font-size:12px;letter-spacing:.06em;color:var(--ink2);display:flex;justify-content:space-between}
+  .ph-d summary::before{content:"ⓘ  "}
+  .ph-d summary::after{content:"펼치기 ▾";font-weight:500;color:var(--gray)}
+  .ph-d[open] summary::after{content:"접기 ▴"}
+  .ph-d .ph-b{padding:4px 14px 10px}
+}
+.sec{font-size:16px;font-weight:700;margin:4px 0 12px}
+.sec+.fixed{margin-bottom:36px}
+.fixed{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.fx{background:#fff;border:1px solid var(--line)}
+.fx .im{aspect-ratio:4/3;background:#d6d6d2 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.4);font-size:12px}
+.fx .im.tall{aspect-ratio:3/4}
+.fx .bd{padding:12px}
+.fx b{display:block;font-size:14px}
+.fx small{display:block;color:var(--gray);font-size:12px;margin-bottom:10px}
+.fx .bt{display:flex;gap:6px}
+.pick{position:relative;overflow:hidden;flex:1;text-align:center;background:var(--ink);color:#fff;padding:9px 6px;font-size:13px;font-weight:600;cursor:pointer}
+.pick input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.mini{border:1px solid var(--line);background:#fff;padding:9px 10px;font-size:13px}
+.gg{margin-bottom:28px}
+.gg h4{font-size:14px;font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.gg h4 .pick{flex:none;padding:7px 12px}
+.gthumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px}
+.gt{position:relative;aspect-ratio:1;background:#d6d6d2 center/cover no-repeat}
+.gt .ctl{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;background:linear-gradient(transparent,rgba(0,0,0,.55));padding:14px 4px 4px}
+.gt button{border:0;background:rgba(255,255,255,.9);width:26px;height:26px;font-size:13px;line-height:1}
+.gempty{color:var(--gray);font-size:13px;border:1px dashed var(--line);padding:24px;text-align:center;grid-column:1/-1}
+.uploading{opacity:.5;pointer-events:none}
 .toast{white-space:nowrap;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 
@@ -128,6 +159,13 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   .chip span{display:none}
   .drawer{top:auto;width:100%;max-height:88vh;border-radius:14px 14px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom))}
   .hd span{display:none}
+  .fixed{grid-template-columns:1fr 1fr;gap:8px}
+  .fx .bd{padding:9px}
+  .fx b{font-size:13px}
+  .fx small{font-size:11px;margin-bottom:8px}
+  .fx .bt{flex-direction:column}
+  .pick,.mini{font-size:12px;padding:8px 4px}
+  .gthumbs{grid-template-columns:repeat(3,1fr);gap:4px}
 }
 </style>
 </head>
@@ -164,29 +202,60 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 <!-- 관리 화면 -->
 <div id="vApp" class="hidden">
   <header>
-    <div class="hd"><b>HAYANBAM</b><span>관리자</span><div class="sp"></div><button id="helpBtn" class="help-btn">? 사용법</button><a href="/" target="_blank" rel="noopener">홈페이지 ↗</a><button id="logout">로그아웃</button></div>
+    <div class="hd"><b>HAYANBAM</b><span>관리자</span><div class="sp"></div><a href="/" target="_blank" rel="noopener">홈페이지 ↗</a><button id="logout">로그아웃</button></div>
     <nav class="tabs">
       <button data-t="cal" class="on">예약 캘린더</button>
       <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
+      <button data-t="pho">사진</button>
       <button data-t="set">설정</button>
     </nav>
   </header>
   <main>
-    <section id="tCal">
+    <section id="tCal" class="pg"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>예약이 들어오면</h5>
+  <ol><li>해당 날짜의 수업 타임 칸을 누릅니다.</li><li><b>＋</b>로 예약 인원을 올리고 <b>저장</b>.</li><li>홈페이지 문의 달력의 <b>잔여석</b>이 바로 바뀝니다.</li><li>정원이 차면 자동으로 <b>마감</b>됩니다.</li></ol>
+  <p class="t">취소되면 <b>−</b>로 줄이고 저장하면 다시 열립니다.</p>
+  <h5>칸 보는 법</h5>
+  <p><b>2/6</b> = 예약 2명 / 정원 6명<br>흰색 예약 없음 · 베이지 예약 있음<br>검정 마감 · 빗금 휴강 · ✎ 메모</p>
+  <h5>쉬는 날 · 특별한 날</h5>
+  <p>타임을 눌러 <b>휴강</b>을 켜면 홈페이지에서 선택할 수 없습니다. 그날만 정원을 바꾸거나, 예약자 이름을 <b>메모</b>로 남길 수 있습니다(손님에게 안 보임).</p>
+</div></details></aside><div class="pc">
       <div class="mh"><button id="mPrev" aria-label="이전 달">‹</button><h2 id="mTitle"></h2><button id="mNext" aria-label="다음 달">›</button></div>
-      <p class="hint">수업 타임 칸을 누르면 예약 인원·정원·휴강·메모를 바꿀 수 있어요. 처음이라면 오른쪽 위 <b>? 사용법</b>을 눌러 보세요.</p>
       <div class="legend"><span><i style="background:#fff;border:1px solid #e2e2de"></i>예약 없음</span><span><i style="background:#f4f1e8;border:1px solid #e2d9bd"></i>예약 있음</span><span><i style="background:#111"></i>마감</span><span><i style="background:repeating-linear-gradient(45deg,#ddd,#ddd 2px,#fff 2px,#fff 4px)"></i>휴강</span><span>✎ 메모</span></div>
       <div class="grid" id="grid"></div>
-    </section>
+    </div></section>
 
-    <section id="tInq" class="hidden">
+    <section id="tInq" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>문의가 들어오면</h5>
+  <ol><li>홈페이지 문의 폼으로 들어온 내용이 여기에 쌓입니다. 새 문의는 탭에 숫자로 표시됩니다.</li><li>연락한 뒤 상태를 <b>확인함 → 예약 확정 → 완료</b>로 바꿔 두세요.</li><li>예약이 확정되면 <b>예약 캘린더</b>에서 인원을 <b>＋1</b> 해야 자리가 잡힙니다.</li></ol>
+  <p class="t">삭제는 <b>삭제</b>를 두 번 눌러야 됩니다.</p>
+</div></details></aside><div class="pc">
       <div class="filters" id="filters">
         <button data-f="all" class="on">전체</button><button data-f="new">새 문의</button><button data-f="checked">확인함</button><button data-f="confirmed">예약 확정</button><button data-f="done">완료</button>
       </div>
       <div id="inqList"></div>
-    </section>
+    </div></section>
 
-    <section id="tSet" class="hidden">
+    <section id="tPho" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>사진 올리기</h5>
+  <ol><li>바꾸고 싶은 자리의 <b>사진 선택</b>을 누릅니다.</li><li>휴대폰은 <b>사진 보관함</b>이나 <b>카메라</b>, PC는 폴더에서 사진을 고릅니다.</li><li>올리면 홈페이지에 바로 반영됩니다.</li></ol>
+  <p class="t">사진은 자동으로 알맞은 크기로 줄여서 올라갑니다. 여러 장을 한 번에 고를 수도 있어요(작업 기록).</p>
+  <h5>작업 기록 (ARCHIVE)</h5>
+  <p>조소반 · 유화반 · 출강으로 나눠 올립니다. 사진 아래 <b>‹ ›</b>로 순서를 바꾸고, <b>✕</b>로 지웁니다.</p>
+  <h5>사진이 없을 때</h5>
+  <p>올리지 않은 자리는 홈페이지에 회색 빈칸으로 보입니다.</p>
+</div></details></aside><div class="pc">
+      <h3 class="sec">홈페이지 고정 사진</h3>
+      <div class="fixed" id="fixedList"></div>
+      <h3 class="sec">작업 기록 (ARCHIVE)</h3>
+      <div id="galList"></div>
+    </div></section>
+
+    <section id="tSet" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>기본 정원</h5><p>모든 타임에 적용되는 정원입니다. 특정 날만 다르게 하려면 캘린더에서 그 타임을 눌러 바꾸세요.</p>
+  <h5>비밀번호</h5><p>바꾸면 다른 기기의 로그인은 모두 풀립니다. 로그인은 7일 동안 유지됩니다.</p>
+  <h5>휴대폰에서 앱처럼 쓰기</h5><p>아이폰: 공유 → 홈 화면에 추가<br>갤럭시: 메뉴(⋮) → 홈 화면에 추가</p>
+</div></details></aside><div class="pc">
       <div class="card">
         <h3>기본 정원</h3>
         <p>모든 수업 타임의 기본 정원입니다. 타임별로 다르게 하려면 캘린더에서 해당 타임을 눌러 바꿔 주세요.</p>
@@ -205,7 +274,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
           <button class="btn">변경</button>
         </form>
       </div>
-    </section>
+    </div></section>
   </main>
 </div>
 
@@ -222,67 +291,6 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   <label class="toggle"><span><b style="font-weight:600">휴강 / 예약 막기</b><br><small style="color:var(--gray)">홈페이지에서 선택할 수 없게 됩니다</small></span><input type="checkbox" id="dClosed"></label>
   <div class="fd"><label>메모 (관리자만 보임)</label><textarea id="dMemo" placeholder="예: 김OO, 이OO / 유화 1명"></textarea></div>
   <div class="acts"><button class="btn line" type="button" id="dCancel">닫기</button><button class="btn" type="button" id="dSave">저장</button></div>
-</aside>
-
-<div class="dim hidden" id="hDim"></div>
-<aside class="drawer help hidden" id="help" role="dialog" aria-modal="true" aria-labelledby="hTitle">
-  <div class="help-top"><p class="eng">HOW TO USE</p><button id="hClose" aria-label="닫기">✕</button></div>
-  <h3 id="hTitle">관리자 페이지 사용법</h3>
-  <p class="sub">홈페이지에 보이는 잔여석과 문의를 여기서 관리합니다.</p>
-
-  <section class="hs"><h4><span>1</span>예약이 들어오면</h4>
-    <ol>
-      <li><b>예약 캘린더</b>에서 해당 날짜의 수업 타임 칸을 누릅니다.</li>
-      <li><b>＋</b> 버튼으로 예약 인원을 올리고 <b>저장</b>을 누릅니다.</li>
-      <li>홈페이지 문의 달력에 <b>“잔여 n석”</b>이 바로 바뀌어 보입니다.</li>
-      <li>정원이 차면 자동으로 <b>“마감”</b>이 되어 손님이 그 시간을 고를 수 없습니다.</li>
-    </ol>
-    <p class="tip">취소되면 <b>−</b> 버튼으로 인원을 줄이고 저장하면 다시 열립니다.</p>
-  </section>
-
-  <section class="hs"><h4><span>2</span>칸 색깔 보는 법</h4>
-    <ul class="keys">
-      <li><i style="background:#fff;border:1px solid #e2e2de"></i>예약 없음</li>
-      <li><i style="background:#f4f1e8;border:1px solid #e2d9bd"></i>예약 있음 (자리 남음)</li>
-      <li><i style="background:#111"></i>마감 (정원 참)</li>
-      <li><i style="background:repeating-linear-gradient(45deg,#ddd,#ddd 2px,#fff 2px,#fff 4px)"></i>휴강</li>
-      <li><i style="background:none;text-align:center;font-style:normal">✎</i>메모 있음</li>
-    </ul>
-    <p class="tip">칸에 적힌 <b>2/6</b>은 “예약 2명 / 정원 6명”이라는 뜻입니다.</p>
-  </section>
-
-  <section class="hs"><h4><span>3</span>쉬는 날·특별한 날</h4>
-    <ul>
-      <li><b>휴강:</b> 타임을 눌러 <b>휴강 / 예약 막기</b>를 켜고 저장하면 홈페이지에서 선택할 수 없습니다.</li>
-      <li><b>그날만 정원 변경:</b> 타임을 눌러 <b>이 타임 정원</b> 숫자를 바꿉니다.</li>
-      <li><b>메모:</b> 예약자 이름, 수업 종류 등을 적어 두세요. 손님에게는 보이지 않습니다.</li>
-    </ul>
-  </section>
-
-  <section class="hs"><h4><span>4</span>문의 확인</h4>
-    <ul>
-      <li>홈페이지 문의 폼으로 들어온 내용은 <b>문의</b> 탭에 쌓입니다. 새 문의는 탭에 숫자로 표시됩니다.</li>
-      <li>연락한 뒤 상태를 <b>확인함 → 예약 확정 → 완료</b>로 바꿔 두면 정리가 쉽습니다.</li>
-      <li>예약이 확정되면 <b>예약 캘린더</b>에서 인원도 꼭 +1 해 주세요. (문의만으로는 자리가 잡히지 않습니다)</li>
-      <li>삭제는 <b>삭제</b>를 두 번 눌러야 됩니다.</li>
-    </ul>
-  </section>
-
-  <section class="hs"><h4><span>5</span>설정</h4>
-    <ul>
-      <li><b>기본 정원:</b> 모든 타임의 기본 정원입니다. (현재 기본값 6명)</li>
-      <li><b>비밀번호 변경:</b> 바꾸면 다른 기기의 로그인은 모두 풀립니다.</li>
-    </ul>
-  </section>
-
-  <section class="hs"><h4><span>＋</span>휴대폰에서 앱처럼 쓰기</h4>
-    <ul>
-      <li><b>아이폰(사파리):</b> 공유 버튼 → 홈 화면에 추가</li>
-      <li><b>갤럭시(크롬·삼성인터넷):</b> 메뉴(⋮) → 홈 화면에 추가</li>
-    </ul>
-    <p class="tip">로그인은 7일 동안 유지됩니다.</p>
-  </section>
-  <button class="btn" id="hOk" type="button" style="margin-top:8px">확인</button>
 </aside>
 
 <div class="toast" id="toast"></div>
@@ -332,7 +340,8 @@ $('#logout').onclick=async()=>{try{await api('/api/admin/logout',{})}catch(_){}s
 // ---------- 탭 ----------
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  ['cal','inq','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  ['cal','inq','pho','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  if(b.dataset.t==='pho')loadPho();
   if(b.dataset.t==='inq')loadInq();
   if(b.dataset.t==='set')loadSet();
 });
@@ -443,12 +452,54 @@ $('#fPw').addEventListener('submit',async e=>{
   try{await api('/api/admin/password',{current:f.get('current'),next:f.get('next')});e.target.reset();toast('비밀번호를 바꿨습니다')}catch(x){er.textContent=x.message}
 });
 
-// ---------- 사용법 ----------
-function openHelp(){$('#hDim').classList.remove('hidden');$('#help').classList.remove('hidden');$('#help').scrollTop=0}
-function closeHelp(){$('#hDim').classList.add('hidden');$('#help').classList.add('hidden');try{localStorage.setItem('hb_help_seen','1')}catch(_){}}
-$('#helpBtn').onclick=openHelp;$('#hClose').onclick=closeHelp;$('#hOk').onclick=closeHelp;$('#hDim').onclick=closeHelp;
-const _start=startApp;
-startApp=function(){_start();let seen=null;try{seen=localStorage.getItem('hb_help_seen')}catch(_){}if(!seen)setTimeout(openHelp,300)};
+
+// 사용법: 넓은 화면에서는 항상 펼침, 휴대폰에서는 접어서 필요할 때 펼침
+const mq=matchMedia('(max-width:900px)');
+function syncHelp(){document.querySelectorAll('.ph-d').forEach(d=>{d.open=!mq.matches})}
+syncHelp();mq.addEventListener('change',syncHelp);
+document.querySelectorAll('.ph-d summary').forEach(sm=>sm.addEventListener('click',e=>{if(!mq.matches)e.preventDefault()}));
+
+// ---------- 사진 ----------
+const FIXED=[['hero','메인 화면 큰 사진','홈 첫 화면',''],['studio','공방 사진','ABOUT → 공방소개',''],['teacher','강사 프로필','ABOUT → 강사소개 (세로 사진)','tall'],
+  ['c_sculpture','조소반 카드','CLASS → 수업 종류',''],['c_oil','유화반 카드','CLASS → 수업 종류',''],['c_oneday','원데이 클래스 카드','CLASS → 수업 종류','']];
+const GAL=[['works','조소반'],['paint','유화반'],['visit','출강']];
+let photos={fixed:{},gallery:{}};
+async function loadPho(){try{photos=await api('/api/admin/photos');renderPho()}catch(_){}}
+function resize(file,max=1600){
+  return new Promise((ok,no)=>{
+    const img=new Image(),u=URL.createObjectURL(file);
+    img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight,r=Math.min(1,max/Math.max(w,h));
+      const c=document.createElement('canvas');c.width=Math.round(w*r);c.height=Math.round(h*r);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.85))};
+    img.onerror=()=>{URL.revokeObjectURL(u);no(new Error('이 사진은 열 수 없습니다. JPG·PNG로 다시 시도해 주세요.'))};
+    img.src=u;
+  });
+}
+async function upload(key,files,el){
+  el&&el.classList.add('uploading');
+  let n=0;
+  for(const f of files){
+    try{toast(`사진 올리는 중… (${++n}/${files.length})`);const data=await resize(f);const j=await api('/api/admin/photo',{key,data});photos=j.photos}
+    catch(x){toast(x.message);break}
+  }
+  el&&el.classList.remove('uploading');renderPho();toast('사진을 올렸습니다');
+}
+function renderPho(){
+  $('#fixedList').innerHTML=FIXED.map(([k,t,where,cls])=>{const u=photos.fixed[k];
+    return `<div class="fx" data-k="${k}"><div class="im ${cls}" style="${u?`background-image:url('${u}')`:''}">${u?'':'사진 없음'}</div>
+    <div class="bd"><b>${t}</b><small>${where}</small><div class="bt"><label class="pick">${u?'사진 바꾸기':'사진 선택'}<input type="file" accept="image/*" data-up="${k}"></label>${u?`<button class="mini" data-delf="${k}">삭제</button>`:''}</div></div></div>`}).join('');
+  $('#galList').innerHTML=GAL.map(([k,t])=>{const list=photos.gallery[k]||[];
+    return `<div class="gg" data-k="${k}"><h4>${t} <small style="color:var(--gray);font-weight:500">${list.length}장</small><label class="pick">+ 사진 추가<input type="file" accept="image/*" multiple data-up="${k}"></label></h4>
+    <div class="gthumbs">${list.length?list.map((u,i)=>`<div class="gt" style="background-image:url('${u}')"><div class="ctl"><span><button data-mv="${k}" data-u="${u}" data-d="-1" ${i?'':'disabled'} aria-label="앞으로">‹</button> <button data-mv="${k}" data-u="${u}" data-d="1" ${i<list.length-1?'':'disabled'} aria-label="뒤로">›</button></span><button data-delg="${k}" data-u="${u}" aria-label="삭제">✕</button></div></div>`).join(''):'<p class="gempty">아직 사진이 없습니다</p>'}</div></div>`}).join('');
+  document.querySelectorAll('[data-up]').forEach(i=>i.onchange=()=>{if(i.files.length)upload(i.dataset.up,[...i.files],i.closest('.fx,.gg'))});
+  document.querySelectorAll('[data-delf]').forEach(b=>b.onclick=()=>confirmDel(b,()=>api('/api/admin/photo/delete',{key:b.dataset.delf,url:photos.fixed[b.dataset.delf]})));
+  document.querySelectorAll('[data-delg]').forEach(b=>b.onclick=()=>confirmDel(b,()=>api('/api/admin/photo/delete',{key:b.dataset.delg,url:b.dataset.u})));
+  document.querySelectorAll('[data-mv]').forEach(b=>b.onclick=async()=>{try{photos=(await api('/api/admin/photo/move',{key:b.dataset.mv,url:b.dataset.u,dir:+b.dataset.d})).photos;renderPho()}catch(x){toast(x.message)}});
+}
+function confirmDel(b,fn){
+  if(b.dataset.c!=='1'){b.dataset.c='1';const o=b.textContent;b.textContent=o==='✕'?'?':'한 번 더';setTimeout(()=>{b.dataset.c='';b.textContent=o},2500);return}
+  fn().then(j=>{photos=j.photos;renderPho();toast('삭제했습니다')}).catch(x=>toast(x.message));
+}
 
 boot();
 </script>
