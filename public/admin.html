@@ -59,7 +59,9 @@ main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
 .day.today .n{display:inline-block;background:var(--ink);color:#fff;padding:0 6px}
 .day .off{font-size:11px;color:var(--gray)}
 .chip{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;padding:5px 6px;margin-top:4px;font-size:12px;line-height:1.3}
-.chip b{display:block;font-weight:600}
+.chip b{display:flex;justify-content:space-between;gap:4px;font-weight:600}
+.chip b em{font-style:normal;font-weight:500;opacity:.75}
+.chip .nm{display:block;margin-top:3px;font-size:11px;line-height:1.35;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chip.part{background:#f4f1e8;border-color:#e2d9bd}
 .chip.full{background:var(--ink);color:#fff;border-color:var(--ink)}
 .chip.closed{background:repeating-linear-gradient(45deg,#eee,#eee 4px,#f8f8f6 4px,#f8f8f6 8px);color:var(--gray)}
@@ -78,6 +80,45 @@ main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
 .toggle{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:8px 0 18px}
 .toggle input{width:20px;height:20px}
 textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-size:15px;resize:vertical;outline:none}
+.ppl{list-style:none;border-top:1px solid var(--ink);margin:6px 0 10px}
+.ppl li{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ppl li b{font-size:15px}
+.ppl li .cs{font-size:12px;color:var(--gray);flex:1}
+.ppl li button{border:1px solid var(--line);background:#fff;font-size:12px;padding:5px 8px}
+.ppl li.none{color:var(--gray);font-size:13px}
+.addp{display:grid;grid-template-columns:1fr auto auto;gap:6px}
+.addp input,.addp select{border:1px solid #c9c9c5;padding:9px 8px;font-size:14px;background:#fff;min-width:0}
+.linkbtn{border:0;background:none;font-size:13px;font-weight:600;text-decoration:underline;padding:10px 0 0;color:var(--ink)}
+.xtra{margin:6px 0 4px}
+.xtra summary{font-size:13px;color:var(--gray);cursor:pointer;padding:6px 0}
+.stu-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.stu-top .filters{margin:0}
+.sbtn{width:auto;padding:11px 18px;font-size:14px}
+.seg{display:flex;border:1px solid var(--ink)}
+.seg button{flex:1;border:0;background:#fff;padding:11px 4px;font-size:14px;font-weight:600}
+.seg button+button{border-left:1px solid var(--ink)}
+.seg button.on{background:var(--ink);color:#fff}
+.prow{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;align-items:center;margin-top:8px}
+.prow span{font-size:12px;color:var(--gray);width:34px}
+.prow select,#fEnroll select{border:1px solid #c9c9c5;padding:10px 8px;font-size:15px;background:#fff;width:100%}
+#fEnroll input[type=date],#fEnroll input[type=number]{border:0;border-bottom:1px solid #c9c9c5;padding:9px 0;font-size:16px;width:100%;background:transparent}
+.prev{background:var(--bg2);padding:12px;font-size:13px;line-height:1.7;margin:4px 0 6px;min-height:20px}
+.prev b{display:block;font-size:12px;letter-spacing:.06em;color:var(--ink2);margin-bottom:4px}
+.prev .d{display:inline-block;background:#fff;border:1px solid var(--line);padding:2px 7px;margin:0 4px 4px 0;font-size:12px}
+.prev .d.full{border-color:var(--warn);color:var(--warn)}
+.stu{background:#fff;border:1px solid var(--line);padding:16px 18px;margin-bottom:10px}
+.stu .h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.stu .h b{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.stu .tag{font-size:11px;font-weight:700;border:1px solid var(--ink);padding:1px 6px}
+.stu .ph2{font-size:13px;color:var(--gray);margin-left:auto}
+.stu .sch{font-size:14px;margin:6px 0 2px}
+.stu .prg{font-size:13px;color:var(--ink2);margin-bottom:8px}
+.stu .ds{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.stu .ds span{font-size:12px;border:1px solid var(--line);padding:2px 7px}
+.stu .ds span.past{color:#bbb;text-decoration:line-through}
+.stu .ds span.next{border-color:var(--ink);font-weight:700}
+.stu .memo{font-size:13px;color:var(--gray);margin-bottom:8px}
+.stu .bt{display:flex;gap:6px;flex-wrap:wrap}
 .drawer .acts{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:18px}
 
 /* inquiries */
@@ -156,7 +197,8 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   .day{min-height:86px;padding:3px}
   .day .n{font-size:12px}
   .chip{padding:3px 3px;font-size:10px;letter-spacing:-.03em}
-  .chip span{display:none}
+  .chip b{flex-direction:column;gap:0}
+  .chip .nm{font-size:10px}
   .drawer{top:auto;width:100%;max-height:88vh;border-radius:14px 14px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom))}
   .hd span{display:none}
   .fixed{grid-template-columns:1fr 1fr;gap:8px}
@@ -205,6 +247,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
     <div class="hd"><b>HAYANBAM</b><span>관리자</span><div class="sp"></div><a href="/" target="_blank" rel="noopener">홈페이지 ↗</a><button id="logout">로그아웃</button></div>
     <nav class="tabs">
       <button data-t="cal" class="on">예약 캘린더</button>
+      <button data-t="stu">수강생</button>
       <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
       <button data-t="pho">사진</button>
       <button data-t="set">설정</button>
@@ -223,6 +266,17 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <div class="mh"><button id="mPrev" aria-label="이전 달">‹</button><h2 id="mTitle"></h2><button id="mNext" aria-label="다음 달">›</button></div>
       <div class="legend"><span><i style="background:#fff;border:1px solid #e2e2de"></i>예약 없음</span><span><i style="background:#f4f1e8;border:1px solid #e2d9bd"></i>예약 있음</span><span><i style="background:#111"></i>마감</span><span><i style="background:repeating-linear-gradient(45deg,#ddd,#ddd 2px,#fff 2px,#fff 4px)"></i>휴강</span><span>✎ 메모</span></div>
       <div class="grid" id="grid"></div>
+    </div></section>
+
+    <section id="tStu" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>정규반 등록 (주 1~4회)</h5>
+  <ol><li><b>+ 수강 등록</b>을 누르고 이름을 입력합니다.</li><li><b>조소반</b> 또는 <b>유화반</b>을 고르고 <b>주 몇 회</b>인지 선택합니다.</li><li>요일과 시간, 시작일을 고르면 4주치 일정이 자동으로 계산됩니다.</li><li><b>등록</b>을 누르면 예약 캘린더에 이름이 들어갑니다.</li></ol>
+  <p class="t">휴강으로 막힌 날은 자동으로 건너뛰고 다음 수업으로 채워집니다.</p>
+  <h5>원데이 클래스</h5><p>날짜와 시간만 고르면 그날 한 번 등록됩니다.</p>
+  <h5>연장 · 결석 · 보강</h5><p>4주가 끝나면 <b>다음 4주 연장</b>. 빠지는 날은 캘린더에서 그 칸을 눌러 <b>빼기</b>, 보강은 다른 날 칸에서 <b>이 날 추가</b>로 넣으면 됩니다.</p>
+</div></details></aside><div class="pc">
+      <div class="stu-top"><div class="filters" id="stuFilters"><button data-f="all" class="on">전체</button><button data-f="조소반">조소반</button><button data-f="유화반">유화반</button><button data-f="원데이 클래스">원데이</button></div><button class="btn sbtn" id="newEnroll">+ 수강 등록</button></div>
+      <div id="stuList"></div>
     </div></section>
 
     <section id="tInq" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
@@ -284,13 +338,49 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   <p class="eng" id="dEng"></p>
   <h3 id="dTitle"></h3>
   <p class="sub" id="dSub"></p>
-  <label class="eng" style="display:block">예약 인원</label>
-  <div class="stepper"><button type="button" id="minus" aria-label="1명 빼기">−</button><output id="bookedOut">0</output><button type="button" id="plus" aria-label="1명 더하기">+</button></div>
+  <label class="eng" style="display:block">수강생</label>
+  <ul class="ppl" id="dPeople"></ul>
+  <div class="addp">
+    <input id="apName" placeholder="이름" maxlength="30">
+    <select id="apCourse"><option>원데이 클래스</option><option>조소반</option><option>유화반</option></select>
+    <button type="button" class="mini" id="apAdd">이 날 추가</button>
+  </div>
+  <button type="button" class="linkbtn" id="apRepeat">정규반 반복 등록으로 추가 →</button>
   <p class="stat" id="dStat"></p>
+  <details class="xtra"><summary>이름 없이 인원만 추가</summary>
+    <div class="stepper"><button type="button" id="minus" aria-label="1명 빼기">−</button><output id="bookedOut">0</output><button type="button" id="plus" aria-label="1명 더하기">+</button></div>
+  </details>
   <div class="fd"><label>이 타임 정원</label><input id="dCap" type="number" min="0" max="99" inputmode="numeric"><small id="dCapHint"></small></div>
   <label class="toggle"><span><b style="font-weight:600">휴강 / 예약 막기</b><br><small style="color:var(--gray)">홈페이지에서 선택할 수 없게 됩니다</small></span><input type="checkbox" id="dClosed"></label>
   <div class="fd"><label>메모 (관리자만 보임)</label><textarea id="dMemo" placeholder="예: 김OO, 이OO / 유화 1명"></textarea></div>
   <div class="acts"><button class="btn line" type="button" id="dCancel">닫기</button><button class="btn" type="button" id="dSave">저장</button></div>
+</aside>
+
+<div class="dim hidden" id="eDim"></div>
+<aside class="drawer hidden" id="eDrawer" role="dialog" aria-modal="true" aria-labelledby="eTitle">
+  <p class="eng">NEW STUDENT</p>
+  <h3 id="eTitle">수강 등록</h3>
+  <p class="sub">등록하면 예약 캘린더에 이름이 자동으로 들어갑니다.</p>
+  <form id="fEnroll" autocomplete="off">
+    <div class="fd"><label>수강생 이름</label><input name="name" required maxlength="30"></div>
+    <div class="fd"><label>연락처 (선택)</label><input name="phone" inputmode="tel" maxlength="14" placeholder="010-0000-0000"></div>
+    <label class="eng" style="display:block;margin-bottom:8px">수업 종류</label>
+    <div class="seg" id="eCourse"><button type="button" data-v="원데이 클래스">원데이 클래스</button><button type="button" data-v="조소반" class="on">조소반</button><button type="button" data-v="유화반">유화반</button></div>
+    <div id="eRegular">
+      <label class="eng" style="display:block;margin:18px 0 8px">주 몇 회</label>
+      <div class="seg" id="eTimes"><button type="button" data-v="1" class="on">주 1회</button><button type="button" data-v="2">주 2회</button><button type="button" data-v="3">주 3회</button><button type="button" data-v="4">주 4회</button></div>
+      <div id="ePattern"></div>
+    </div>
+    <div class="row2" style="margin-top:16px">
+      <div class="fd"><label id="eStartLbl">시작일</label><input type="date" name="startDate" required></div>
+      <div class="fd" id="eSessWrap"><label>총 회차</label><input type="number" name="sessions" min="1" max="60" inputmode="numeric"></div>
+      <div class="fd hidden" id="eOneSlot"><label>시간</label><select name="slot"></select></div>
+    </div>
+    <div class="fd"><label>메모 (선택)</label><input name="memo" maxlength="300" placeholder="예: 두상 진행 중"></div>
+    <div class="prev" id="ePrev"></div>
+    <p class="err" id="eErr"></p>
+    <div class="acts"><button class="btn line" type="button" id="eCancel">닫기</button><button class="btn" type="submit">등록</button></div>
+  </form>
 </aside>
 
 <div class="toast" id="toast"></div>
@@ -340,7 +430,8 @@ $('#logout').onclick=async()=>{try{await api('/api/admin/logout',{})}catch(_){}s
 // ---------- 탭 ----------
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  ['cal','inq','pho','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  ['cal','stu','inq','pho','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  if(b.dataset.t==='stu')loadStu();
   if(b.dataset.t==='pho')loadPho();
   if(b.dataset.t==='inq')loadInq();
   if(b.dataset.t==='set')loadSet();
@@ -376,7 +467,8 @@ function renderGrid(){
     slots.forEach(s=>{
       const c=document.createElement('button');
       c.className='chip '+chipClass(s)+(s.memo?' memo':'');
-      c.innerHTML=`<b>${SL[s.slot]||s.slot}</b>${s.closed?'휴강':`${s.booked}/${s.capacity}<span>명</span>`}`;
+      const ppl=(s.people||[]).map(x=>x.name);if(s.extra)ppl.push(`+${s.extra}명`);
+      c.innerHTML=`<b>${SL[s.slot]||s.slot} <em>${s.closed?'휴강':`${s.booked}/${s.capacity}`}</em></b>`+(ppl.length?`<span class="nm">${ppl.slice(0,4).map(esc).join('<br>')}${ppl.length>4?`<br>외 ${ppl.length-4}명`:''}</span>`:'');
       c.onclick=()=>openDrawer(ds,s);
       d.appendChild(c);
     });
@@ -387,7 +479,8 @@ function renderGrid(){
 // ---------- 타임 편집 ----------
 let cur=null;
 function openDrawer(ds,s){
-  cur={date:ds,slot:s.slot,booked:s.booked};
+  cur={date:ds,slot:s.slot,booked:s.extra||0,people:s.people||[]};
+  renderPeople();$('#apName').value='';
   const [y,m,d]=ds.split('-').map(Number),w=W[new Date(Date.UTC(y,m-1,d)).getUTCDay()];
   $('#dEng').textContent='CLASS SLOT';
   $('#dTitle').textContent=`${m}월 ${d}일 (${w}) ${SLF[s.slot]||s.slot}`;
@@ -397,9 +490,26 @@ function openDrawer(ds,s){
   updStep();
   $('#dim').classList.remove('hidden');$('#drawer').classList.remove('hidden');
 }
+function renderPeople(){
+  const ul=$('#dPeople');
+  ul.innerHTML=cur.people.length?cur.people.map(x=>`<li><b>${esc(x.name)}</b><span class="cs">${esc(x.course||'')}${x.enr?' · 정규':''}</span><button type="button" data-rm="${x.id}" aria-label="빼기">빼기</button></li>`).join(''):'<li class="none">아직 등록된 수강생이 없습니다</li>';
+  ul.querySelectorAll('[data-rm]').forEach(b=>b.onclick=async()=>{
+    if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='이 날만 빼기?';setTimeout(()=>{b.dataset.c='';b.textContent='빼기'},2500);return}
+    try{await api('/api/admin/booking/delete',{id:b.dataset.rm});cur.people=cur.people.filter(p=>p.id!==b.dataset.rm);renderPeople();updStep();loadMonth();toast('뺐습니다')}catch(x){toast(x.message)}
+  });
+}
+$('#apAdd').onclick=async()=>{
+  const name=$('#apName').value.trim();if(!name){toast('이름을 입력해 주세요');return}
+  try{await api('/api/admin/booking',{date:cur.date,slot:cur.slot,name,course:$('#apCourse').value});
+    const j=await api(`/api/admin/month?ym=${cur.date.slice(0,7)}`);monthData=j.days;const s=(monthData[cur.date]||[]).find(x=>x.slot===cur.slot);
+    cur.people=s?s.people:cur.people;$('#apName').value='';renderPeople();updStep();renderGrid();toast(`${name}님을 추가했습니다`)}catch(x){toast(x.message)}
+};
+$('#apRepeat').onclick=()=>{const c={date:cur.date,slot:cur.slot,name:$('#apName').value.trim()};closeDrawer();document.querySelector('nav.tabs button[data-t=stu]').click();openEnroll(c)};
 function updStep(){
   $('#bookedOut').textContent=cur.booked;
-  const cap=parseInt($('#dCap').value,10)||0,left=Math.max(0,cap-cur.booked);
+  const total=cur.booked+cur.people.length;
+  const cap=parseInt($('#dCap').value,10)||0,left=Math.max(0,cap-total);
+  $('#dStat').textContent=total>=cap&&cap>0?`${total}/${cap}명 · 정원이 다 찼습니다 (홈페이지 "마감")`:`${total}/${cap}명 · 잔여 ${left}석`;
   $('#dStat').textContent=cur.booked>=cap&&cap>0?'정원이 다 찼습니다 · 홈페이지에 "마감"으로 표시':`잔여 ${left}석 · 홈페이지에 "잔여 ${left}석"으로 표시`;
 }
 $('#plus').onclick=()=>{cur.booked=Math.min(99,cur.booked+1);updStep()};
@@ -410,10 +520,83 @@ $('#dim').onclick=closeDrawer;$('#dCancel').onclick=closeDrawer;
 $('#dSave').onclick=async()=>{
   if(!cur)return;
   try{
-    await api('/api/admin/slot',{date:cur.date,slot:cur.slot,booked:cur.booked,capacity:$('#dCap').value,closed:$('#dClosed').checked,memo:$('#dMemo').value});
+    await api('/api/admin/slot',{date:cur.date,slot:cur.slot,extra:cur.booked,capacity:$('#dCap').value,closed:$('#dClosed').checked,memo:$('#dMemo').value});
     closeDrawer();toast('저장했습니다');loadMonth();
   }catch(x){toast(x.message)}
 };
+
+// ---------- 수강생 ----------
+const WD=[0,2,3,4,5,6]; // 일, 화~토 (월 휴무)
+const DSL={0:['10:00-12:00'],2:['20:00-22:00','22:00-24:00'],3:['20:00-22:00','22:00-24:00'],4:['20:00-22:00','22:00-24:00'],5:['20:00-22:00','22:00-24:00'],6:['20:00-22:00','22:00-24:00']};
+let stuItems=[],stuFilter='all',stuToday=todayKST(),eCourse='조소반',eTimes=1,ePat=[{dow:2,slot:'20:00-22:00'}];
+document.querySelectorAll('#stuFilters button').forEach(b=>b.onclick=()=>{stuFilter=b.dataset.f;document.querySelectorAll('#stuFilters button').forEach(x=>x.classList.toggle('on',x===b));renderStu()});
+async function loadStu(){try{const j=await api('/api/admin/enrollments');stuItems=j.items;stuToday=j.today;renderStu()}catch(_){}}
+const dLabel=(ds,slot)=>{const [y,m,d]=ds.split('-').map(Number);return `${m}/${d}(${W[new Date(Date.UTC(y,m-1,d)).getUTCDay()]}) ${SL[slot]||''}`};
+function renderStu(){
+  const el=$('#stuList'),items=stuItems.filter(x=>stuFilter==='all'||x.course===stuFilter);
+  if(!items.length){el.innerHTML='<p class="empty">등록된 수강생이 없습니다<br><small>오른쪽 위 + 수강 등록을 눌러 시작하세요</small></p>';return}
+  el.innerHTML=items.map(e=>{
+    const done=e.dates.filter(d=>d.date<stuToday).length,next=e.dates.find(d=>d.date>=stuToday);
+    const sch=e.course==='원데이 클래스'?'원데이 1회':'매주 '+e.pattern.map(p=>`${W[p.dow]} ${SL[p.slot]}`).join(' · ');
+    return `<article class="stu"><div class="h"><b>${esc(e.name)}</b><span class="tag">${esc(e.course)}</span>${e.phone?`<span class="ph2">${esc(e.phone)}</span>`:''}</div>
+      <p class="sch">${sch}</p>
+      <p class="prg">${e.dates.length}회 중 ${done}회 지남${next?` · 다음 수업 ${dLabel(next.date,next.slot)}`:' · 남은 수업 없음'}</p>
+      <div class="ds">${e.dates.map(d=>`<span class="${d.date<stuToday?'past':(next&&d.id===next.id?'next':'')}">${dLabel(d.date,d.slot)}</span>`).join('')}</div>
+      ${e.memo?`<p class="memo">${esc(e.memo)}</p>`:''}
+      <div class="bt">${e.course!=='원데이 클래스'?`<button class="mini" data-ext="${e.id}">다음 4주 연장</button>`:''}<button class="mini" data-delf="${e.id}">남은 일정 삭제</button><button class="mini" data-dela="${e.id}">전체 삭제</button></div></article>`;
+  }).join('');
+  el.querySelectorAll('[data-ext]').forEach(b=>b.onclick=async()=>{try{const j=await api('/api/admin/enrollment/extend',{id:b.dataset.ext});toast(`${j.added}회 연장했습니다`);loadStu();loadMonth()}catch(x){toast(x.message)}});
+  el.querySelectorAll('[data-delf]').forEach(b=>b.onclick=()=>confirmDel(b,()=>api('/api/admin/enrollment/delete',{id:b.dataset.delf,scope:'future'}).then(()=>{loadStu();loadMonth();return {photos}})));
+  el.querySelectorAll('[data-dela]').forEach(b=>b.onclick=()=>confirmDel(b,()=>api('/api/admin/enrollment/delete',{id:b.dataset.dela,scope:'all'}).then(()=>{loadStu();loadMonth();return {photos}})));
+}
+function slotOpts(dw,sel){return (DSL[dw]||[]).map(s=>`<option value="${s}" ${s===sel?'selected':''}>${SLF[s]}</option>`).join('')}
+function renderPattern(){
+  while(ePat.length<eTimes)ePat.push({dow:WD[(WD.indexOf(ePat[ePat.length-1]?.dow??2)+1)%WD.length]||2,slot:''});
+  ePat=ePat.slice(0,eTimes);
+  ePat.forEach(p=>{if(!(DSL[p.dow]||[]).includes(p.slot))p.slot=(DSL[p.dow]||[])[0]});
+  $('#ePattern').innerHTML=ePat.map((p,i)=>`<div class="prow"><span>${i+1}번째</span><select data-pd="${i}">${WD.map(d=>`<option value="${d}" ${d===p.dow?'selected':''}>${W[d]}요일</option>`).join('')}</select><select data-ps="${i}">${slotOpts(p.dow,p.slot)}</select></div>`).join('');
+  document.querySelectorAll('[data-pd]').forEach(s=>s.onchange=()=>{ePat[+s.dataset.pd].dow=+s.value;ePat[+s.dataset.pd].slot='';renderPattern();preview()});
+  document.querySelectorAll('[data-ps]').forEach(s=>s.onchange=()=>{ePat[+s.dataset.ps].slot=s.value;preview()});
+}
+function setSeg(id,v){document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle('on',b.dataset.v===String(v)))}
+document.querySelectorAll('#eCourse button').forEach(b=>b.onclick=()=>{eCourse=b.dataset.v;setSeg('eCourse',eCourse);syncCourse();preview()});
+document.querySelectorAll('#eTimes button').forEach(b=>b.onclick=()=>{eTimes=+b.dataset.v;setSeg('eTimes',eTimes);$('#fEnroll [name=sessions]').value=eTimes*4;renderPattern();preview()});
+function syncCourse(){
+  const one=eCourse==='원데이 클래스';
+  $('#eRegular').classList.toggle('hidden',one);$('#eSessWrap').classList.toggle('hidden',one);$('#eOneSlot').classList.toggle('hidden',!one);
+  $('#eStartLbl').textContent=one?'수업 날짜':'시작일';
+  if(one)syncOneSlot();
+}
+function syncOneSlot(){const v=$('#fEnroll [name=startDate]').value;if(!v)return;const [y,m,d]=v.split('-').map(Number),dw=new Date(Date.UTC(y,m-1,d)).getUTCDay();
+  const sel=$('#fEnroll [name=slot]');sel.innerHTML=(DSL[dw]||[]).length?slotOpts(dw,sel.value):'<option value="">그날은 휴무입니다</option>'}
+$('#fEnroll [name=startDate]').onchange=()=>{syncOneSlot();preview()};
+$('#fEnroll [name=slot]').onchange=preview;
+$('#fEnroll [name=sessions]').oninput=preview;
+$('#fEnroll [name=phone]').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,11);e.target.value=d.length<4?d:d.length<8?d.slice(0,3)+'-'+d.slice(3):d.length<11?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7)});
+function enrollBody(){const f=new FormData($('#fEnroll'));return {name:f.get('name')||'미입력',phone:f.get('phone'),course:eCourse,startDate:f.get('startDate'),slot:f.get('slot'),pattern:ePat,sessions:f.get('sessions'),memo:f.get('memo')}}
+let pvT;
+function preview(){clearTimeout(pvT);pvT=setTimeout(async()=>{
+  const b=enrollBody();if(!b.startDate){$('#ePrev').innerHTML='';return}
+  try{const j=await api('/api/admin/enrollment/preview',b);const full=j.dates.filter(d=>d.full).length;
+    $('#ePrev').innerHTML=`<b>들어갈 일정 ${j.dates.length}회${j.dates.length<j.sessions?` (요청 ${j.sessions}회 중)`:''}</b>`+j.dates.map(d=>`<span class="d ${d.full?'full':''}">${dLabel(d.date,d.slot)}${d.full?' 정원참':''}</span>`).join('')+(full?`<br><small style="color:var(--warn)">정원이 찬 날이 ${full}회 있습니다. 그대로 등록하면 정원을 넘습니다.</small>`:'');
+  }catch(x){$('#ePrev').textContent=x.message}
+},250)}
+function openEnroll(pre){
+  const f=$('#fEnroll');f.reset();$('#eErr').textContent='';
+  eCourse='조소반';eTimes=1;
+  const start=pre&&pre.date?pre.date:todayKST();
+  if(pre&&pre.date){const [y,m,d]=pre.date.split('-').map(Number);ePat=[{dow:new Date(Date.UTC(y,m-1,d)).getUTCDay(),slot:pre.slot}]}else ePat=[{dow:2,slot:'20:00-22:00'}];
+  f.name.value=pre&&pre.name||'';f.startDate.value=start;f.sessions.value=4;
+  setSeg('eCourse',eCourse);setSeg('eTimes',1);syncCourse();renderPattern();preview();
+  $('#eDim').classList.remove('hidden');$('#eDrawer').classList.remove('hidden');setTimeout(()=>f.name.focus(),50);
+}
+function closeEnroll(){$('#eDim').classList.add('hidden');$('#eDrawer').classList.add('hidden')}
+$('#newEnroll').onclick=()=>openEnroll();$('#eCancel').onclick=closeEnroll;$('#eDim').onclick=closeEnroll;
+$('#fEnroll').addEventListener('submit',async e=>{
+  e.preventDefault();$('#eErr').textContent='';
+  const b=enrollBody();if(!new FormData(e.target).get('name')){$('#eErr').textContent='수강생 이름을 입력해 주세요.';return}
+  try{const j=await api('/api/admin/enrollment',b);closeEnroll();toast(`${j.enrollment.name}님 ${j.enrollment.dates.length}회 등록했습니다`);loadStu();loadMonth()}catch(x){$('#eErr').textContent=x.message}
+});
 
 // ---------- 문의 ----------
 let inqItems=[],inqFilter='all';

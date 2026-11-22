@@ -41,6 +41,8 @@ if (!process.env.SESSION_SECRET) console.warn('[warn] SESSION_SECRET 미설정: 
 fs.mkdirSync(DATA_DIR, { recursive: true });
 let db = { admin: null, settings: { capacity: 6 }, slots: {}, inquiries: [], photos: { fixed: {}, gallery: { works: [], paint: [], visit: [] } } };
 try { db = Object.assign(db, JSON.parse(fs.readFileSync(DB_FILE, 'utf8'))); } catch (_) {}
+db.bookings = db.bookings || [];
+db.enrollments = db.enrollments || [];
 db.photos = db.photos || { fixed: {}, gallery: {} };
 db.photos.fixed = db.photos.fixed || {};
 db.photos.gallery = Object.assign({ works: [], paint: [], visit: [] }, db.photos.gallery || {});
@@ -68,16 +70,53 @@ const SCHEDULE = { 0: ['10:00-12:00'], 1: [], 2: EVENING, 3: EVENING, 4: EVENING
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 function dow(date) { const [y, m, d] = date.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)).getUTCDay(); }
 function slotsFor(date) { return SCHEDULE[dow(date)] || []; }
+function slotBookings(date, slot) { return db.bookings.filter(b => b.date === date && b.slot === slot); }
 function slotInfo(date, slot, withMemo) {
   const o = db.slots[date + '|' + slot] || {};
+  const list = slotBookings(date, slot);
+  const extra = o.booked || 0; // 이름 없이 추가한 인원
   const r = {
     slot,
     capacity: Number.isInteger(o.capacity) ? o.capacity : db.settings.capacity,
-    booked: o.booked || 0,
+    booked: extra + list.length,
     closed: !!o.closed,
   };
-  if (withMemo) r.memo = o.memo || '';
+  if (withMemo) {
+    r.memo = o.memo || '';
+    r.extra = extra;
+    r.people = list.map(b => ({ id: b.id, name: b.name, course: b.course, enr: b.enr || null }));
+  }
   return r;
+}
+function todayKST() { return new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); }
+const COURSES = ['원데이 클래스', '조소반', '유화반'];
+// 반복 일정 만들기: 시작일부터 요일·시간이 맞는 날을 회차 수만큼. 휴강 타임은 건너뜀
+function genSessions(pattern, startDate, sessions, skip = new Set()) {
+  const out = []; let d = startDate; let guard = 0;
+  while (out.length < sessions && guard++ < 400) {
+    const w = dow(d), valid = slotsFor(d);
+    for (const p of pattern) {
+      if (out.length >= sessions) break;
+      if (p.dow !== w || !valid.includes(p.slot) || skip.has(d + '|' + p.slot)) continue;
+      const info = slotInfo(d, p.slot, false);
+      if (info.closed) continue;
+      out.push({ date: d, slot: p.slot, full: info.booked >= info.capacity });
+    }
+    d = addDays(d, 1);
+  }
+  return out;
+}
+function cleanPattern(raw) {
+  if (!Array.isArray(raw)) return [];
+  const seen = new Set();
+  return raw.map(p => ({ dow: parseInt(p.dow, 10), slot: String(p.slot || '') }))
+    .filter(p => p.dow >= 0 && p.dow <= 6 && (SCHEDULE[p.dow] || []).includes(p.slot))
+    .filter(p => { const k = p.dow + '|' + p.slot; if (seen.has(k)) return false; seen.add(k); return true; })
+    .sort((a, b) => ((a.dow + 6) % 7) - ((b.dow + 6) % 7) || a.slot.localeCompare(b.slot));
+}
+function enrollmentView(e) {
+  const list = db.bookings.filter(b => b.enr === e.id).sort((a, b) => (a.date + a.slot).localeCompare(b.date + b.slot));
+  return Object.assign({}, e, { dates: list.map(b => ({ id: b.id, date: b.date, slot: b.slot })) });
 }
 function addDays(date, n) {
   const [y, m, d] = date.split('-').map(Number);
@@ -253,7 +292,7 @@ async function api(req, res, url) {
     let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
     if (!DATE_RE.test(b.date || '') || !slotsFor(b.date).includes(b.slot)) return send(res, 400, { error: '없는 수업 타임입니다.' });
     const key = b.date + '|' + b.slot;
-    const booked = Math.max(0, Math.min(99, parseInt(b.booked, 10) || 0));
+    const booked = Math.max(0, Math.min(99, parseInt(b.extra != null ? b.extra : b.booked, 10) || 0));
     const cap = b.capacity === '' || b.capacity == null ? undefined : Math.max(0, Math.min(99, parseInt(b.capacity, 10) || 0));
     const next = { booked, closed: !!b.closed, memo: str(b.memo, 300) };
     if (cap !== undefined && cap !== db.settings.capacity) next.capacity = cap;
@@ -261,6 +300,78 @@ async function api(req, res, url) {
     else db.slots[key] = next;
     save();
     return send(res, 200, { ok: true, slot: slotInfo(b.date, b.slot, true) });
+  }
+
+  // ----- 수강생 · 예약 -----
+  if (p === '/api/admin/booking' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    if (!DATE_RE.test(b.date || '') || !slotsFor(b.date).includes(b.slot)) return send(res, 400, { error: '없는 수업 타임입니다.' });
+    const name = str(b.name, 30); if (!name) return send(res, 400, { error: '이름을 입력해 주세요.' });
+    const course = COURSES.includes(b.course) ? b.course : '원데이 클래스';
+    db.bookings.push({ id: crypto.randomUUID(), date: b.date, slot: b.slot, name, course, enr: null });
+    save();
+    return send(res, 200, { ok: true });
+  }
+
+  if (p === '/api/admin/booking/delete' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    db.bookings = db.bookings.filter(x => x.id !== b.id); save();
+    return send(res, 200, { ok: true });
+  }
+
+  if (p === '/api/admin/enrollments' && req.method === 'GET') {
+    return send(res, 200, { items: db.enrollments.map(enrollmentView), today: todayKST() });
+  }
+
+  if ((p === '/api/admin/enrollment' || p === '/api/admin/enrollment/preview') && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const name = str(b.name, 30); if (!name) return send(res, 400, { error: '수강생 이름을 입력해 주세요.' });
+    const course = COURSES.includes(b.course) ? b.course : null; if (!course) return send(res, 400, { error: '수업 종류를 선택해 주세요.' });
+    if (!DATE_RE.test(b.startDate || '')) return send(res, 400, { error: '시작일을 선택해 주세요.' });
+    let pattern, sessions;
+    if (course === '원데이 클래스') {
+      if (!slotsFor(b.startDate).includes(b.slot)) return send(res, 400, { error: '그날 수업 시간을 선택해 주세요.' });
+      pattern = [{ dow: dow(b.startDate), slot: b.slot }]; sessions = 1;
+    } else {
+      pattern = cleanPattern(b.pattern);
+      if (!pattern.length) return send(res, 400, { error: '반복할 요일과 시간을 선택해 주세요.' });
+      sessions = Math.max(1, Math.min(60, parseInt(b.sessions, 10) || pattern.length * 4));
+    }
+    const dates = genSessions(pattern, b.startDate, sessions);
+    if (p.endsWith('/preview')) return send(res, 200, { dates, sessions });
+    if (!dates.length) return send(res, 400, { error: '들어갈 수 있는 수업 날짜가 없습니다.' });
+    const e = { id: crypto.randomUUID(), name, phone: str(b.phone, 30), course, pattern, startDate: b.startDate, sessions, memo: str(b.memo, 300), createdAt: new Date().toISOString() };
+    db.enrollments.unshift(e);
+    for (const d of dates) db.bookings.push({ id: crypto.randomUUID(), date: d.date, slot: d.slot, name, course, enr: e.id });
+    save();
+    return send(res, 200, { ok: true, enrollment: enrollmentView(e) });
+  }
+
+  if (p === '/api/admin/enrollment/extend' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const e = db.enrollments.find(x => x.id === b.id);
+    if (!e || e.course === '원데이 클래스') return send(res, 400, { error: '연장할 수 없는 수강입니다.' });
+    const mine = db.bookings.filter(x => x.enr === e.id).map(x => x.date).sort();
+    const last = mine.length ? mine[mine.length - 1] : todayKST();
+    const start = addDays(last > todayKST() ? last : todayKST(), last > todayKST() ? 1 : 0);
+    const n = Math.max(1, Math.min(60, parseInt(b.sessions, 10) || e.pattern.length * 4));
+    const dates = genSessions(e.pattern, start, n);
+    for (const d of dates) db.bookings.push({ id: crypto.randomUUID(), date: d.date, slot: d.slot, name: e.name, course: e.course, enr: e.id });
+    e.sessions += dates.length; save();
+    return send(res, 200, { ok: true, added: dates.length });
+  }
+
+  if (p === '/api/admin/enrollment/delete' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const t = todayKST();
+    if (b.scope === 'future') {
+      db.bookings = db.bookings.filter(x => !(x.enr === b.id && x.date >= t));
+    } else {
+      db.bookings = db.bookings.filter(x => x.enr !== b.id);
+      db.enrollments = db.enrollments.filter(x => x.id !== b.id);
+    }
+    save();
+    return send(res, 200, { ok: true });
   }
 
   if (p === '/api/admin/photos' && req.method === 'GET') return send(res, 200, photosPublic());
