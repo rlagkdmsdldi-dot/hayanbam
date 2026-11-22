@@ -263,7 +263,7 @@ body.v-contact .mbar{display:none}
 .res pre{white-space:pre-wrap;font-family:var(--f);font-size:14px;background:var(--bg2);padding:16px;margin:12px 0 16px;line-height:1.7}
 .res .bt{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
 .res .bt a,.res .bt button{display:block;text-align:center;border:1px solid var(--ink);padding:13px 6px;font-size:14px;font-weight:600;background:#fff}
-.res .bt a.p{background:var(--ink);color:#fff}
+.res .bt .p{background:var(--ink);color:#fff}
 .res small{display:block;font-size:12px;color:var(--gray);margin-top:12px}
 
 /* location */
@@ -531,7 +531,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <div class="sub"><a href="#contact-form">문의하기</a><a href="#contact-loc">오시는 길</a></div></li>
     </ul>
     <button class="snd" id="snd" type="button" aria-pressed="false" aria-label="배경음 켜기"><span class="bars"><i></i><i></i><i></i></span><span class="sl">SOUND OFF</span></button>
-    <a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" class="hd-tel">네이버 톡톡 문의</a>
+    <a href="#contact-form" class="hd-tel">문의하기</a>
     <button class="burger" id="burger" aria-label="메뉴"><i></i><i></i></button>
   </div>
 </header>
@@ -540,7 +540,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
   <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>CLASS</span><small>수업안내</small><i></i></button><div class="mg-s"><a href="#class-hobby">수업 종류</a><a href="#class-eve">야간 출강</a><a href="#class-guide">시간표·수강 안내</a><a href="#class-qna">Q&amp;A</a></div></div>
   <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>ARCHIVE</span><small>작업 기록</small><i></i></button><div class="mg-s"><a href="#archive-works">조소반</a><a href="#archive-paint">유화반</a><a href="#archive-visit">출강</a></div></div>
   <div class="mg"><button type="button" class="mg-h" aria-expanded="false"><span>CONTACT</span><small>문의</small><i></i></button><div class="mg-s"><a href="#contact-form">문의하기</a><a href="#contact-loc">오시는 길</a></div></div>
-  <a class="mg-talk" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의 ↗</a>
+  <a class="mg-talk" href="#contact-form">문의하기 →</a>
 </nav>
 
 <!-- ================= HERO ================= -->
@@ -573,7 +573,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
     <a href="#archive"><span class="n">03</span><h3>Archive</h3><p>조소반 · 유화반 · 출강</p><i>→</i></a>
     <a href="#contact"><span class="n">04</span><h3>Contact</h3><p>수업 · 출강 · 제작 의뢰 문의, 오시는 길</p><i>→</i></a>
   </nav>
-  <div class="home-cta"><p>수업, 출강, 제작 의뢰 문의는<br>네이버 톡톡으로 받습니다.</p><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의 ↗</a></div>
+  <div class="home-cta"><p>수업, 출강, 제작 의뢰 문의는<br>문의하기에서 접수합니다.</p><a href="#contact-form">문의하기 →</a></div>
 </div>
 </main>
 
@@ -835,7 +835,8 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
 
           <p class="fsec">문의 내용</p>
           <div class="cond on" data-for="수업 문의">
-            <div class="fd full"><label>수업 선택</label><select name="cls"><option>조소반</option><option>유화반</option><option>원데이 클래스</option></select></div>
+            <div class="fd"><label>수업 선택</label><select name="cls"><option>조소반</option><option>유화반</option><option>원데이 클래스</option></select></div>
+            <div class="fd"><label>희망 시간</label><select name="pref"><option>화–토 20:00–22:00</option><option>화–토 22:00–24:00</option><option>일 10:00–12:00</option><option>상담 후 결정</option></select></div>
           </div>
           <div class="cond" data-for="출강 문의">
             <div class="fd"><label>예상 인원</label><input name="people" inputmode="numeric" placeholder="5~10명 (10명 이상 별도 문의)"></div>
@@ -847,7 +848,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
             <div class="fd full"><label>예산 범위 (선택)</label><input name="budget" placeholder="예: 3,000만 원 내외"></div>
           </div>
 
-          <div class="fd full">
+          <div class="fd full" id="pickWrap">
             <label id="dlabel">희망 일시</label>
             <div class="picker">
               <div>
@@ -876,10 +877,10 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
           <p id="resMsg" style="font-size:14px;color:var(--ink2);margin-top:6px"></p>
           <pre id="out"></pre>
           <div class="bt" id="resBt">
-            <a class="p" id="mail" href="#">메일로 보내기</a>
-            <a id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">복사 후 톡톡 열기</a>
+            <button type="button" class="p" id="copyAll">내용 복사</button>
+            <a id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 열기</a>
           </div>
-          <small id="resHint" style="display:none">메일: 818art@naver.com · ‘복사 후 톡톡 열기’를 누르면 내용이 복사되니 톡톡 창에 붙여넣어 보내주세요.</small>
+          <small id="resHint" style="display:none">내용을 복사해 818art@naver.com 으로 메일을 보내시거나, 네이버 톡톡에 붙여넣어 보내주세요.</small>
         </div>
       </form>
     </div>
@@ -948,7 +949,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
   </div>
 </footer>
 
-<div class="mbar"><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" class="talk-only">네이버 톡톡 문의</a></div>
+<div class="mbar"><a href="#contact-form" class="talk-only">문의하기</a></div>
 
 <script>
 // ---- mobile nav
@@ -1010,6 +1011,7 @@ function setType(t){
   f.querySelectorAll('input[name=type]').forEach(r=>r.checked=r.value===t);
   f.querySelectorAll('.cond').forEach(c=>c.classList.toggle('on',c.dataset.for===t));
   document.getElementById('dlabel').textContent=SLOTS[t].label;
+  document.getElementById('pickWrap').style.display=t==='수업 문의'?'none':'';
   selTime=null;const md=new Date(today);md.setDate(md.getDate()+(SLOTS[t].minDays||0));if(selDate&&((SLOTS[t].closed||[]).includes(selDate.getDay())||selDate<md))selDate=null;renderCal();renderSlots();updatePicked();
 }
 f.querySelectorAll('input[name=type]').forEach(r=>r.onchange=()=>setType(r.value));
@@ -1080,7 +1082,7 @@ function updatePicked(){
   if(!selDate){p.innerHTML='<span>날짜를 선택해 주세요</span>';return}
   p.textContent=fmt(selDate)+(selTime?'  '+selTime:'');
 }
-renderCal();renderSlots();route();
+renderCal();renderSlots();document.getElementById('pickWrap').style.display='none';route();
 
 // ---- background sound (코드로 생성하는 앰비언트 사운드, 기본 꺼짐)
 const Snd=(()=>{
@@ -1194,19 +1196,19 @@ f.addEventListener('submit',e=>{
   const L=[`[하얀밤 조소공방 홈페이지 · ${t}]`];
   if(!d.get('name')||!d.get('phone')){warn.textContent='이름과 연락처를 입력해 주세요.';return}
   L.push(`이름: ${d.get('name')}`,`연락처: ${d.get('phone')}`);
-  if(t==='수업 문의') L.push(`수업: ${d.get('cls')}`);
+  if(t==='수업 문의') L.push(`수업: ${d.get('cls')}`,`희망 시간: ${d.get('pref')}`);
   else if(t==='출강 문의') L.push(`소속: ${d.get('org2')||'-'}`,`인원: ${d.get('people')||'-'}`,`장소: ${d.get('place')||'-'}`);
   else L.push(`소속: ${d.get('org3')||'-'}`,`종류: ${d.get('kind')}`,`규모/장소: ${d.get('size')||'-'}`,`예산: ${d.get('budget')||'-'}`);
   if(!d.get('ok')){warn.textContent='개인정보 수집·이용에 동의해 주세요.';return}
   warn.textContent='';
-  L.push(`${SLOTS[t].label}: ${selDate?fmt(selDate):'-'}${selTime?' '+selTime:''}`,`내용: ${d.get('msg')||'-'}`);
+  if(t!=='수업 문의') L.push(`${SLOTS[t].label}: ${selDate?fmt(selDate):'-'}${selTime?' '+selTime:''}`);
+  L.push(`내용: ${d.get('msg')||'-'}`);
   const text=L.join('\n');
   document.getElementById('out').textContent=text;
-  document.getElementById('mail').href='mailto:818art@naver.com?subject='+encodeURIComponent('[홈페이지 '+t+']')+'&body='+encodeURIComponent(text);
   // 서버에 문의 저장 (실제 사이트) → 성공하면 접수 완료만 표시, 실패할 때만 톡톡·메일 안내
   const payload={type:t,name:d.get('name'),phone:d.get('phone'),org:d.get('org2')||d.get('org3')||'',cls:t==='수업 문의'?d.get('cls'):'',
     people:t==='출강 문의'?d.get('people'):'',place:t==='출강 문의'?d.get('place'):'',kind:t==='조형물 제작'?d.get('kind'):'',
-    size:t==='조형물 제작'?d.get('size'):'',budget:t==='조형물 제작'?d.get('budget'):'',date:selDate?fmt(selDate):'',time:selTime||'',msg:d.get('msg')||'',website:d.get('website')||''};
+    size:t==='조형물 제작'?d.get('size'):'',budget:t==='조형물 제작'?d.get('budget'):'',date:t==='수업 문의'?'':(selDate?fmt(selDate):''),time:t==='수업 문의'?d.get('pref'):(selTime||''),msg:d.get('msg')||'',website:d.get('website')||''};
   const rt=document.getElementById('resTitle'),rm=document.getElementById('resMsg'),btn=f.querySelector('.submit');
   const resEl=document.getElementById('res'),bt=document.getElementById('resBt'),hint=document.getElementById('resHint'),out=document.getElementById('out');
   btn.disabled=true;btn.textContent='접수 중…';
@@ -1220,6 +1222,7 @@ f.addEventListener('submit',e=>{
       resEl.scrollIntoView({behavior:'smooth',block:'center'})})
     .catch(fallback);
 });
+document.getElementById('copyAll').addEventListener('click',async e=>{try{await navigator.clipboard.writeText(document.getElementById('out').textContent);e.currentTarget.textContent='복사됨'}catch(_){e.currentTarget.textContent='직접 선택해 복사'}});
 document.getElementById('talkSend').addEventListener('click',async e=>{
   try{await navigator.clipboard.writeText(document.getElementById('out').textContent);e.currentTarget.textContent='복사됨 · 톡톡에 붙여넣기'}catch(_){}
 });
