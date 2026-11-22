@@ -1,4 +1,4 @@
-// 하얀밤조소공방 홈페이지 서버 (Railway)
+// 하얀밤 조소공방 홈페이지 서버 (Railway)
 // - 정적 파일(public/) 제공
 // - 예약 현황(잔여석) 공개 API, 홈페이지 문의 저장
 // - 관리자 페이지(/admin) 로그인 · 예약 캘린더 · 문의 관리
@@ -25,7 +25,7 @@ async function notify(it) {
   const rows = [['이름', it.name], ['연락처', it.phone], ['소속', it.org], ['수업', it.cls], ['인원', it.people], ['장소', it.place],
     ['종류', it.kind], ['규모', it.size], ['예산', it.budget], ['희망 일시', [it.date, it.time].filter(Boolean).join(' ')], ['내용', it.msg]]
     .filter(r => r[1]);
-  const text = `[하얀밤조소공방 홈페이지] 새 ${label}\n\n` + rows.map(r => `${r[0]}: ${r[1]}`).join('\n') + '\n\n관리자 페이지에서 확인하기: /admin';
+  const text = `[하얀밤 조소공방 홈페이지] 새 ${label}\n\n` + rows.map(r => `${r[0]}: ${r[1]}`).join('\n') + '\n\n관리자 페이지에서 확인하기: /admin';
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
