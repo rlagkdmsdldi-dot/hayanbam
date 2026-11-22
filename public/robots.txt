@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
+
+Sitemap: https://hayanbam-web-production.up.railway.app/sitemap.xml
