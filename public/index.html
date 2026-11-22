@@ -38,7 +38,7 @@ header{position:fixed;inset:0 0 auto;z-index:50;background:rgba(250,250,248,.94)
 .hd{display:flex;align-items:center;height:64px;gap:40px}
 .logo{display:flex;align-items:baseline;gap:10px;margin-right:auto}
 .logo b{font-weight:800;font-size:17px;letter-spacing:.18em}
-.logo span{font-size:12px;color:var(--gray);letter-spacing:.02em}
+.logo span{font-size:12px;color:var(--gray);letter-spacing:.02em;white-space:nowrap}
 .gnb{display:flex;height:100%}
 .gnb>li{list-style:none;position:relative;height:100%}
 .gnb>li>a{display:flex;align-items:center;height:100%;padding:0 22px;font-size:12px;font-weight:600;letter-spacing:.2em}
@@ -203,6 +203,11 @@ h3.t{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.03em;line
 .ways a{display:grid;grid-template-columns:110px 1fr auto;align-items:center;padding:20px 0;border-bottom:1px solid var(--line);transition:padding .2s}
 .ways a:first-child{border-top:1px solid var(--ink)}
 .ways a:hover{padding-left:8px}
+.ct.sp.on{display:block;max-width:720px;margin:0 auto}
+.ct-intro{margin-bottom:36px}
+.ct-alt{font-size:13px;color:var(--gray);margin-top:16px;text-align:center}
+.ct-alt a{color:var(--ink2);border-bottom:1px solid var(--ink2)}
+body.v-contact .mbar{display:none}
 .ways a.talk span{font-weight:700;border-bottom:1px solid var(--ink)}
 .ways small{font-size:11px;letter-spacing:.2em;color:var(--gray);font-weight:600}
 .ways span{font-size:16px;font-weight:500}
@@ -357,7 +362,7 @@ footer{background:var(--dk);color:var(--dgray);padding:64px 0 110px;font-size:13
 .view.page{padding-top:64px}
 .view.page>.w:first-child .sh,.view.page .sh{padding-top:96px}
 .sp{display:none}.sp.on{display:block}
-.ct.sp.on,.loc.sp.on{display:grid}
+.loc.sp.on{display:grid}
 .sp.row{grid-template-columns:1fr;border-bottom:0}
 .sp .lab{display:none}
 .stabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;background:var(--bg);z-index:5}
@@ -526,7 +531,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
   </div>
   <div class="w" style="padding:0">
     <div class="hero-img">
-      <div class="ph" data-l="MAIN VISUAL — 작업실 / 작품 사진"></div>
+      <div class="ph photo" data-l="MAIN VISUAL"><img src="images/site/hero.jpg" alt="하얀밤 조소공방 작업실의 두상 작품"></div>
       <div class="side">
         <a href="#class-hobby" class="svc"><span class="n">01</span><h3>조소 · 유화 수업<small>CLASS</small></h3></a>
         <a href="#class-eve" class="svc"><span class="n">02</span><h3>야간 출강 20:00—<small>VISIT</small></h3></a>
@@ -543,7 +548,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
     <a href="#archive"><span class="n">03</span><h3>Archive</h3><p>입체 작품 · 평면 작품 · 출강 현장</p><i>→</i></a>
     <a href="#contact"><span class="n">04</span><h3>Contact</h3><p>수업 · 출강 · 제작 의뢰 문의, 오시는 길</p><i>→</i></a>
   </nav>
-  <div class="home-cta"><p>수업, 출강, 제작 의뢰 문의는 <br class="pc">네이버 톡톡으로 받습니다.</p><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의 ↗</a></div>
+  <div class="home-cta"><p>수업, 출강, 제작 의뢰 문의는<br>네이버 톡톡으로 받습니다.</p><a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡 문의 ↗</a></div>
 </div>
 </main>
 
@@ -558,16 +563,16 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
       <div class="about-grid">
         <div>
           <h3 class="t">조소 전문 미술공방,<br>하얀밤 조소공방</h3>
-          <p class="txt">전주 하얀밤 조소공방은 조소를 중심으로 <br class="pc">유화까지 배울 수 있는 미술공방입니다.</p>
-          <p class="txt">조소는 기초 조형에서 시작해 <br class="pc">피규어 제작, 두상 조소, 인체 구조를 활용한 조형까지 <br class="pc">단계적으로 익힐 수 있도록 구성했습니다.</p>
-          <p class="txt">모든 수업은 소수 정원제로 진행하며, <br class="pc">수강생의 수준에 맞춰 단계별로 운영합니다.</p>
+          <p class="txt">전주 하얀밤 조소공방은<br>조소를 중심으로 유화까지 배울 수 있는<br>미술공방입니다.</p>
+          <p class="txt">조소는 기초 조형에서 시작해<br>피규어 제작, 두상 조소,<br>인체 구조를 활용한 조형까지<br>단계적으로 익힐 수 있도록 구성했습니다.</p>
+          <p class="txt">모든 수업은 소수 정원제로 진행하며,<br>수강생의 수준에 맞춰 단계별로 운영합니다.</p>
           <div class="kv">
             <div><small>METHOD</small><p>소수 정원제</p></div>
             <div><small>CLASS</small><p>조소 · 유화</p></div>
             <div><small>TIME</small><p>화–토 저녁 · 일 오전</p></div>
           </div>
         </div>
-        <div class="ph" data-l="STUDIO — 공방 내부"></div>
+        <div class="ph photo" data-l="STUDIO"><img src="images/site/studio.jpg" alt="공방 작업 테이블" loading="lazy"></div>
       </div>
     </div>
 
@@ -576,7 +581,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
       <div>
         <p class="hanja">彫塑</p>
         <h3 class="t">조소: 깎아내는 조각, 붙여 쌓는 소조</h3>
-        <p class="txt">조소는 재료를 깎거나 붙여 입체 형태를 만드는 미술입니다. <br class="pc">평면에 그리는 회화와 달리 <br class="pc">앞·옆·뒤 모든 방향에서 형태를 완성합니다.</p>
+        <p class="txt">조소는 재료를 깎거나 붙여<br>입체 형태를 만드는 미술입니다.<br>평면에 그리는 회화와 달리<br>앞·옆·뒤 모든 방향에서 형태를 완성합니다.</p>
         <div class="def">
           <div><h4>조각 <em>CARVING</em></h4><p>덩어리 재료를 깎고 다듬어 형태를 찾는 방식</p></div>
           <div><h4>소조 <em>MODELING</em></h4><p>점토를 붙여 쌓아 올리며 형태를 만드는 방식<br>공방 수업의 중심</p></div>
@@ -585,7 +590,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <div class="oil">
           <p class="hanja">油畫</p>
           <h3 class="t">유화: 겹겹이 쌓아 올리는 색</h3>
-          <p class="txt">유화는 기름에 갠 물감으로 캔버스 위에 그리는 회화입니다. <br class="pc">천천히 마르는 물감을 여러 번 덧칠하며 <br class="pc">색과 질감을 쌓아 화면을 완성합니다.</p>
+          <p class="txt">유화는 기름에 갠 물감으로<br>캔버스 위에 그리는 회화입니다.<br>천천히 마르는 물감을 여러 번 덧칠하며<br>색과 질감을 쌓아 화면을 완성합니다.</p>
           <div class="def">
             <div><h4>레이어링 <em>LAYERING</em></h4><p>물감을 얇게 여러 겹 올려 색의 깊이를 만드는 방식</p></div>
             <div><h4>임파스토 <em>IMPASTO</em></h4><p>물감을 두껍게 올려 붓 자국과 질감을 살리는 방식</p></div>
@@ -626,7 +631,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
     <!-- hobby -->
     <div class="sp" data-sp="class-hobby" style="padding-top:56px">
       <div class="cards">
-        <div class="card"><div class="ph" data-l="SCULPTURE"></div><div class="cb"><span class="eng">Sculpture</span><h4>조소반</h4><p>기초 조형부터 두상·인체까지<br>개인 진도에 맞춘 4주 단위 과정</p><div class="pr"><span>주 1회 · 4주</span><b>160,000원~</b></div></div></div>
+        <div class="card"><div class="ph photo" data-l="SCULPTURE"><img src="images/site/c_sculpture.jpg" alt="점토로 형태를 만드는 조소 수업" loading="lazy"></div><div class="cb"><span class="eng">Sculpture</span><h4>조소반</h4><p>기초 조형부터 두상·인체까지<br>개인 진도에 맞춘 4주 단위 과정</p><div class="pr"><span>주 1회 · 4주</span><b>160,000원~</b></div></div></div>
         <div class="card"><div class="ph" data-l="OIL PAINTING"></div><div class="cb"><span class="eng">Oil Painting</span><h4>유화반</h4><p>캔버스와 유화 물감으로 진행하는<br>4주 단위 회화 과정</p><div class="pr"><span>주 1회 · 4주</span><b>200,000원~</b></div></div></div>
         <div class="card"><div class="ph" data-l="ONE-DAY"></div><div class="cb"><span class="eng">One-day</span><h4>원데이 클래스</h4><p>2시간 동안 소형 작품 1점 완성<br>조소를 처음 접하는 분을 위한 체험 과정</p><div class="pr"><span>2시간</span><b>50,000원</b></div></div></div>
         
@@ -640,7 +645,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <div>
           <span class="eng" style="color:var(--gray)">Timetable</span>
           <h3 class="t" style="margin-top:8px">수업 시간표</h3>
-          <p class="txt">화요일부터 토요일까지는 저녁, <br class="pc">일요일은 오전에 수업합니다. <br class="pc">모든 수업은 예약제로 운영합니다.</p>
+          <p class="txt">화요일부터 토요일까지는 저녁,<br>일요일은 오전에 수업합니다.<br>모든 수업은 예약제로 운영합니다.</p>
         </div>
         <table class="tt">
           <thead><tr><th></th><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr></thead>
@@ -659,7 +664,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <div>
           <span class="eng" style="color:var(--gray)">Q&amp;A</span>
           <h3 class="t" style="margin-top:8px">자주 묻는 질문</h3>
-          <p class="txt">그 밖의 문의는 <a href="#contact-form" style="border-bottom:1px solid var(--ink)">문의하기</a>로 남겨주시면 <br class="pc">확인 후 회신드립니다.</p>
+          <p class="txt">그 밖의 문의는 <a href="#contact-form" style="border-bottom:1px solid var(--ink)">문의하기</a>로 남겨주시면<br>확인 후 회신드립니다.</p>
         </div>
         <div class="qna">
         <details open><summary><span class="q">Q</span>준비물이 필요한가요?<i></i></summary><p>도구와 점토는 공방에서 제공합니다.<br>앞치마, 팔토시 등 개인용품은 따로 준비하시는 것을 권장합니다.<br>석고·유토 작업을 하거나, 캐스팅으로 작품을 보존해 가져가고 싶은 경우 추가 재료비가 발생할 수 있습니다.</p></details>
@@ -678,7 +683,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
           <div>
             <span class="eng" style="color:var(--dgray)">Evening Visiting Class</span>
             <h3 class="t" style="margin-top:8px">야간 출강</h3>
-            <p class="txt">저녁 20:00 이후 진행하는 출강 조소 수업입니다. <br class="pc">기관·단체의 저녁 일정에 맞춰 운영하며, <br class="pc">출강 희망일 최소 2주 전까지 문의를 받습니다.</p>
+            <p class="txt">저녁 20:00 이후 진행하는<br>출강 조소 수업입니다.<br>기관·단체의 저녁 일정에 맞춰 운영하며,<br>출강 희망일 최소 2주 전까지 문의를 받습니다.</p>
           </div>
           <div>
             <p class="clock">20:00<span class="it">onward</span></p>
@@ -727,7 +732,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <div>
           <span class="eng" style="color:var(--gray)">Guide</span>
           <h3 class="t" style="margin-top:8px">예약 · 변경 · 환불</h3>
-          <p class="txt" style="margin-bottom:20px">모든 수강생이 예약한 시간에 <br class="pc">충분히 지도받을 수 있도록 <br class="pc">아래 기준으로 운영합니다.</p>
+          <p class="txt" style="margin-bottom:20px">모든 수강생이 예약한 시간에<br>충분히 지도받을 수 있도록<br>아래 기준으로 운영합니다.</p>
           <ul class="hours guide">
             <li><b>예약</b><span>모든 수업은 예약제로 운영합니다.</span></li>
             <li><b>일정 변경</b><span>수업 전날 20:00까지 연락 시 <br>횟수 차감 없이 변경 가능합니다.</span></li>
@@ -747,18 +752,15 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
     <div class="sh"><p class="num">03<span>작업 기록</span></p><h2>Archive</h2></div>
     <nav class="stabs"><a href="#archive-works">조소반 <small>SCULPTURE</small></a><a href="#archive-paint">유화반 <small>PAINTING</small></a><a href="#archive-visit">출강 <small>VISIT</small></a></nav>
     <div class="sp" data-sp="archive-works"><div class="gal">
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
-        <div class="ph"></div>
+        <div class="ph photo"><img src="images/site/w1.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w2.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w3.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w4.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w5.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w6.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w7.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w8.jpg" alt="" loading="lazy"></div>
+        <div class="ph photo"><img src="images/site/w9.jpg" alt="" loading="lazy"></div>
     </div></div>
     <div class="sp" data-sp="archive-paint"><div class="gal">
         <div class="ph"></div>
@@ -790,15 +792,8 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
     <nav class="stabs"><a href="#contact-form">문의하기 <small>INQUIRY</small></a><a href="#contact-map">오시는 길 <small>LOCATION</small></a></nav>
 
     <div class="ct sp" data-sp="contact-form">
-      <div>
-        <p class="lab" style="display:none"><small style="display:block;color:var(--gray);font-size:12px;letter-spacing:.18em;margin-bottom:6px">04-1</small>문의하기</p>
-        <p class="txt" style="margin-bottom:32px">수업, 출강, 제작 의뢰 문의를 접수합니다. <br class="pc">작업 중에는 통화가 어려울 수 있어 <br class="pc">네이버 톡톡 문의를 권장합니다.</p>
-        <div class="ways">
-          <a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener" class="talk"><small>NAVER TALK</small><span>네이버 톡톡 문의</span><i>↗</i></a>
-          <a href="mailto:818art@naver.com"><small>MAIL</small><span>818art@naver.com</span><i>→</i></a>
-          <a href="https://www.instagram.com/hayan.bam" target="_blank" rel="noopener"><small>INSTAGRAM</small><span>@hayan.bam</span><i>↗</i></a>
-          <a href="https://blog.naver.com/rea-son" target="_blank" rel="noopener"><small>BLOG</small><span>blog.naver.com/rea-son</span><i>↗</i></a>
-        </div>
+      <div class="ct-intro">
+        <p class="txt">수업, 출강, 제작 의뢰 문의를 접수합니다.<br>남겨주신 내용은 확인 후<br>기재하신 연락처로 회신드립니다.</p>
       </div>
 
       <form id="f" novalidate>
@@ -851,15 +846,17 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <button class="submit" type="submit">문의 접수</button>
 
+        <p class="ct-alt">빠른 상담이 필요하시면 <a href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">네이버 톡톡</a>으로 문의해 주세요.</p>
+
         <div class="res" id="res">
           <b style="font-size:15px" id="resTitle">문의 내용</b>
           <p id="resMsg" style="font-size:14px;color:var(--ink2);margin-top:6px"></p>
           <pre id="out"></pre>
           <div class="bt" id="resBt">
-            <a class="p" id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">복사 후 톡톡 열기</a>
-                        <a id="mail" href="#">메일로 보내기</a>
+            <a class="p" id="mail" href="#">메일로 보내기</a>
+            <a id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">복사 후 톡톡 열기</a>
           </div>
-          <small id="resHint">‘복사 후 톡톡 열기’를 누르면 내용이 복사됩니다. 톡톡 창에 붙여넣어 보내주세요.</small>
+          <small id="resHint" style="display:none">메일: 818art@naver.com · ‘복사 후 톡톡 열기’를 누르면 내용이 복사되니 톡톡 창에 붙여넣어 보내주세요.</small>
         </div>
       </form>
     </div>
@@ -947,6 +944,7 @@ function route(){
   const h=(location.hash||'#home').slice(1);
   let v=h.split('-')[0]; if(!VIEWS.includes(v)) v='home';
   document.querySelectorAll('.view').forEach(el=>el.classList.toggle('on',el.dataset.v===v));
+  document.body.className=document.body.className.replace(/\bv-\S+/g,'').trim()+' v-'+v;
   document.querySelectorAll('.gnb>li>a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));
   const view=document.querySelector(`.view[data-v="${v}"]`);
   const sps=view.querySelectorAll('.sp');
@@ -960,6 +958,16 @@ function route(){
 window.addEventListener('hashchange',route);
 window.addEventListener('load',()=>setTimeout(()=>window.scrollTo(0,0),30));
 if('scrollRestoration' in history)history.scrollRestoration='manual';
+
+// ---- 연락처 자동 하이픈
+function fmtPhone(v){
+  const d=v.replace(/\D/g,'').slice(0,12);
+  if(d.startsWith('02')){ if(d.length<3)return d; if(d.length<6)return d.slice(0,2)+'-'+d.slice(2); if(d.length<10)return d.slice(0,2)+'-'+d.slice(2,5)+'-'+d.slice(5); return d.slice(0,2)+'-'+d.slice(2,6)+'-'+d.slice(6,10); }
+  if(/^0[0-9]{3}/.test(d)&&d.startsWith('050')){ if(d.length<5)return d; if(d.length<9)return d.slice(0,4)+'-'+d.slice(4); return d.slice(0,4)+'-'+d.slice(4,8)+'-'+d.slice(8,12); }
+  if(d.length<4)return d; if(d.length<8)return d.slice(0,3)+'-'+d.slice(3);
+  if(d.length<11)return d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6); return d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7,11);
+}
+document.querySelectorAll('input[name=phone]').forEach(i=>{i.setAttribute('maxlength','14');i.addEventListener('input',()=>{i.value=fmtPhone(i.value)})});
 
 // ---- form type
 const f=document.getElementById('f');
@@ -1178,7 +1186,7 @@ f.addEventListener('submit',e=>{
     out.style.display='';bt.style.display='';hint.style.display='';resEl.classList.add('on');btn.disabled=false;btn.textContent='문의 접수'};
   fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
     .then(r=>r.ok?r.json():Promise.reject(r))
-    .then(()=>{rt.textContent='문의가 접수되었습니다';rm.textContent='확인 후 기재하신 연락처로 연락드립니다. 감사합니다.';
+    .then(()=>{rt.textContent='문의가 접수되었습니다';rm.innerHTML='답변이 다소 지연될 수 있으나, 확인 후 빠른 시일 내에<br>기재하신 연락처로 연락드리겠습니다. 감사합니다.';
       out.style.display='none';bt.style.display='none';hint.style.display='none';resEl.classList.add('on');btn.textContent='접수 완료';
       f.querySelectorAll('input:not([type=radio]):not([type=checkbox]),textarea').forEach(i=>{if(i.name!=='website')i.value=''});
       resEl.scrollIntoView({behavior:'smooth',block:'center'})})
