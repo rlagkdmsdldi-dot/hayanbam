@@ -608,13 +608,16 @@ $('#fEnroll [name=slot]').onchange=preview;
 $('#fEnroll [name=sessions]').oninput=preview;
 $('#fEnroll [name=phone]').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,11);e.target.value=d.length<4?d:d.length<8?d.slice(0,3)+'-'+d.slice(3):d.length<11?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d.slice(0,3)+'-'+d.slice(3,7)+'-'+d.slice(7)});
 function enrollBody(){const f=new FormData($('#fEnroll'));return {name:f.get('name')||'미입력',phone:f.get('phone'),course:eCourse,startDate:f.get('startDate'),slot:f.get('slot'),pattern:ePat,sessions:f.get('sessions'),memo:f.get('memo'),payAmount:f.get('payAmount'),payMethod:f.get('payMethod'),paid:!!f.get('paid')}}
+let eSnap='';
+function schedKey(){const b=enrollBody();return JSON.stringify({c:b.course,p:eCourse==='원데이 클래스'?null:ePat.slice(0,eTimes).map(p=>[p.dow,p.slot]),s:b.startDate,n:eCourse==='원데이 클래스'?null:String(b.sessions),sl:eCourse==='원데이 클래스'?b.slot:null})}
+function schedChanged(){return !!eEdit&&schedKey()!==eSnap}
 function pastCount(){return eEdit?eEdit.dates.filter(d=>d.date<todayKST()).length:0}
-function syncRes(){const on=!eEdit||$('#eRes').checked;$('#eSched').classList.toggle('dim2',!on);$('#eSched').querySelectorAll('button,select,input').forEach(x=>x.disabled=!on);$('#ePrev').style.display=on?'':'none';if(on)preview()}
+function syncRes(){const on=true;$('#eSched').classList.toggle('dim2',!on);$('#eSched').querySelectorAll('button,select,input').forEach(x=>x.disabled=!on);$('#ePrev').style.display=on?'':'none';if(on)preview()}
 $('#eRes').onchange=syncRes;
 let pvT;
 function preview(){clearTimeout(pvT);pvT=setTimeout(async()=>{
   const b=enrollBody();if(!b.startDate){$('#ePrev').innerHTML='';return}
-  if(eEdit){if(!$('#eRes').checked)return;const pc=pastCount();b.sessions=Math.max(1,(parseInt(b.sessions,10)||eEdit.sessions)-pc);}
+  if(eEdit){if(!schedChanged()){$('#ePrev').innerHTML='<b>일정 변경 없음</b>요일·시간·시작일·회차를 바꾸면 새 일정이 여기에 미리 보입니다.';return}if(b.startDate>=todayKST()){const pc=pastCount();b.sessions=Math.max(1,(parseInt(b.sessions,10)||eEdit.sessions)-pc)}}
   try{const j=await api('/api/admin/enrollment/preview',b);const full=j.dates.filter(d=>d.full).length;
     $('#ePrev').innerHTML=`<b>들어갈 일정 ${j.dates.length}회${j.dates.length<j.sessions?` (요청 ${j.sessions}회 중)`:''}</b>`+j.dates.map(d=>`<span class="d ${d.full?'full':''}">${dLabel(d.date,d.slot)}${d.full?' 정원참':''}</span>`).join('')+(full?`<br><small style="color:var(--warn)">정원이 찬 날이 ${full}회 있습니다. 그대로 등록하면 정원을 넘습니다.</small>`:'');
   }catch(x){$('#ePrev').textContent=x.message}
@@ -623,17 +626,18 @@ function openEnroll(pre,edit){
   const f=$('#fEnroll');f.reset();$('#eErr').textContent='';
   eEdit=edit||null;payTouched=!!eEdit;
   $('#eTitle').textContent=eEdit?'수강 정보 수정':'수강 등록';
-  $('#eDrawer .sub').textContent=eEdit?`지난 수업 ${pastCount()}회는 그대로 두고, 바꾼 내용은 적용일부터 반영됩니다.`:'등록하면 예약 캘린더에 이름이 자동으로 들어갑니다.';
+  $('#eDrawer .sub').textContent=eEdit?`시작일을 오늘 이전으로 바꾸면 전체 일정을 다시 계산하고, 오늘 이후로 바꾸면 지난 수업 ${pastCount()}회는 그대로 둡니다.`:'등록하면 예약 캘린더에 이름이 자동으로 들어갑니다.';
   $('#fEnroll button[type=submit]').textContent=eEdit?'저장':'등록';
-  $('#eResWrap').classList.toggle('hidden',!eEdit);$('#eRes').checked=false;
+  $('#eResWrap').classList.add('hidden');
   if(eEdit){
     eCourse=eEdit.course;eTimes=Math.min(4,Math.max(1,eEdit.pattern.length));ePat=eEdit.pattern.map(p=>({dow:p.dow,slot:p.slot}));
     f.name.value=eEdit.name;f.phone.value=eEdit.phone||'';f.memo.value=eEdit.memo||'';
     const py=eEdit.pay||{};f.payAmount.value=py.amount?won(py.amount):'';f.payMethod.value=py.method||'';f.paid.checked=!!py.paid;
-    const nx=eEdit.dates.find(d=>d.date>=todayKST());f.startDate.value=eCourse==='원데이 클래스'&&nx?nx.date:todayKST();f.sessions.value=eEdit.sessions;
+    const nx=eEdit.dates.find(d=>d.date>=todayKST());f.startDate.value=eCourse==='원데이 클래스'?(nx?nx.date:(eEdit.dates[0]||{}).date||todayKST()):(eEdit.startDate||todayKST());f.sessions.value=eEdit.sessions;
     setSeg('eCourse',eCourse);setSeg('eTimes',eTimes);syncCourse();renderPattern();
-    if(eCourse==='원데이 클래스'&&nx){$('#fEnroll [name=slot]').value=nx.slot}
-    $('#eStartLbl').textContent=eCourse==='원데이 클래스'?'수업 날짜':'변경 적용일';
+    if(eCourse==='원데이 클래스'){const d0=nx||eEdit.dates[0];if(d0)$('#fEnroll [name=slot]').value=d0.slot}
+    $('#eStartLbl').textContent=eCourse==='원데이 클래스'?'수업 날짜':'시작일';
+    eSnap=schedKey();
     syncRes();
     $('#eDim').classList.remove('hidden');$('#eDrawer').classList.remove('hidden');return;
   }
@@ -651,7 +655,7 @@ $('#fEnroll').addEventListener('submit',async e=>{
   e.preventDefault();$('#eErr').textContent='';
   const b=enrollBody();if(!new FormData(e.target).get('name')){$('#eErr').textContent='수강생 이름을 입력해 주세요.';return}
   try{
-    if(eEdit){const j=await api('/api/admin/enrollment/update',Object.assign(b,{id:eEdit.id,reschedule:$('#eRes').checked}));closeEnroll();toast(`${j.enrollment.name}님 정보를 수정했습니다`);loadStu();loadMonth();return}
+    if(eEdit){const j=await api('/api/admin/enrollment/update',Object.assign(b,{id:eEdit.id,reschedule:schedChanged()}));closeEnroll();toast(`${j.enrollment.name}님 정보를 수정했습니다`);loadStu();loadMonth();return}
     const j=await api('/api/admin/enrollment',b);closeEnroll();toast(`${j.enrollment.name}님 ${j.enrollment.dates.length}회 등록했습니다`);loadStu();loadMonth()}catch(x){$('#eErr').textContent=x.message}
 });
 

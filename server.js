@@ -398,24 +398,29 @@ async function api(req, res, url) {
     const t = todayKST();
     const past = db.bookings.filter(x => x.enr === e.id && x.date < t);
     let pattern = e.pattern, sessions = e.sessions, newDates = null;
+    let startDate = e.startDate;
     if (b.reschedule) {
-      const start = DATE_RE.test(b.startDate || '') && b.startDate >= t ? b.startDate : t;
+      if (!DATE_RE.test(b.startDate || '')) return send(res, 400, { error: '시작일을 선택해 주세요.' });
+      // 시작일을 오늘 이전으로 바꾸면 전체 일정을 다시 만들고, 오늘 이후면 지난 수업은 그대로 두고 남은 회차만 다시 만듦
+      const full = b.startDate < t;
+      const keep = full ? [] : past;
+      const start = b.startDate;
+      startDate = full || !past.length ? b.startDate : e.startDate;
       if (course === '원데이 클래스') {
         if (!slotsFor(start).includes(b.slot)) return send(res, 400, { error: '그날 수업 시간을 선택해 주세요.' });
-        pattern = [{ dow: dow(start), slot: b.slot }]; sessions = past.length + 1;
+        pattern = [{ dow: dow(start), slot: b.slot }]; sessions = keep.length + 1; startDate = start;
       } else {
         pattern = cleanPattern(b.pattern);
         if (!pattern.length) return send(res, 400, { error: '반복할 요일과 시간을 선택해 주세요.' });
-        sessions = Math.max(past.length + 1, Math.min(60, parseInt(b.sessions, 10) || e.sessions));
+        sessions = Math.max(keep.length + 1, Math.min(60, parseInt(b.sessions, 10) || e.sessions));
       }
-      const remain = sessions - past.length;
-      // 이 수강생의 오늘 이후 일정은 계산에서 빼고 다시 만듦
-      db.bookings = db.bookings.filter(x => !(x.enr === e.id && x.date >= t));
-      newDates = genSessions(pattern, start, remain);
+      const remain = sessions - keep.length;
+      db.bookings = db.bookings.filter(x => !(x.enr === e.id && (full || x.date >= t)));
+      newDates = genSessions(pattern, full ? start : (start > t ? start : t), remain);
       for (const d of newDates) db.bookings.push({ id: crypto.randomUUID(), date: d.date, slot: d.slot, name, course, enr: e.id });
-      sessions = past.length + newDates.length;
+      sessions = keep.length + newDates.length;
     }
-    Object.assign(e, { name, phone: str(b.phone, 30), memo: str(b.memo, 300), course, pattern, sessions, pay: cleanPay(b) });
+    Object.assign(e, { name, phone: str(b.phone, 30), memo: str(b.memo, 300), course, pattern, sessions, startDate, pay: cleanPay(b) });
     db.bookings.forEach(x => { if (x.enr === e.id) { x.name = name; x.course = course; } });
     save();
     return send(res, 200, { ok: true, enrollment: enrollmentView(e) });
