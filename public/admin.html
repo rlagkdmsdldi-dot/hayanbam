@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>관리자 · 하얀밤조소공방</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23111'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='900' font-size='34' fill='%23fafaf8' text-anchor='middle'%3EH%3C/text%3E%3C/svg%3E">
+<style>
+@font-face{font-family:'Pretendard';src:url('/fonts/PretendardVariable.woff2') format('woff2-variations');font-weight:45 920;font-display:swap}
+:root{--bg:#fafaf8;--bg2:#f1f1ee;--ink:#111;--ink2:#3d3d3d;--gray:#8b8b88;--line:#e2e2de;--warn:#b5482f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard',-apple-system,'Apple SD Gothic Neo',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select,textarea{font:inherit;color:var(--ink)}
+.hidden{display:none!important}
+.eng{font-size:11px;font-weight:600;letter-spacing:.22em;color:var(--gray)}
+
+/* auth */
+.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.auth form{width:100%;max-width:360px}
+.auth h1{font-weight:850;font-size:34px;letter-spacing:-.04em;margin:6px 0 4px}
+.auth p.d{color:var(--gray);font-size:14px;margin-bottom:32px}
+.fd{margin-bottom:18px}
+.fd label{display:block;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px;letter-spacing:.04em}
+.fd input{width:100%;border:0;border-bottom:1px solid #c9c9c5;background:transparent;padding:10px 0;font-size:16px;outline:none;border-radius:0}
+.fd input:focus{border-color:var(--ink)}
+.fd small{display:block;color:var(--gray);font-size:12px;margin-top:4px}
+.btn{display:block;width:100%;background:var(--ink);color:#fff;border:0;padding:16px;font-weight:600;font-size:15px}
+.btn.line{background:#fff;color:var(--ink);border:1px solid var(--ink)}
+.err{color:var(--warn);font-size:13px;min-height:20px;margin:6px 0 10px}
+
+/* app */
+header{position:sticky;top:0;z-index:20;background:rgba(250,250,248,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hd{max-width:1100px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:12px}
+.hd b{font-weight:800;letter-spacing:.16em;font-size:15px}
+.hd span{font-size:12px;color:var(--gray)}
+.hd .sp{flex:1}
+.hd a,.hd button{font-size:12px;font-weight:600;letter-spacing:.06em;background:none;border:0;color:var(--ink2)}
+nav.tabs{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;gap:4px;border-top:1px solid var(--line)}
+nav.tabs button{background:none;border:0;padding:14px 12px 12px;font-weight:600;color:var(--gray);border-bottom:2px solid transparent;margin-bottom:-1px}
+nav.tabs button.on{color:var(--ink);border-color:var(--ink)}
+nav.tabs .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:4px;background:var(--ink);color:#fff;border-radius:9px;font-size:11px;line-height:18px;text-align:center}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+
+/* calendar */
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mh h2{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.mh button{width:36px;height:36px;border:1px solid var(--line);background:#fff;font-size:16px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--gray);margin-bottom:12px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--line)}
+.grid .dw{font-size:12px;font-weight:600;color:var(--gray);text-align:center;padding:8px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2)}
+.day{min-height:110px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px;background:#fff}
+.day.out{background:var(--bg)}
+.day.past{opacity:.55}
+.day .n{font-size:13px;font-weight:700;margin-bottom:4px}
+.day.sun .n{color:var(--warn)}
+.day.today .n{display:inline-block;background:var(--ink);color:#fff;padding:0 6px}
+.day .off{font-size:11px;color:var(--gray)}
+.chip{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;padding:5px 6px;margin-top:4px;font-size:12px;line-height:1.3}
+.chip b{display:block;font-weight:600}
+.chip.part{background:#f4f1e8;border-color:#e2d9bd}
+.chip.full{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.closed{background:repeating-linear-gradient(45deg,#eee,#eee 4px,#f8f8f6 4px,#f8f8f6 8px);color:var(--gray)}
+.chip.memo::after{content:" ✎"}
+
+/* drawer */
+.dim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:40}
+.drawer{position:fixed;z-index:41;background:#fff;right:0;top:0;bottom:0;width:380px;max-width:100%;padding:24px;overflow:auto;box-shadow:-10px 0 30px rgba(0,0,0,.08)}
+.drawer h3{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.drawer .sub{color:var(--gray);font-size:13px;margin-bottom:24px}
+.stepper{display:flex;align-items:center;border:1px solid var(--ink);margin:8px 0 6px}
+.stepper button{width:56px;height:56px;border:0;background:#fff;font-size:24px}
+.stepper output{flex:1;text-align:center;font-size:28px;font-weight:800}
+.stat{font-size:13px;color:var(--gray);margin-bottom:22px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toggle{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:8px 0 18px}
+.toggle input{width:20px;height:20px}
+textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-size:15px;resize:vertical;outline:none}
+.drawer .acts{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:18px}
+
+/* inquiries */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filters button{border:1px solid var(--line);background:#fff;padding:7px 12px;font-size:13px;font-weight:600}
+.filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.inq{border:1px solid var(--line);background:#fff;padding:18px;margin-bottom:10px}
+.inq.new{border-left:3px solid var(--ink)}
+.inq .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}
+.inq .ty{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--gray)}
+.inq h4{font-size:17px;font-weight:700}
+.inq time{font-size:12px;color:var(--gray);white-space:nowrap}
+.inq dl{display:grid;grid-template-columns:76px 1fr;gap:4px 10px;font-size:14px}
+.inq dt{color:var(--gray);font-size:13px}
+.inq dd{word-break:break-all;white-space:pre-wrap}
+.inq .ft{display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.inq select{border:1px solid var(--ink);background:#fff;padding:8px 10px;font-weight:600}
+.inq .del{border:0;background:none;color:var(--gray);font-size:13px;margin-left:auto;text-decoration:underline}
+.empty{color:var(--gray);text-align:center;padding:60px 0;border:1px dashed var(--line)}
+
+/* settings */
+.card{background:#fff;border:1px solid var(--line);padding:22px;margin-bottom:14px;max-width:520px}
+.card h3{font-size:17px;font-weight:700;margin-bottom:4px}
+.card p{color:var(--gray);font-size:13px;margin-bottom:16px}
+.ok{color:#2f6b3a;font-size:13px;min-height:20px;margin-top:8px}
+
+.toast{white-space:nowrap;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+
+@media(max-width:700px){
+  .grid .dw{font-size:11px}
+  .day{min-height:86px;padding:3px}
+  .day .n{font-size:12px}
+  .chip{padding:3px 3px;font-size:10px;letter-spacing:-.03em}
+  .chip span{display:none}
+  .drawer{top:auto;width:100%;max-height:88vh;border-radius:14px 14px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom))}
+  .hd span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 첫 계정 만들기 -->
+<section class="auth hidden" id="vSetup">
+  <form id="fSetup" autocomplete="off">
+    <p class="eng">HAYANBAM ADMIN</p>
+    <h1>관리자 계정 만들기</h1>
+    <p class="d">처음 한 번만 진행합니다. 안내받은 설정 코드를 입력하고, 앞으로 사용할 아이디와 비밀번호를 정해 주세요.</p>
+    <div class="fd"><label>설정 코드</label><input name="code" required></div>
+    <div class="fd"><label>아이디</label><input name="id" required autocomplete="username"><small>영문·숫자 4~30자</small></div>
+    <div class="fd"><label>비밀번호</label><input name="pw" type="password" required autocomplete="new-password"><small>8자 이상</small></div>
+    <div class="fd"><label>비밀번호 확인</label><input name="pw2" type="password" required autocomplete="new-password"></div>
+    <p class="err" id="eSetup"></p>
+    <button class="btn">계정 만들기</button>
+  </form>
+</section>
+
+<!-- 로그인 -->
+<section class="auth hidden" id="vLogin">
+  <form id="fLogin">
+    <p class="eng">HAYANBAM ADMIN</p>
+    <h1>관리자 로그인</h1>
+    <p class="d">하얀밤조소공방 예약·문의 관리</p>
+    <div class="fd"><label>아이디</label><input name="id" required autocomplete="username"></div>
+    <div class="fd"><label>비밀번호</label><input name="pw" type="password" required autocomplete="current-password"></div>
+    <p class="err" id="eLogin"></p>
+    <button class="btn">로그인</button>
+  </form>
+</section>
+
+<!-- 관리 화면 -->
+<div id="vApp" class="hidden">
+  <header>
+    <div class="hd"><b>HAYANBAM</b><span>관리자</span><div class="sp"></div><a href="/" target="_blank" rel="noopener">홈페이지 ↗</a><button id="logout">로그아웃</button></div>
+    <nav class="tabs">
+      <button data-t="cal" class="on">예약 캘린더</button>
+      <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
+      <button data-t="set">설정</button>
+    </nav>
+  </header>
+  <main>
+    <section id="tCal">
+      <div class="mh"><button id="mPrev" aria-label="이전 달">‹</button><h2 id="mTitle"></h2><button id="mNext" aria-label="다음 달">›</button></div>
+      <div class="legend"><span><i style="background:#fff;border:1px solid #e2e2de"></i>예약 없음</span><span><i style="background:#f4f1e8;border:1px solid #e2d9bd"></i>예약 있음</span><span><i style="background:#111"></i>마감</span><span><i style="background:repeating-linear-gradient(45deg,#ddd,#ddd 2px,#fff 2px,#fff 4px)"></i>휴강</span><span>✎ 메모</span></div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section id="tInq" class="hidden">
+      <div class="filters" id="filters">
+        <button data-f="all" class="on">전체</button><button data-f="new">새 문의</button><button data-f="checked">확인함</button><button data-f="confirmed">예약 확정</button><button data-f="done">완료</button>
+      </div>
+      <div id="inqList"></div>
+    </section>
+
+    <section id="tSet" class="hidden">
+      <div class="card">
+        <h3>기본 정원</h3>
+        <p>모든 수업 타임의 기본 정원입니다. 타임별로 다르게 하려면 캘린더에서 해당 타임을 눌러 바꿔 주세요.</p>
+        <div class="fd"><label>정원 (명)</label><input id="capInput" type="number" min="1" max="99" inputmode="numeric"></div>
+        <button class="btn" id="capSave">저장</button>
+        <p class="ok" id="capMsg"></p>
+      </div>
+      <div class="card">
+        <h3>비밀번호 변경</h3>
+        <p>변경하면 다른 기기의 로그인은 모두 해제됩니다.</p>
+        <form id="fPw">
+          <div class="fd"><label>현재 비밀번호</label><input name="current" type="password" required autocomplete="current-password"></div>
+          <div class="fd"><label>새 비밀번호</label><input name="next" type="password" required autocomplete="new-password"><small>8자 이상</small></div>
+          <div class="fd"><label>새 비밀번호 확인</label><input name="next2" type="password" required autocomplete="new-password"></div>
+          <p class="err" id="ePw"></p>
+          <button class="btn">변경</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 타임 편집 -->
+<div class="dim hidden" id="dim"></div>
+<aside class="drawer hidden" id="drawer" role="dialog" aria-modal="true">
+  <p class="eng" id="dEng"></p>
+  <h3 id="dTitle"></h3>
+  <p class="sub" id="dSub"></p>
+  <label class="eng" style="display:block">예약 인원</label>
+  <div class="stepper"><button type="button" id="minus" aria-label="1명 빼기">−</button><output id="bookedOut">0</output><button type="button" id="plus" aria-label="1명 더하기">+</button></div>
+  <p class="stat" id="dStat"></p>
+  <div class="fd"><label>이 타임 정원</label><input id="dCap" type="number" min="0" max="99" inputmode="numeric"><small id="dCapHint"></small></div>
+  <label class="toggle"><span><b style="font-weight:600">휴강 / 예약 막기</b><br><small style="color:var(--gray)">홈페이지에서 선택할 수 없게 됩니다</small></span><input type="checkbox" id="dClosed"></label>
+  <div class="fd"><label>메모 (관리자만 보임)</label><textarea id="dMemo" placeholder="예: 김OO, 이OO / 유화 1명"></textarea></div>
+  <div class="acts"><button class="btn line" type="button" id="dCancel">닫기</button><button class="btn" type="button" id="dSave">저장</button></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const W=['일','월','화','수','목','금','토'];
+const SL={'10:00-12:00':'10시','20:00-22:00':'20시','22:00-24:00':'22시'};
+const SLF={'10:00-12:00':'10–12시','20:00-22:00':'20–22시','22:00-24:00':'22–24시'};
+const STATUS={new:'새 문의',checked:'확인함',confirmed:'예약 확정',done:'완료'};
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
+async function api(path,body){
+  const opt=body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json','X-HB':'1'},body:JSON.stringify(body)};
+  const r=await fetch(path,Object.assign({credentials:'same-origin'},opt));
+  let j={};try{j=await r.json()}catch(_){}
+  if(r.status===401&&path!=='/api/admin/login'&&path!=='/api/admin/setup'&&path!=='/api/admin/password'){show('login');throw new Error('login')}
+  if(!r.ok)throw new Error(j.error||'오류가 발생했습니다.');
+  return j;
+}
+function show(v){['vSetup','vLogin','vApp'].forEach(id=>$('#'+id).classList.toggle('hidden',id!=='v'+v[0].toUpperCase()+v.slice(1)))}
+const pad=n=>String(n).padStart(2,'0');
+function todayKST(){const d=new Date(Date.now()+9*3600e3);return d.toISOString().slice(0,10)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// ---------- 시작 ----------
+async function boot(){
+  try{
+    const s=await api('/api/admin/state');
+    if(s.authed){show('app');startApp()}
+    else if(s.setup){show('setup');if(!s.setupEnabled)$('#eSetup').textContent='서버에 설정 코드가 없습니다. 관리자에게 문의해 주세요.'}
+    else show('login');
+  }catch(e){show('login');$('#eLogin').textContent='서버에 연결할 수 없습니다.'}
+}
+$('#fSetup').addEventListener('submit',async e=>{
+  e.preventDefault();const f=new FormData(e.target),er=$('#eSetup');er.textContent='';
+  if(f.get('pw')!==f.get('pw2')){er.textContent='비밀번호 확인이 일치하지 않습니다.';return}
+  try{await api('/api/admin/setup',{code:f.get('code'),id:f.get('id'),pw:f.get('pw')});show('app');startApp();toast('관리자 계정이 만들어졌습니다')}
+  catch(x){er.textContent=x.message}
+});
+$('#fLogin').addEventListener('submit',async e=>{
+  e.preventDefault();const f=new FormData(e.target),er=$('#eLogin');er.textContent='';
+  try{await api('/api/admin/login',{id:f.get('id'),pw:f.get('pw')});show('app');startApp()}
+  catch(x){er.textContent=x.message}
+});
+$('#logout').onclick=async()=>{try{await api('/api/admin/logout',{})}catch(_){}show('login')};
+
+// ---------- 탭 ----------
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  ['cal','inq','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  if(b.dataset.t==='inq')loadInq();
+  if(b.dataset.t==='set')loadSet();
+});
+
+let started=false;
+function startApp(){
+  if(started){loadMonth();loadInq(true);return}
+  started=true;loadMonth();loadInq(true);
+}
+
+// ---------- 캘린더 ----------
+const t0=todayKST().split('-').map(Number);
+let vy=t0[0],vm=t0[1],monthData={},defaultCap=6;
+$('#mPrev').onclick=()=>{vm--;if(vm<1){vm=12;vy--}loadMonth()};
+$('#mNext').onclick=()=>{vm++;if(vm>12){vm=1;vy++}loadMonth()};
+async function loadMonth(){
+  $('#mTitle').textContent=`${vy}. ${pad(vm)}`;
+  try{const j=await api(`/api/admin/month?ym=${vy}-${pad(vm)}`);monthData=j.days;defaultCap=j.capacity;renderGrid()}catch(_){}
+}
+function chipClass(s){if(s.closed)return'closed';if(s.booked>=s.capacity&&s.capacity>0)return'full';if(s.booked>0)return'part';return''}
+function renderGrid(){
+  const g=$('#grid');g.innerHTML='';
+  W.forEach(w=>{const d=document.createElement('div');d.className='dw';d.textContent=w;g.appendChild(d)});
+  const first=new Date(Date.UTC(vy,vm-1,1)).getUTCDay(),last=new Date(Date.UTC(vy,vm,0)).getUTCDate(),today=todayKST();
+  for(let i=0;i<first;i++){const d=document.createElement('div');d.className='day out';g.appendChild(d)}
+  for(let n=1;n<=last;n++){
+    const ds=`${vy}-${pad(vm)}-${pad(n)}`,dw=(first+n-1)%7,slots=monthData[ds]||[];
+    const d=document.createElement('div');
+    d.className='day'+(dw===0?' sun':'')+(ds===today?' today':'')+(ds<today?' past':'');
+    d.innerHTML=`<div class="n">${n}</div>`;
+    if(!slots.length){d.insertAdjacentHTML('beforeend','<div class="off">휴무</div>')}
+    slots.forEach(s=>{
+      const c=document.createElement('button');
+      c.className='chip '+chipClass(s)+(s.memo?' memo':'');
+      c.innerHTML=`<b>${SL[s.slot]||s.slot}</b>${s.closed?'휴강':`${s.booked}/${s.capacity}<span>명</span>`}`;
+      c.onclick=()=>openDrawer(ds,s);
+      d.appendChild(c);
+    });
+    g.appendChild(d);
+  }
+}
+
+// ---------- 타임 편집 ----------
+let cur=null;
+function openDrawer(ds,s){
+  cur={date:ds,slot:s.slot,booked:s.booked};
+  const [y,m,d]=ds.split('-').map(Number),w=W[new Date(Date.UTC(y,m-1,d)).getUTCDay()];
+  $('#dEng').textContent='CLASS SLOT';
+  $('#dTitle').textContent=`${m}월 ${d}일 (${w}) ${SLF[s.slot]||s.slot}`;
+  $('#dSub').textContent=s.slot.replace('-',' – ');
+  $('#dCap').value=s.capacity;$('#dCapHint').textContent=`기본 정원 ${defaultCap}명`;
+  $('#dClosed').checked=s.closed;$('#dMemo').value=s.memo||'';
+  updStep();
+  $('#dim').classList.remove('hidden');$('#drawer').classList.remove('hidden');
+}
+function updStep(){
+  $('#bookedOut').textContent=cur.booked;
+  const cap=parseInt($('#dCap').value,10)||0,left=Math.max(0,cap-cur.booked);
+  $('#dStat').textContent=cur.booked>=cap&&cap>0?'정원이 다 찼습니다 · 홈페이지에 "마감"으로 표시':`잔여 ${left}석 · 홈페이지에 "잔여 ${left}석"으로 표시`;
+}
+$('#plus').onclick=()=>{cur.booked=Math.min(99,cur.booked+1);updStep()};
+$('#minus').onclick=()=>{cur.booked=Math.max(0,cur.booked-1);updStep()};
+$('#dCap').oninput=updStep;
+function closeDrawer(){$('#dim').classList.add('hidden');$('#drawer').classList.add('hidden');cur=null}
+$('#dim').onclick=closeDrawer;$('#dCancel').onclick=closeDrawer;
+$('#dSave').onclick=async()=>{
+  if(!cur)return;
+  try{
+    await api('/api/admin/slot',{date:cur.date,slot:cur.slot,booked:cur.booked,capacity:$('#dCap').value,closed:$('#dClosed').checked,memo:$('#dMemo').value});
+    closeDrawer();toast('저장했습니다');loadMonth();
+  }catch(x){toast(x.message)}
+};
+
+// ---------- 문의 ----------
+let inqItems=[],inqFilter='all';
+document.querySelectorAll('#filters button').forEach(b=>b.onclick=()=>{
+  inqFilter=b.dataset.f;document.querySelectorAll('#filters button').forEach(x=>x.classList.toggle('on',x===b));renderInq();
+});
+async function loadInq(badgeOnly){
+  try{const j=await api('/api/admin/inquiries');inqItems=j.items;
+    const n=inqItems.filter(x=>x.status==='new').length,bd=$('#newCount');bd.textContent=n;bd.classList.toggle('hidden',!n);
+    if(!badgeOnly)renderInq();
+  }catch(_){}
+}
+function renderInq(){
+  const list=$('#inqList'),items=inqItems.filter(x=>inqFilter==='all'||x.status===inqFilter);
+  if(!items.length){list.innerHTML='<p class="empty">문의가 없습니다</p>';return}
+  list.innerHTML=items.map(x=>{
+    const rows=[['연락처',x.phone],['소속',x.org],['수업',x.cls],['인원',x.people],['장소',x.place],['종류',x.kind],['규모',x.size],['예산',x.budget],['희망 일시',[x.date,x.time].filter(Boolean).join(' ')],['내용',x.msg]].filter(r=>r[1]);
+    const dt=new Date(x.createdAt),when=`${dt.getMonth()+1}/${dt.getDate()} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`;
+    return `<article class="inq ${x.status==='new'?'new':''}"><div class="top"><div><p class="ty">${esc(x.type==='조형물 제작'?'제작 의뢰':x.type)}</p><h4>${esc(x.name)}</h4></div><time>${when}</time></div>
+      <dl>${rows.map(r=>`<dt>${r[0]}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>
+      <div class="ft"><select data-id="${x.id}">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${x.status===k?'selected':''}>${v}</option>`).join('')}</select><button class="del" data-del="${x.id}">삭제</button></div></article>`;
+  }).join('');
+  list.querySelectorAll('select[data-id]').forEach(s=>s.onchange=async()=>{try{await api('/api/admin/inquiries/status',{id:s.dataset.id,status:s.value});toast('상태를 바꿨습니다');loadInq()}catch(x){toast(x.message)}});
+  list.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{
+    if(b.dataset.confirm!=='1'){b.dataset.confirm='1';b.textContent='한 번 더 누르면 삭제';setTimeout(()=>{b.dataset.confirm='';b.textContent='삭제'},3000);return}
+    try{await api('/api/admin/inquiries/delete',{id:b.dataset.del});toast('삭제했습니다');loadInq()}catch(x){toast(x.message)}
+  });
+}
+
+// ---------- 설정 ----------
+function loadSet(){$('#capInput').value=defaultCap;$('#capMsg').textContent=''}
+$('#capSave').onclick=async()=>{try{await api('/api/admin/settings',{capacity:$('#capInput').value});defaultCap=parseInt($('#capInput').value,10);$('#capMsg').textContent='저장했습니다.';loadMonth()}catch(x){$('#capMsg').textContent=x.message}};
+$('#fPw').addEventListener('submit',async e=>{
+  e.preventDefault();const f=new FormData(e.target),er=$('#ePw');er.textContent='';
+  if(f.get('next')!==f.get('next2')){er.textContent='새 비밀번호 확인이 일치하지 않습니다.';return}
+  try{await api('/api/admin/password',{current:f.get('current'),next:f.get('next')});e.target.reset();toast('비밀번호를 바꿨습니다')}catch(x){er.textContent=x.message}
+});
+
+boot();
+</script>
+</body>
+</html>

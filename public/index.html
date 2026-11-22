@@ -243,6 +243,9 @@ h3.t{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.03em;line
 .slot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .slot-grid button{background:#fff;color:var(--ink);-webkit-text-fill-color:var(--ink);border:1px solid #c9c9c5;padding:9px 0;font-size:13px;font-weight:500}
 .slot-grid button:hover{border-color:var(--ink)}
+.slot-grid button small{display:block;font-size:11px;font-weight:500;color:var(--gray);-webkit-text-fill-color:var(--gray)}
+.slot-grid button:disabled{opacity:.45;cursor:default;text-decoration:line-through}
+.slot-grid button.sel small{color:#ccc;-webkit-text-fill-color:#ccc}
 .slot-grid button.sel{background:var(--ink);color:#fff;-webkit-text-fill-color:#fff;border-color:var(--ink)}
 .picked{margin-top:14px;font-size:14px;font-weight:600;min-height:22px}
 .picked span{color:var(--gray);font-weight:400}
@@ -832,10 +835,12 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
         </div>
         <label class="agree"><input type="checkbox" name="ok"> 문의 응대를 위한 개인정보(이름·연락처) 수집·이용 동의 <a href="#privacy" style="border-bottom:1px solid var(--ink2);margin-left:4px">보기</a></label>
         <p class="warn" id="warn"></p>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <button class="submit" type="submit">문의 접수</button>
 
         <div class="res" id="res">
-          <b style="font-size:15px">문의 내용</b>
+          <b style="font-size:15px" id="resTitle">문의 내용</b>
+          <p id="resMsg" style="font-size:14px;color:var(--ink2);margin-top:6px"></p>
           <pre id="out"></pre>
           <div class="bt">
             <a class="p" id="talkSend" href="https://talk.naver.com/ct/w3bwk1j" target="_blank" rel="noopener">복사 후 톡톡 열기</a>
@@ -960,7 +965,28 @@ document.querySelectorAll('[data-ftype]').forEach(a=>a.addEventListener('click',
 const today=new Date();today.setHours(0,0,0,0);
 let view=new Date(today.getFullYear(),today.getMonth(),1);
 const cal=document.getElementById('cal'),ym=document.getElementById('ym');
+// ---- 잔여석 (실제 사이트에서만 동작, 미리보기에서는 생략)
+const AV={},AVm={};
+const ds=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const norm=x=>x.replace('–','-');
+async function loadAvail(){
+  const y=view.getFullYear(),m=view.getMonth(),key=y+'-'+m;
+  if(AVm[key])return; AVm[key]=1;
+  try{
+    const from=ds(new Date(y,m,1)),to=ds(new Date(y,m+1,0));
+    const r=await fetch(`/api/availability?from=${from}&to=${to}`);if(!r.ok)return;
+    const j=await r.json();Object.assign(AV,j.days);renderCal();renderSlots();
+  }catch(_){}
+}
+function slotAv(dt,label){const a=AV[ds(dt)];if(!a)return null;return a.find(o=>o.slot===norm(label))||null}
+function slotOpen(o){return !o||(!o.closed&&o.booked<o.capacity)}
+function dayFull(dt){
+  const s=SLOTS[curType];if(!s.byDay)return false;
+  const list=s.byDay(dt.getDay());if(!list.length||!AV[ds(dt)])return false;
+  return list.every(l=>!slotOpen(slotAv(dt,l)));
+}
 function renderCal(){
+  loadAvail();
   ym.textContent=`${view.getFullYear()}. ${String(view.getMonth()+1).padStart(2,'0')}`;
   cal.innerHTML='';
   ['일','월','화','수','목','금','토'].forEach(d=>{const s=document.createElement('span');s.className='dw';s.textContent=d;cal.appendChild(s)});
@@ -971,7 +997,8 @@ function renderCal(){
     const b=document.createElement('button');b.type='button';b.textContent=d;
     if(dt.getDay()===0)b.classList.add('sun');
     const minD=new Date(today);minD.setDate(minD.getDate()+(SLOTS[curType].minDays||0));
-    if(dt<minD||(SLOTS[curType].closed||[]).includes(dt.getDay()))b.disabled=true;
+    if(dt<minD||(SLOTS[curType].closed||[]).includes(dt.getDay())||dayFull(dt))b.disabled=true;
+    if(dayFull(dt)&&dt>=minD)b.title='마감';
     if(+dt===+today)b.classList.add('today');
     if(selDate&&+dt===+selDate)b.classList.add('sel');
     b.onclick=()=>{selDate=dt;selTime=null;renderCal();renderSlots();updatePicked()};
@@ -985,7 +1012,11 @@ function renderSlots(){
   const s=SLOTS[curType],g=document.getElementById('slotGrid'),t=document.getElementById('slotTitle');
   const list=s.byDay?(selDate?s.byDay(selDate.getDay()):[]):(s.list||[]);
   t.textContent=s.byDay&&!selDate?'날짜를 먼저 선택해 주세요':s.title;t.style.display=(s.title)?'block':'none';g.innerHTML='';
-  list.forEach(x=>{const b=document.createElement('button');b.type='button';b.textContent=x;if(x===selTime)b.classList.add('sel');
+  list.forEach(x=>{const b=document.createElement('button');b.type='button';
+    const o=s.byDay&&selDate?slotAv(selDate,x):null;
+    b.innerHTML=x+(o?`<small>${slotOpen(o)?'잔여 '+(o.capacity-o.booked)+'석':'마감'}</small>`:'');
+    if(o&&!slotOpen(o)){b.disabled=true}
+    if(x===selTime)b.classList.add('sel');
     b.onclick=()=>{selTime=x;renderSlots();updatePicked()};g.appendChild(b)});
 }
 const W=['일','월','화','수','목','금','토'];
@@ -1101,6 +1132,16 @@ f.addEventListener('submit',e=>{
   document.getElementById('out').textContent=text;
   document.getElementById('mail').href='mailto:818art@naver.com?subject='+encodeURIComponent('[홈페이지 '+t+']')+'&body='+encodeURIComponent(text);
   document.getElementById('res').classList.add('on');
+  // 서버에 문의 저장 (실제 사이트)
+  const payload={type:t,name:d.get('name'),phone:d.get('phone'),org:d.get('org2')||d.get('org3')||'',cls:t==='수업 문의'?d.get('cls'):'',
+    people:t==='출강 문의'?d.get('people'):'',place:t==='출강 문의'?d.get('place'):'',kind:t==='조형물 제작'?d.get('kind'):'',
+    size:t==='조형물 제작'?d.get('size'):'',budget:t==='조형물 제작'?d.get('budget'):'',date:selDate?fmt(selDate):'',time:selTime||'',msg:d.get('msg')||'',website:d.get('website')||''};
+  const rt=document.getElementById('resTitle'),rm=document.getElementById('resMsg'),btn=f.querySelector('.submit');
+  btn.disabled=true;
+  fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    .then(r=>r.ok?r.json():Promise.reject(r))
+    .then(()=>{rt.textContent='문의가 접수되었습니다';rm.textContent='확인 후 기재하신 연락처로 연락드립니다. 더 빠른 답변이 필요하시면 아래 내용을 톡톡으로도 보내주세요.'})
+    .catch(()=>{rt.textContent='문의 내용';rm.textContent='아래 내용을 톡톡이나 메일로 보내주시면 확인 후 연락드립니다.';btn.disabled=false});
 });
 document.getElementById('talkSend').addEventListener('click',async e=>{
   try{await navigator.clipboard.writeText(document.getElementById('out').textContent);e.currentTarget.textContent='복사됨 · 톡톡에 붙여넣기'}catch(_){}
