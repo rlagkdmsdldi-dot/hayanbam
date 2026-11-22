@@ -257,7 +257,11 @@ body.v-contact .mbar{display:none}
 .agree{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink2);margin:6px 0 22px}
 .submit{width:100%;background:var(--ink);color:#fff;border:0;padding:18px;font-size:15px;font-weight:600;letter-spacing:.04em}
 .submit:hover{background:#2b2b2b}
-.warn{color:#b5482f;font-size:13px;margin-bottom:10px;min-height:0}
+.warn{color:#b5482f;font-size:14px;font-weight:600;margin-bottom:12px;min-height:0}
+.warn:empty{display:none}
+.fd.bad label,.agree.bad{color:#b5482f}
+.fd.bad input{border-color:#b5482f}
+.agree.bad{font-weight:600}
 .res{display:none;margin-top:24px;border:1px solid var(--ink);padding:24px;background:#fff}
 .res.on{display:block}
 .res pre{white-space:pre-wrap;font-family:var(--f);font-size:14px;background:var(--bg2);padding:16px;margin:12px 0 16px;line-height:1.7}
@@ -518,6 +522,8 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
 .cal-h button{background:#fff;color:var(--ink);-webkit-text-fill-color:var(--ink);border:1px solid #c9c9c5;font-size:18px;font-weight:600;line-height:1;display:flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;-webkit-appearance:none;appearance:none}
 .cal-h button:disabled{color:#c9c9c5;-webkit-text-fill-color:#c9c9c5;border-color:var(--line);cursor:default}
 button,select,input{color-scheme:light}
+
+.about-grid{grid-template-columns:1fr!important;max-width:720px}
 </style>
 </head>
 <body>
@@ -602,7 +608,7 @@ button,select,input{color-scheme:light}
             <div><small>TIME</small><p>화–토 저녁 · 일 오전</p></div>
           </div>
         </div>
-        <div class="ph photo" data-l="STUDIO"><img src="images/site/studio.jpg" alt="하얀밤 조소공방 작업실" loading="lazy"></div>
+        
       </div>
     </div>
 
@@ -1005,6 +1011,8 @@ document.querySelectorAll('input[name=phone]').forEach(i=>{i.setAttribute('maxle
 
 // ---- form type
 const f=document.getElementById('f');
+f.addEventListener('input',e=>{const x=e.target.closest('.fd,.agree');if(x)x.classList.remove('bad')});
+f.addEventListener('change',e=>{const x=e.target.closest('.agree');if(x)x.classList.remove('bad')});
 const SLOTS={
   '수업 문의':{title:'수업 시간',byDay:d=>d===0?['10:00–12:00']:d===1?[]:['20:00–22:00','22:00–24:00'],closed:[1],label:'희망 일시 (첫 수업)'},
   '출강 문의':{title:'출강 시작 시간',list:['20:00','22:30'],minDays:14,label:'희망 일시 (최소 2주 후부터 선택 가능)'},
@@ -1167,7 +1175,7 @@ autoStart();
     const r=await fetch('/api/photos');if(!r.ok)return;const P=await r.json(),F=P.fixed||{},G=P.gallery||{};
     const put=(el,u)=>{if(!el||!u)return;el.classList.add('photo');el.innerHTML=`<img src="${u}" alt="" loading="lazy">`};
     put(document.querySelector('.hero-img > .ph'),F.hero);
-    put(document.querySelector('.about-grid .ph'),F.studio);
+    
     if(F.teacher){const t=document.querySelector('.teacher .ph img');if(t)t.src=F.teacher}
     put(document.querySelector('.card .ph[data-l="SCULPTURE"]'),F.c_sculpture);
     put(document.querySelector('.card .ph[data-l="OIL PAINTING"]'),F.c_oil);
@@ -1199,12 +1207,21 @@ f.addEventListener('submit',e=>{
   e.preventDefault();
   const d=new FormData(f),t=curType,warn=document.getElementById('warn');
   const L=[`[하얀밤 조소공방 홈페이지 · ${t}]`];
-  if(!d.get('name')||!d.get('phone')){warn.textContent='이름과 연락처를 입력해 주세요.';return}
+  // 빠진 항목 표시 + 그 위치로 이동
+  f.querySelectorAll('.bad').forEach(x=>x.classList.remove('bad'));
+  const miss=[];
+  if(!d.get('name'))miss.push(f.querySelector('input[name=name]').closest('.fd'));
+  if(!d.get('phone')||d.get('phone').replace(/\D/g,'').length<9)miss.push(f.querySelector('input[name=phone]').closest('.fd'));
+  if(!d.get('ok'))miss.push(f.querySelector('.agree'));
+  if(miss.length){
+    miss.forEach(x=>x.classList.add('bad'));
+    warn.textContent=(!d.get('name')||!d.get('phone')?'이름과 연락처를 확인해 주세요. ':'')+(!d.get('ok')?'개인정보 수집·이용 동의에 체크해 주세요.':'');
+    miss[0].scrollIntoView({behavior:'smooth',block:'center'});return;
+  }
   L.push(`이름: ${d.get('name')}`,`연락처: ${d.get('phone')}`);
   if(t==='수업 문의') L.push(`수업: ${d.get('cls')}`,`희망 시간: ${d.get('pref')}`);
   else if(t==='출강 문의') L.push(`소속: ${d.get('org2')||'-'}`,`인원: ${d.get('people')||'-'}`,`장소: ${d.get('place')||'-'}`);
   else L.push(`소속: ${d.get('org3')||'-'}`,`종류: ${d.get('kind')}`,`규모/장소: ${d.get('size')||'-'}`,`예산: ${d.get('budget')||'-'}`);
-  if(!d.get('ok')){warn.textContent='개인정보 수집·이용에 동의해 주세요.';return}
   warn.textContent='';
   if(t!=='수업 문의') L.push(`${SLOTS[t].label}: ${selDate?fmt(selDate):'-'}${selTime?' '+selTime:''}`);
   L.push(`내용: ${d.get('msg')||'-'}`);

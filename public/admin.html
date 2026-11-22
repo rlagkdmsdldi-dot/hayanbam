@@ -644,7 +644,7 @@ syncHelp();mq.addEventListener('change',syncHelp);
 document.querySelectorAll('.ph-d summary').forEach(sm=>sm.addEventListener('click',e=>{if(!mq.matches)e.preventDefault()}));
 
 // ---------- 사진 ----------
-const FIXED=[['hero','메인 화면 큰 사진','홈 첫 화면',''],['studio','공방 사진','ABOUT → 공방소개',''],['teacher','강사 프로필','ABOUT → 강사소개 (세로 사진)','tall'],
+const FIXED=[['hero','메인 화면 큰 사진','홈 첫 화면',''],['teacher','강사 프로필','ABOUT → 강사소개 (세로 사진)','tall'],
   ['c_sculpture','조소반 카드','CLASS → 수업 종류',''],['c_oil','유화반 카드','CLASS → 수업 종류',''],['c_oneday','원데이 클래스 카드','CLASS → 수업 종류','']];
 const GAL=[['works','조소반'],['paint','유화반'],['visit','출강']];
 let photos={fixed:{},gallery:{}};
