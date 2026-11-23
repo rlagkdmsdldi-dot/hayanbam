@@ -974,9 +974,11 @@ br.m{display:none}
       <p>이용자는 개인정보 수집·이용에 동의하지 않을 수 있으며, 이 경우 홈페이지 문의 접수가 제한됩니다. 네이버 톡톡으로 직접 문의하실 수 있습니다.</p>
       <h4>6. 이용자의 권리</h4>
       <p>이용자는 언제든지 본인의 개인정보 열람, 정정, 삭제를 요청할 수 있습니다.</p>
-      <h4>7. 개인정보 보호책임자</h4>
+      <h4>7. 방문 통계</h4>
+      <p>홈페이지 개선을 위해 방문 수, 유입 경로(검색·SNS 등), 기기 종류(휴대폰·PC), 본 메뉴를 숫자로만 집계합니다. 이름, IP 주소 등 개인을 알아볼 수 있는 정보는 저장하지 않으며, 쿠키를 사용하지 않습니다.</p>
+      <h4>8. 개인정보 보호책임자</h4>
       <p>성명: 황아현 (대표)<br>문의: 818art@naver.com</p>
-      <p class="pdate">시행일: 2026년 11월 22일</p>
+      <p class="pdate">시행일: 2026년 11월 23일</p>
     </div>
   </div>
 </main>
@@ -1031,6 +1033,18 @@ function route(){
   window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),0);
 }
 window.addEventListener('hashchange',route);
+// ---- 방문 통계 (숫자만 집계, 개인 식별 정보 저장 안 함)
+let hbFirst=true,hbLast='';
+function hbHit(){
+  if(location.protocol==='file:'||/claude|anthropic/.test(location.hostname))return;
+  const h=(location.hash||'#home').slice(1),v=h.split('-')[0];
+  const sp=document.querySelector('.view.on .sp.on');const page=v==='home'||v==='privacy'?v:(sp?sp.dataset.sp:h);
+  if(page===hbLast)return;hbLast=page;
+  try{fetch('/api/hit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({page,first:hbFirst,ref:hbFirst?document.referrer:''}),keepalive:true}).catch(()=>{})}catch(_){}
+  hbFirst=false;
+}
+window.addEventListener('hashchange',()=>setTimeout(hbHit,80));
+window.addEventListener('load',()=>setTimeout(hbHit,300));
 window.addEventListener('load',()=>setTimeout(()=>window.scrollTo(0,0),30));
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 

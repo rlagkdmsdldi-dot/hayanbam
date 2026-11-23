@@ -69,6 +69,47 @@ const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 const FIXED_KEYS = ['hero', 'studio', 'teacher', 'c_sculpture', 'c_oil', 'c_oneday'];
 const GALLERY_KEYS = ['works', 'paint', 'visit'];
+// ---------- 방문 통계 (개인 식별 정보 없이 숫자만 저장) ----------
+db.stats = db.stats || {};
+const PAGES = ['home', 'about-studio', 'about-sculpture', 'about-teacher', 'class-hobby', 'class-guide', 'class-qna', 'archive-works', 'archive-paint', 'archive-visit', 'contact-form', 'privacy'];
+const BOT_RE = /bot|crawl|spider|slurp|yeti|daum|bingpreview|facebookexternalhit|headless|lighthouse|preview/i;
+let seen = { day: '', set: new Set() };
+function statDay(d) {
+  if (!db.stats[d]) db.stats[d] = { v: 0, pv: 0, inq: 0, src: {}, page: {}, dev: {} };
+  return db.stats[d];
+}
+function srcOf(ref, ua) {
+  let h = ''; try { h = new URL(ref).hostname; } catch (_) {}
+  if (/instagram/i.test(ua) || /instagram\.com$/.test(h)) return '인스타그램';
+  if (/blog\.naver\.com$/.test(h)) return '네이버 블로그';
+  if (/(map|place|m\.place|pcmap)\.naver\.com$/.test(h) || /place\.map/.test(h)) return '네이버 지도·플레이스';
+  if (/naver\.com$/.test(h)) return '네이버 검색';
+  if (/NAVER\(inapp/i.test(ua) && !h) return '네이버 앱';
+  if (/google\./.test(h)) return '구글';
+  if (/daum\.net$|kakao/.test(h) || /KAKAOTALK/i.test(ua)) return '카카오·다음';
+  if (!h) return '직접 방문';
+  return '기타 사이트';
+}
+function hit(req, b) {
+  const ua = String(req.headers['user-agent'] || '');
+  if (!ua || BOT_RE.test(ua) || authed(req)) return;
+  const d = todayKST(), st = statDay(d);
+  const page = PAGES.includes(b.page) ? b.page : 'home';
+  st.pv++; st.page[page] = (st.page[page] || 0) + 1;
+  if (b.first) {
+    if (seen.day !== d) seen = { day: d, set: new Set() };
+    const key = crypto.createHash('sha256').update(d + '|' + ip(req) + '|' + ua + '|' + SESSION_SECRET).digest('hex').slice(0, 16);
+    if (!seen.set.has(key)) {
+      seen.set.add(key); st.v++;
+      const src = srcOf(String(b.ref || ''), ua); st.src[src] = (st.src[src] || 0) + 1;
+      const dev = /Mobi|Android|iPhone|iPad/i.test(ua) ? '휴대폰' : 'PC'; st.dev[dev] = (st.dev[dev] || 0) + 1;
+    }
+  }
+  statsDirty = true;
+}
+let statsDirty = false;
+setInterval(() => { if (statsDirty) { statsDirty = false; save(); } }, 30e3);
+
 const T_SECS = ['학력', '전시', '수상', '소장', '활동', '분야'];
 if (!Array.isArray(db.teachers)) {
   db.teachers = [{
@@ -314,6 +355,12 @@ async function api(req, res, url) {
 
   // 공개: 사진 목록
   if (p === '/api/photos' && req.method === 'GET') return send(res, 200, photosPublic());
+  if (p === '/api/hit' && req.method === 'POST') {
+    if (limited('hit:' + ip(req), 120, 10 * 60e3)) return send(res, 200, { ok: true });
+    let b; try { b = await readBody(req, 2000); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    try { hit(req, b); } catch (_) {}
+    return send(res, 200, { ok: true });
+  }
   if (p === '/api/teachers' && req.method === 'GET') return send(res, 200, { teachers: teachersOut(false) });
 
   // 공개: 홈페이지 문의 저장
@@ -333,6 +380,7 @@ async function api(req, res, url) {
     };
     db.inquiries.unshift(item);
     db.inquiries = db.inquiries.slice(0, 2000);
+    statDay(todayKST()).inq++;
     save();
     notify(item);
     return send(res, 200, { ok: true });
@@ -599,6 +647,17 @@ async function api(req, res, url) {
   }
 
   if (p === '/api/admin/photos' && req.method === 'GET') return send(res, 200, photosPublic());
+
+  // ---------- 방문 통계 ----------
+  if (p === '/api/admin/stats' && req.method === 'GET') {
+    const n = Math.min(366, Math.max(1, parseInt(url.searchParams.get('days'), 10) || 30));
+    const days = []; const t0 = new Date(todayKST() + 'T00:00:00Z');
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date(t0 - i * 864e5).toISOString().slice(0, 10);
+      days.push(Object.assign({ date: d }, db.stats[d] || { v: 0, pv: 0, inq: 0, src: {}, page: {}, dev: {} }));
+    }
+    return send(res, 200, { days, since: Object.keys(db.stats).sort()[0] || null });
+  }
 
   // ---------- 강사 ----------
   if (p === '/api/admin/teachers' && req.method === 'GET') return send(res, 200, { teachers: teachersOut(true) });

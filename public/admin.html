@@ -37,8 +37,9 @@ header{position:sticky;top:0;z-index:20;background:rgba(250,250,248,.95);backdro
 .hd span{font-size:12px;color:var(--gray)}
 .hd .sp{flex:1}
 .hd a,.hd button{font-size:12px;font-weight:600;letter-spacing:.06em;background:none;border:0;color:var(--ink2)}
-nav.tabs{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;gap:4px;border-top:1px solid var(--line)}
-nav.tabs button{background:none;border:0;padding:14px 12px 12px;font-weight:600;color:var(--gray);border-bottom:2px solid transparent;margin-bottom:-1px}
+nav.tabs{max-width:1100px;margin:0 auto;padding:0 20px;display:flex;gap:4px;border-top:1px solid var(--line);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{white-space:nowrap;flex:none;background:none;border:0;padding:14px 12px 12px;font-weight:600;color:var(--gray);border-bottom:2px solid transparent;margin-bottom:-1px}
 nav.tabs button.on{color:var(--ink);border-color:var(--ink)}
 nav.tabs .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:4px;background:var(--ink);color:#fff;border-radius:9px;font-size:11px;line-height:18px;text-align:center}
 main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
@@ -93,6 +94,12 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 .xtra{margin:6px 0 4px}
 .xtra summary{font-size:13px;color:var(--gray);cursor:pointer;padding:6px 0}
 .dim2{opacity:.4}
+.chart{display:flex;align-items:flex-end;gap:2px;height:160px;background:#fff;border:1px solid var(--line);padding:12px 10px 26px;position:relative}
+.chart .c{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;min-width:0}
+.chart .c i{display:block;width:100%;max-width:22px;background:var(--ink);min-height:1px}
+.chart .c.today i{background:#b5482f}
+.chart .c span{position:absolute;bottom:-20px;font-size:10px;color:var(--gray);white-space:nowrap}
+.chart .c b{font-size:10px;font-weight:600;margin-bottom:2px}
 .tcard{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);padding:12px;margin-bottom:8px}
 .tcard.off{opacity:.5}
 .tcard .im{width:72px;aspect-ratio:3/4;background:#eee center/cover;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--gray)}
@@ -310,6 +317,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <button data-t="stu">수강생</button>
       <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
       <button data-t="acc">정산</button>
+      <button data-t="sta">통계</button>
       <button data-t="pho">사진</button>
       <button data-t="tch">강사</button>
       <button data-t="set">설정</button>
@@ -386,6 +394,19 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <div class="fixed" id="fixedList"></div>
       <h3 class="sec">작업 기록 (ARCHIVE)</h3>
       <div id="galList"></div>
+    </div></section>
+
+    <section id="tSta" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>숫자 보는 법</h5><p><b>방문자</b>: 하루에 한 사람은 한 번만 셉니다.<br><b>페이지뷰</b>: 메뉴를 옮겨 다닌 횟수까지 셉니다.<br><b>문의 전환</b>: 방문자 중 홈페이지에서 문의를 남긴 비율입니다.</p>
+  <h5>유입 경로</h5><p>처음 들어온 곳을 기준으로 나눕니다. 인스타그램 앱이나 카카오톡 안에서 링크를 누르면 출처가 안 넘어와 <b>직접 방문</b>으로 잡힐 때가 있습니다.</p>
+  <h5>빠지는 것</h5><p>관리자 로그인 상태에서 본 화면, 검색엔진 로봇은 세지 않습니다.</p>
+  <p class="t">이름·IP 등 개인을 알아볼 수 있는 정보는 저장하지 않고 숫자만 남깁니다.</p>
+</div></details></aside><div class="pc">
+      <div class="seg" id="staRange" style="max-width:360px;margin-bottom:16px"><button type="button" data-v="7">최근 7일</button><button type="button" data-v="30" class="on">최근 30일</button><button type="button" data-v="90">최근 90일</button></div>
+      <div class="sum" id="staSum"></div>
+      <h3 class="sec">일별 방문자</h3>
+      <div class="chart" id="staChart"></div>
+      <div class="cols2" style="margin-top:24px"><div><h3 class="sec">유입 경로</h3><div id="staSrc"></div></div><div><h3 class="sec">많이 본 메뉴</h3><div id="staPage"></div><h3 class="sec" style="margin-top:18px">기기</h3><div id="staDev"></div></div></div>
     </div></section>
 
     <section id="tTch" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
@@ -564,11 +585,12 @@ $('#logout').onclick=async()=>{try{await api('/api/admin/logout',{})}catch(_){}s
 // ---------- 탭 ----------
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  ['cal','stu','inq','acc','pho','tch','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  ['cal','stu','inq','acc','sta','pho','tch','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
   if(b.dataset.t==='acc')loadAcc();
   if(b.dataset.t==='stu')loadStu();
   if(b.dataset.t==='pho')loadPho();
   if(b.dataset.t==='tch')loadTch();
+  if(b.dataset.t==='sta')loadSta();
   if(b.dataset.t==='inq')loadInq();
   if(b.dataset.t==='set')loadSet();
 });
@@ -889,6 +911,28 @@ const mq=matchMedia('(max-width:900px)');
 function syncHelp(){document.querySelectorAll('.ph-d').forEach(d=>{d.open=!mq.matches})}
 syncHelp();mq.addEventListener('change',syncHelp);
 document.querySelectorAll('.ph-d summary').forEach(sm=>sm.addEventListener('click',e=>{if(!mq.matches)e.preventDefault()}));
+
+// ---------- 통계 ----------
+let staDays=30;
+const PGL={'home':'홈','about-studio':'공방소개','about-sculpture':'조소·유화','about-teacher':'강사소개','class-hobby':'수업 종류','class-guide':'시간표·수강 안내','class-qna':'Q&A','archive-works':'아카이브 · 조소반','archive-paint':'아카이브 · 유화반','archive-visit':'아카이브 · 출강','contact-form':'문의하기','privacy':'개인정보처리방침'};
+document.querySelectorAll('#staRange button').forEach(b=>b.onclick=()=>{staDays=+b.dataset.v;setSeg('staRange',b.dataset.v);loadSta()});
+async function loadSta(){
+  try{
+    const {days}=await api('/api/admin/stats?days='+Math.max(staDays,30));
+    const D=days.slice(-staDays),sumK=(arr,k)=>arr.reduce((a,x)=>a+(x[k]||0),0);
+    const merge=k=>{const o={};D.forEach(x=>Object.entries(x[k]||{}).forEach(([a,b])=>o[a]=(o[a]||0)+b));return o};
+    const today=days[days.length-1],last7=days.slice(-7),v=sumK(D,'v'),inq=sumK(D,'inq');
+    $('#staSum').innerHTML=`<div><small>오늘 방문자</small><b>${W0(today.v)}</b><em>페이지뷰 ${W0(today.pv)}</em></div>
+      <div><small>최근 7일 방문자</small><b>${W0(sumK(last7,'v'))}</b><em>하루 평균 ${W0(Math.round(sumK(last7,'v')/7))}</em></div>
+      <div class="k"><small>기간 방문자</small><b>${W0(v)}</b><em>페이지뷰 ${W0(sumK(D,'pv'))}</em></div>
+      <div><small>문의 전환</small><b>${v?(inq/v*100).toFixed(1):'0.0'}%</b><em>홈페이지 문의 ${W0(inq)}건</em></div>`;
+    const mx=Math.max(1,...D.map(x=>x.v)),step=D.length>30?14:D.length>7?5:1;
+    $('#staChart').innerHTML=D.map((x,i)=>`<div class="c ${i===D.length-1?'today':''}" title="${x.date} · 방문자 ${x.v} · 페이지뷰 ${x.pv}">${D.length<=31&&x.v?`<b>${x.v}</b>`:''}<i style="height:${x.v/mx*100}%"></i>${(D.length-1-i)%step===0?`<span>${+x.date.slice(5,7)}/${+x.date.slice(8)}</span>`:''}</div>`).join('');
+    $('#staSrc').innerHTML=bars(merge('src'));
+    const pg=merge('page'),pgL={};Object.entries(pg).forEach(([k,n])=>pgL[PGL[k]||k]=n);$('#staPage').innerHTML=bars(pgL);
+    $('#staDev').innerHTML=bars(merge('dev'));
+  }catch(_){}
+}
 
 // ---------- 강사 ----------
 const TSECS=['학력','전시','수상','소장','활동','분야'];
