@@ -144,6 +144,12 @@ h3.t{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.03em;line
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-left:1px solid var(--line)}
 .card{border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column}
 .card .ph{aspect-ratio:4/3}
+a.card{color:inherit;text-decoration:none;cursor:pointer}
+a.card .ph{overflow:hidden}a.card .ph img{transition:transform .5s}
+a.card:hover .ph img{transform:scale(1.03)}
+.card .more{display:block;margin-top:14px;font-size:13px;font-weight:600;letter-spacing:.02em;border-top:1px solid var(--line);padding-top:12px}
+a.card:hover .more{text-decoration:underline;text-underline-offset:3px}
+.teacher+.teacher{margin-top:72px;padding-top:72px;border-top:1px solid var(--line)}
 .cb{padding:28px 28px 32px;flex:1;display:flex;flex-direction:column}
 .cb .eng{color:var(--gray)}
 .cb h4{font-size:22px;font-weight:700;letter-spacing:-.02em;margin:6px 0 10px}
@@ -674,7 +680,7 @@ br.m{display:none}
             <li><b>수상</b><span class="list"><span class="it-row"><em>2018.05</em><span>제50회 전라북도 미술대전 특선</span></span><span class="it-row"><em>2017.05</em><span>제9회 한국구상대전 입체부문 우수상</span></span><span class="it-row"><em>2016.07</em><span>제48회 전라북도 미술대전 특선</span></span></span></li>
             <li><b>소장</b><span class="list"><span class="it-row"><em></em><span><b class='wk'>〈METHUSELAH〉</b> 대형 작품, 금구 신세계병원 소장</span></span></span></li>
             <li><b>활동</b><span class="list"><span class="it-row"><em>2019.03</em><span>내려놓다 참여형 설치미술 퍼포먼스</span></span><span class="it-row"><em>2017–2019</em><span>거리예술단체 ‘내려놓다’ 활동</span></span></span></li>
-            <li><b>분야</b><span class="list"><span class="it-row"><em></em><span>조소 · 유화</span></span></span></li>
+            <li><b>분야</b><span class="list"><span class="it-row"><em></em><span>조소</span></span></span></li>
           </ul>
         </div>
       </div>
@@ -693,9 +699,9 @@ br.m{display:none}
     <!-- hobby + evening -->
     <div class="sp" data-sp="class-hobby" style="padding-top:56px">
       <div class="cards">
-        <div class="card"><div class="ph photo" data-l="SCULPTURE"><img src="images/site/c_sculpture.jpg" alt="점토로 형태를 만드는 조소 수업" loading="lazy"></div><div class="cb"><span class="eng">Sculpture</span><h4>조소반</h4><p>기초 조형부터 두상·인체까지<br>개인 진도에 맞춘 4주 단위 과정</p><div class="pr"><span>주 1회 · 4주</span><b>160,000원~</b></div></div></div>
-        <div class="card"><div class="ph" data-l="OIL PAINTING"></div><div class="cb"><span class="eng">Oil Painting</span><h4>유화반</h4><p>캔버스와 유화 물감으로 진행하는<br>4주 단위 회화 과정 · 수 18:00–20:00</p><div class="pr"><span>주 1회 · 4주</span><b>200,000원~</b></div></div></div>
-        <div class="card"><div class="ph photo" data-l="ONE-DAY"><img src="images/site/c_oneday.jpg" alt="원데이 클래스에서 동물 조형을 만드는 모습" loading="lazy"></div><div class="cb"><span class="eng">One-day</span><h4>원데이 클래스</h4><p>2시간 동안 소형 작품 1점 완성<br>조소를 처음 접하는 분을 위한 체험 과정</p><div class="pr"><span>2시간</span><b>50,000원</b></div></div></div>
+        <a class="card" href="#archive-works"><div class="ph photo" data-l="SCULPTURE"><img src="images/site/c_sculpture.jpg" alt="점토로 형태를 만드는 조소 수업" loading="lazy"></div><div class="cb"><span class="eng">Sculpture</span><h4>조소반</h4><p>기초 조형부터 두상·인체까지<br>개인 진도에 맞춘 4주 단위 과정</p><div class="pr"><span>주 1회 · 4주</span><b>160,000원~</b></div><span class="more">작업물 보기 →</span></div></a>
+        <a class="card" href="#archive-paint"><div class="ph" data-l="OIL PAINTING"></div><div class="cb"><span class="eng">Oil Painting</span><h4>유화반</h4><p>캔버스와 유화 물감으로 진행하는<br>4주 단위 회화 과정 · 수 18:00–20:00</p><div class="pr"><span>주 1회 · 4주</span><b>200,000원~</b></div><span class="more">작업물 보기 →</span></div></a>
+        <a class="card" href="#archive-works"><div class="ph photo" data-l="ONE-DAY"><img src="images/site/c_oneday.jpg" alt="원데이 클래스에서 동물 조형을 만드는 모습" loading="lazy"></div><div class="cb"><span class="eng">One-day</span><h4>원데이 클래스</h4><p>2시간 동안 소형 작품 1점 완성<br>조소를 처음 접하는 분을 위한 체험 과정</p><div class="pr"><span>2시간</span><b>50,000원</b></div><span class="more">작업물 보기 →</span></div></a>
         
       </div>
       <a href="#class-guide" class="tt-link">수업 시간 · 유화 수 18–20시 / 조소 화–토 20–24시 / 일 10–12시 →</a>
@@ -1203,7 +1209,6 @@ autoStart();
     const put=(el,u)=>{if(!el||!u)return;el.classList.add('photo');el.innerHTML=`<img src="${u}" alt="" loading="lazy">`};
     put(document.querySelector('.hero-img > .ph'),F.hero);
     
-    if(F.teacher){const t=document.querySelector('.teacher .ph img');if(t)t.src=F.teacher}
     put(document.querySelector('.card .ph[data-l="SCULPTURE"]'),F.c_sculpture);
     put(document.querySelector('.card .ph[data-l="OIL PAINTING"]'),F.c_oil);
     put(document.querySelector('.card .ph[data-l="ONE-DAY"]'),F.c_oneday);
@@ -1211,6 +1216,25 @@ autoStart();
       const list=G[k]||[],g=document.querySelector(`[data-sp="${sp}"] .gal`);
       if(g&&list.length)g.innerHTML=list.map(u=>`<div class="ph photo"><img src="${u}" alt="" loading="lazy"></div>`).join('');
     });
+  }catch(_){}
+})();
+
+// ---- 관리자 페이지에서 등록한 강사 정보 반영
+(async()=>{
+  try{
+    const r=await fetch('/api/teachers');if(!r.ok)return;const T=(await r.json()).teachers||[];if(!T.length)return;
+    const e=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const wk=x=>e(x).replace(/〈([^〉]*)〉/g,"<b class='wk'>〈$1〉</b>");
+    const row=line=>{const f=line.split('|').map(v=>v.trim());const d=f[0]||'',txt=f[1]||'';if(!txt&&!d)return'';
+      const link=f.slice(2).find(v=>/^https?:\/\//.test(v)),place=f.slice(2).find(v=>v&&!/^https?:\/\//.test(v));
+      const body=link?`<a href="${e(link)}" target="_blank" rel="noopener" class="exl">${e(txt)}</a>`:wk(txt);
+      return `<span class="it-row"><em>${e(d)}</em><span>${body}${place?` <i>${e(place)}</i>`:''}</span></span>`};
+    const SECS=['학력','전시','수상','소장','활동','분야'];
+    const html=T.map(t=>`<div class="teacher"><div class="ph photo">${t.photo?`<img src="${e(t.photo)}" alt="${e(t.name)} 강사 프로필" loading="lazy">`:''}</div><div>
+      <p class="tname">${e(t.name)}${t.sub?` <span class="tname-en">${e(t.sub)}</span>`:''}</p>${t.role?`<p class="trole">${e(t.role)}</p>`:''}
+      <ul class="hist">${SECS.map(k=>{const rows=String((t.sec||{})[k]||'').split('\n').map(row).filter(Boolean).join('');return rows?`<li><b>${k}</b><span class="list">${rows}</span></li>`:''}).join('')}</ul></div></div>`).join('');
+    const box=document.querySelector('[data-sp="about-teacher"]');
+    box.querySelectorAll('.teacher').forEach(x=>x.remove());box.insertAdjacentHTML('beforeend',html);
   }catch(_){}
 })();
 

@@ -93,6 +93,18 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
 .xtra{margin:6px 0 4px}
 .xtra summary{font-size:13px;color:var(--gray);cursor:pointer;padding:6px 0}
 .dim2{opacity:.4}
+.tcard{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);padding:12px;margin-bottom:8px}
+.tcard.off{opacity:.5}
+.tcard .im{width:72px;aspect-ratio:3/4;background:#eee center/cover;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--gray)}
+.tcard b{display:block;font-size:16px;font-weight:700}
+.tcard small{display:block;font-size:12px;color:var(--gray);margin-top:2px}
+.tcard .bt{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.tcard .bt button{border:1px solid var(--line);background:#fff;font-size:12px;padding:5px 9px}
+.tcard .bt button:disabled{opacity:.3}
+.tphoto{display:flex;align-items:flex-end;gap:14px;margin-bottom:20px}
+.tphoto .im{width:96px;aspect-ratio:3/4;background:#eee center/cover;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--gray)}
+#tSecs textarea{min-height:64px;font-size:14px;line-height:1.6}
+@media(max-width:700px){.tcard{grid-template-columns:56px 1fr}.tcard .im{width:56px}.tcard .bt{grid-column:1/-1;justify-content:flex-start}}
 .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .sum div{background:#fff;border:1px solid var(--line);padding:14px}
 .sum div.k{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -299,6 +311,7 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <button data-t="inq">문의 <span class="badge hidden" id="newCount"></span></button>
       <button data-t="acc">정산</button>
       <button data-t="pho">사진</button>
+      <button data-t="tch">강사</button>
       <button data-t="set">설정</button>
     </nav>
   </header>
@@ -373,6 +386,16 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
       <div class="fixed" id="fixedList"></div>
       <h3 class="sec">작업 기록 (ARCHIVE)</h3>
       <div id="galList"></div>
+    </div></section>
+
+    <section id="tTch" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
+  <h5>추가·수정</h5><p><b>+ 강사 추가</b>로 새 강사를 등록하고, 카드의 <b>수정</b>으로 내용을 고칩니다. 저장하면 홈페이지 <b>ABOUT → 강사소개</b>에 바로 반영됩니다.</p>
+  <h5>경력 적는 법</h5><p>한 줄에 하나씩, 칸은 <b>|</b> 로 나눕니다.<br><code>날짜 | 내용 | 지역 | 링크</code><br>지역과 링크는 없으면 비워도 됩니다. 날짜가 없으면 <code>| 내용</code>처럼 앞을 비웁니다.</p>
+  <p>예) <code>2018.05 | 제50회 전라북도 미술대전 특선</code><br><code>2020.07 | 단체전 | 전주</code></p>
+  <h5>순서·숨기기</h5><p>‹ › 로 홈페이지에 보이는 순서를 바꿉니다. <b>숨기기</b>를 누르면 정보는 남겨둔 채 홈페이지에서만 빠집니다.</p>
+</div></details></aside><div class="pc">
+      <div class="acts2"><button class="btn sbtn" id="addTch">+ 강사 추가</button></div>
+      <div id="tchList"></div>
     </div></section>
 
     <section id="tSet" class="pg hidden"><aside class="ph"><details class="ph-d"><summary>사용법</summary><div class="ph-b">
@@ -480,6 +503,20 @@ textarea{width:100%;border:1px solid #c9c9c5;padding:10px;min-height:80px;font-s
   </form>
 </aside>
 
+<div class="dim hidden" id="tDim"></div>
+<aside class="drawer hidden" id="tDrawer" role="dialog" aria-modal="true" aria-labelledby="tTitle" style="width:460px">
+  <p class="eng">TEACHER</p><h3 id="tTitle">강사 추가</h3><p class="sub">경력은 한 줄에 하나씩, <b>날짜 | 내용 | 지역 | 링크</b> 순서로 적습니다.</p>
+  <form id="fTch" autocomplete="off">
+    <div class="tphoto"><div class="im" id="tImg">사진 없음</div><label class="pick">사진 선택<input type="file" accept="image/*" id="tFile"></label></div>
+    <div class="fd"><label>이름</label><input name="name" maxlength="40" placeholder="황아현"></div>
+    <div class="fd"><label>한자·영문 이름 (선택)</label><input name="sub" maxlength="80" placeholder="黃雅賢 · A Hyeon Hwang"></div>
+    <div class="fd"><label>직함</label><input name="role" maxlength="80" placeholder="하얀밤 조소공방 대표 · 강사"></div>
+    <div id="tSecs"></div>
+    <p class="err" id="tErr"></p>
+    <div class="acts"><button class="btn line" type="button" id="tCancel">닫기</button><button class="btn" type="submit">저장</button></div>
+  </form>
+</aside>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -527,10 +564,11 @@ $('#logout').onclick=async()=>{try{await api('/api/admin/logout',{})}catch(_){}s
 // ---------- 탭 ----------
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  ['cal','stu','inq','acc','pho','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
+  ['cal','stu','inq','acc','pho','tch','set'].forEach(t=>$('#t'+t[0].toUpperCase()+t.slice(1)).classList.toggle('hidden',t!==b.dataset.t));
   if(b.dataset.t==='acc')loadAcc();
   if(b.dataset.t==='stu')loadStu();
   if(b.dataset.t==='pho')loadPho();
+  if(b.dataset.t==='tch')loadTch();
   if(b.dataset.t==='inq')loadInq();
   if(b.dataset.t==='set')loadSet();
 });
@@ -852,8 +890,41 @@ function syncHelp(){document.querySelectorAll('.ph-d').forEach(d=>{d.open=!mq.ma
 syncHelp();mq.addEventListener('change',syncHelp);
 document.querySelectorAll('.ph-d summary').forEach(sm=>sm.addEventListener('click',e=>{if(!mq.matches)e.preventDefault()}));
 
+// ---------- 강사 ----------
+const TSECS=['학력','전시','수상','소장','활동','분야'];
+const TPH={'학력':'2019.02 | 전북대학교 예술대학 미술학과 조소전공 졸업','전시':'2020.07 | 단체전 이름 | 전주','수상':'2018.05 | 제50회 전라북도 미술대전 특선','소장':'| 〈작품명〉 대형 작품, ○○ 소장','활동':'2017–2019 | 활동 내용','분야':'| 조소'};
+let teachers=[],tEdit=null,tPhoto=null;
+async function loadTch(){try{teachers=(await api('/api/admin/teachers')).teachers;renderTch()}catch(_){}}
+function renderTch(){
+  $('#tchList').innerHTML=teachers.length?teachers.map((t,i)=>`<div class="tcard ${t.show?'':'off'}"><div class="im" style="${t.photo?`background-image:url('${esc(t.photo)}')`:''}">${t.photo?'':'사진 없음'}</div>
+    <div><b>${esc(t.name)}</b><small>${esc(t.role||'')}${t.show?'':' · 홈페이지에서 숨김'}</small></div>
+    <div class="bt"><button data-tm="${t.id}" data-d="-1" ${i?'':'disabled'} aria-label="앞으로">‹</button><button data-tm="${t.id}" data-d="1" ${i<teachers.length-1?'':'disabled'} aria-label="뒤로">›</button>
+      <button data-te="${t.id}">수정</button><button data-ts="${t.id}">${t.show?'숨기기':'보이기'}</button><button data-td="${t.id}">삭제</button></div></div>`).join(''):'<p class="empty">등록된 강사가 없습니다</p>';
+  const call=(path,body)=>api(path,body).then(j=>{teachers=j.teachers;renderTch()}).catch(x=>toast(x.message));
+  $('#tchList').querySelectorAll('[data-tm]').forEach(b=>b.onclick=()=>call('/api/admin/teacher/move',{id:b.dataset.tm,dir:+b.dataset.d}));
+  $('#tchList').querySelectorAll('[data-ts]').forEach(b=>b.onclick=()=>{const t=teachers.find(x=>x.id===b.dataset.ts);call('/api/admin/teacher/show',{id:t.id,show:!t.show}).then(()=>toast(t.show?'홈페이지에 보이게 했습니다':'홈페이지에서 숨겼습니다'))});
+  $('#tchList').querySelectorAll('[data-te]').forEach(b=>b.onclick=()=>openTch(teachers.find(x=>x.id===b.dataset.te)));
+  $('#tchList').querySelectorAll('[data-td]').forEach(b=>b.onclick=()=>{if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='한 번 더';setTimeout(()=>{b.dataset.c='';b.textContent='삭제'},2500);return}
+    call('/api/admin/teacher/delete',{id:b.dataset.td}).then(()=>toast('삭제했습니다'))});
+}
+function openTch(t){
+  tEdit=t||null;tPhoto=null;const f=$('#fTch');f.reset();$('#tErr').textContent='';
+  $('#tTitle').textContent=t?'강사 정보 수정':'강사 추가';
+  f.name.value=t?t.name:'';f.sub.value=t?t.sub||'':'';f.role.value=t?t.role||'':'';
+  $('#tSecs').innerHTML=TSECS.map(k=>`<div class="fd"><label>${k}</label><textarea data-sec="${k}" placeholder="${esc(TPH[k])}">${esc(t&&t.sec?t.sec[k]||'':'')}</textarea></div>`).join('');
+  const im=$('#tImg');if(t&&t.photo){im.style.backgroundImage=`url('${t.photo}')`;im.textContent=''}else{im.style.backgroundImage='';im.textContent='사진 없음'}
+  $('#tDim').classList.remove('hidden');$('#tDrawer').classList.remove('hidden');$('#tDrawer').scrollTop=0;
+}
+function closeTch(){$('#tDim').classList.add('hidden');$('#tDrawer').classList.add('hidden')}
+$('#addTch').onclick=()=>openTch(null);$('#tCancel').onclick=closeTch;$('#tDim').onclick=closeTch;
+$('#tFile').onchange=async e=>{const fl=e.target.files[0];if(!fl)return;try{tPhoto=await resize(fl,1200);const im=$('#tImg');im.style.backgroundImage=`url('${tPhoto}')`;im.textContent=''}catch(x){toast(x.message)}};
+$('#fTch').addEventListener('submit',async e=>{e.preventDefault();const f=e.target,sec={};
+  document.querySelectorAll('#tSecs [data-sec]').forEach(a=>sec[a.dataset.sec]=a.value);
+  try{const j=await api('/api/admin/teacher',{id:tEdit&&tEdit.id,name:f.name.value,sub:f.sub.value,role:f.role.value,sec,photoData:tPhoto||undefined});
+    teachers=j.teachers;renderTch();closeTch();toast('저장했습니다. 홈페이지에 반영됐습니다')}catch(x){$('#tErr').textContent=x.message}});
+
 // ---------- 사진 ----------
-const FIXED=[['hero','메인 화면 큰 사진','홈 첫 화면',''],['teacher','강사 프로필','ABOUT → 강사소개 (세로 사진)','tall'],
+const FIXED=[['hero','메인 화면 큰 사진','홈 첫 화면',''],
   ['c_sculpture','조소반 카드','CLASS → 수업 종류',''],['c_oil','유화반 카드','CLASS → 수업 종류',''],['c_oneday','원데이 클래스 카드','CLASS → 수업 종류','']];
 const GAL=[['works','조소반'],['paint','유화반'],['visit','출강']];
 let photos={fixed:{},gallery:{}};

@@ -69,6 +69,33 @@ const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 const FIXED_KEYS = ['hero', 'studio', 'teacher', 'c_sculpture', 'c_oil', 'c_oneday'];
 const GALLERY_KEYS = ['works', 'paint', 'visit'];
+const T_SECS = ['학력', '전시', '수상', '소장', '활동', '분야'];
+if (!Array.isArray(db.teachers)) {
+  db.teachers = [{
+    id: crypto.randomUUID(), show: true, name: '황아현', sub: '黃雅賢 · A Hyeon Hwang', role: '하얀밤 조소공방 대표 · 강사',
+    photo: db.photos.fixed.teacher ? '/uploads/' + db.photos.fixed.teacher : '/images/profile.jpg',
+    sec: {
+      '학력': '2019.02 | 전북대학교 예술대학 미술학과 조소전공 졸업',
+      '전시': ['2021.01 | Volkswagen Collaboration Exhibition | 전주 | https://www.volkswagen.co.kr/ko/promotion_news/news/2021/2021-01-06.html',
+        "2020.07 | ‘Damage Recipe’ 단체전 | 전주", "2018.12 | ‘새로운 여정’ 단체전 | 전주", "2017.12 | ‘내려놓다’ 단체전 | 전주",
+        "2017.09 | ‘첫 번째’ 단체전 | 전주", '2017.07 | NonColor X 내려놓다 Collaboration | 전주', "2017.05 | ‘욕망’ 단체전 | 전주",
+        '2017.05 | DANYA International Art Fair 참여', "2016.11 | ‘나와 나’ 단체전 | 전주"].join('\n'),
+      '수상': '2018.05 | 제50회 전라북도 미술대전 특선\n2017.05 | 제9회 한국구상대전 입체부문 우수상\n2016.07 | 제48회 전라북도 미술대전 특선',
+      '소장': ' | 〈METHUSELAH〉 대형 작품, 금구 신세계병원 소장',
+      '활동': "2019.03 | 내려놓다 참여형 설치미술 퍼포먼스\n2017–2019 | 거리예술단체 ‘내려놓다’ 활동",
+      '분야': ' | 조소'
+    }
+  }];
+}
+function teachersOut(all) { return db.teachers.filter(t => all || t.show); }
+function cleanTeacher(b, prev) {
+  const str = (v, n) => String(v == null ? '' : v).slice(0, n).trim();
+  const t = prev || { id: crypto.randomUUID(), show: true, photo: '' };
+  t.name = str(b.name, 40); t.sub = str(b.sub, 80); t.role = str(b.role, 80);
+  if (b.show !== undefined) t.show = !!b.show;
+  t.sec = {}; for (const k of T_SECS) t.sec[k] = str(b.sec && b.sec[k], 4000);
+  return t;
+}
 function removeUpload(name) { if (name && /^[a-f0-9-]+\.jpg$/.test(name)) fs.unlink(path.join(UPLOAD_DIR, name), () => {}); }
 function photosPublic() {
   const url = n => '/uploads/' + n;
@@ -287,6 +314,7 @@ async function api(req, res, url) {
 
   // 공개: 사진 목록
   if (p === '/api/photos' && req.method === 'GET') return send(res, 200, photosPublic());
+  if (p === '/api/teachers' && req.method === 'GET') return send(res, 200, { teachers: teachersOut(false) });
 
   // 공개: 홈페이지 문의 저장
   if (p === '/api/inquiry' && req.method === 'POST') {
@@ -571,6 +599,48 @@ async function api(req, res, url) {
   }
 
   if (p === '/api/admin/photos' && req.method === 'GET') return send(res, 200, photosPublic());
+
+  // ---------- 강사 ----------
+  if (p === '/api/admin/teachers' && req.method === 'GET') return send(res, 200, { teachers: teachersOut(true) });
+  if (p === '/api/admin/teacher' && req.method === 'POST') {
+    let b; try { b = await readBody(req, 8 * 1024 * 1024); } catch (_) { return send(res, 413, { error: '사진 용량이 너무 큽니다.' }); }
+    const prev = b.id ? db.teachers.find(t => t.id === b.id) : null;
+    if (b.id && !prev) return send(res, 404, { error: '강사 정보를 찾을 수 없습니다.' });
+    if (!String(b.name || '').trim()) return send(res, 400, { error: '이름을 입력해 주세요.' });
+    const t = cleanTeacher(b, prev);
+    if (b.photoData) {
+      const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(b.photoData));
+      const buf = m && Buffer.from(m[1], 'base64');
+      if (!buf || buf[0] !== 0xff || buf[1] !== 0xd8) return send(res, 400, { error: '사진 형식이 올바르지 않습니다.' });
+      const name = crypto.randomUUID() + '.jpg';
+      fs.writeFileSync(path.join(UPLOAD_DIR, name), buf);
+      if (t.photo && t.photo.startsWith('/uploads/')) removeUpload(t.photo.slice(9));
+      t.photo = '/uploads/' + name;
+    }
+    if (!prev) db.teachers.push(t);
+    save(); return send(res, 200, { ok: true, teachers: teachersOut(true) });
+  }
+  if (p === '/api/admin/teacher/delete' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const i = db.teachers.findIndex(t => t.id === b.id);
+    if (i < 0) return send(res, 404, { error: '강사 정보를 찾을 수 없습니다.' });
+    const [t] = db.teachers.splice(i, 1);
+    if (t.photo && t.photo.startsWith('/uploads/')) removeUpload(t.photo.slice(9));
+    save(); return send(res, 200, { ok: true, teachers: teachersOut(true) });
+  }
+  if (p === '/api/admin/teacher/move' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const i = db.teachers.findIndex(t => t.id === b.id), j = i + (b.dir < 0 ? -1 : 1);
+    if (i < 0 || j < 0 || j >= db.teachers.length) return send(res, 400, { error: '이동할 수 없습니다.' });
+    [db.teachers[i], db.teachers[j]] = [db.teachers[j], db.teachers[i]];
+    save(); return send(res, 200, { ok: true, teachers: teachersOut(true) });
+  }
+  if (p === '/api/admin/teacher/show' && req.method === 'POST') {
+    let b; try { b = await readBody(req); } catch (_) { return send(res, 400, { error: 'bad body' }); }
+    const t = db.teachers.find(x => x.id === b.id);
+    if (!t) return send(res, 404, { error: '강사 정보를 찾을 수 없습니다.' });
+    t.show = !!b.show; save(); return send(res, 200, { ok: true, teachers: teachersOut(true) });
+  }
 
   if (p === '/api/admin/photo' && req.method === 'POST') {
     let b; try { b = await readBody(req, 8 * 1024 * 1024); } catch (_) { return send(res, 413, { error: '사진 용량이 너무 큽니다.' }); }
