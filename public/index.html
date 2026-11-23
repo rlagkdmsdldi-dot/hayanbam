@@ -126,6 +126,7 @@ h3.t{font-size:clamp(24px,2.4vw,32px);font-weight:700;letter-spacing:-.03em;line
 .hist .list{display:flex;flex-direction:column;gap:6px}
 .it-row{display:grid;grid-template-columns:76px 1fr;gap:8px;line-height:1.6}
 .it-row em{font-style:normal;color:var(--gray);font-size:13px;font-variant-numeric:tabular-nums;padding-top:1px}
+.it-row.nd{grid-template-columns:1fr}
 .it-row i{font-style:normal;color:var(--gray);font-size:13px;margin-left:6px}
 .it-row .exl{border-bottom:1px solid var(--ink)}
 .ph.photo{background:#eee}.ph.photo::after{display:none}
@@ -486,6 +487,7 @@ h3.t,.sh h2,.home-cta p{text-wrap:balance}
   .tname{font-size:26px}
   .tname-en{display:block;margin:4px 0 0}
   .hist li{grid-template-columns:1fr;gap:8px;padding:18px 0}
+  .hist li.nd{grid-template-columns:64px 1fr;gap:8px;align-items:baseline}
   .it-row{grid-template-columns:64px 1fr}
   /* class */
   .card .ph{aspect-ratio:16/9}
@@ -678,9 +680,9 @@ br.m{display:none}
             <li><b>학력</b><span class="list"><span class="it-row"><em>2019.02</em><span>전북대학교 예술대학 미술학과 조소전공 졸업</span></span></span></li>
             <li><b>전시</b><span class="list"><span class="it-row"><em>2021.01</em><span><a href="https://www.volkswagen.co.kr/ko/promotion_news/news/2021/2021-01-06.html" target="_blank" rel="noopener" class="exl">Volkswagen Collaboration Exhibition</a> <i>전주</i></span></span><span class="it-row"><em>2020.07</em><span>‘Damage Recipe’ 단체전 <i>전주</i></span></span><span class="it-row"><em>2018.12</em><span>‘새로운 여정’ 단체전 <i>전주</i></span></span><span class="it-row"><em>2017.12</em><span>‘내려놓다’ 단체전 <i>전주</i></span></span><span class="it-row"><em>2017.09</em><span>‘첫 번째’ 단체전 <i>전주</i></span></span><span class="it-row"><em>2017.07</em><span>NonColor X 내려놓다 Collaboration <i>전주</i></span></span><span class="it-row"><em>2017.05</em><span>‘욕망’ 단체전 <i>전주</i></span></span><span class="it-row"><em>2017.05</em><span>DANYA International Art Fair 참여</span></span><span class="it-row"><em>2016.11</em><span>‘나와 나’ 단체전 <i>전주</i></span></span></span></li>
             <li><b>수상</b><span class="list"><span class="it-row"><em>2018.05</em><span>제50회 전라북도 미술대전 특선</span></span><span class="it-row"><em>2017.05</em><span>제9회 한국구상대전 입체부문 우수상</span></span><span class="it-row"><em>2016.07</em><span>제48회 전라북도 미술대전 특선</span></span></span></li>
-            <li><b>소장</b><span class="list"><span class="it-row"><em></em><span><b class='wk'>〈METHUSELAH〉</b> 대형 작품, 금구 신세계병원 소장</span></span></span></li>
+            <li class="nd"><b>소장</b><span class="list"><span class="it-row nd"><span><b class='wk'>〈METHUSELAH〉</b> 대형 작품, 금구 신세계병원 소장</span></span></span></li>
             <li><b>활동</b><span class="list"><span class="it-row"><em>2019.03</em><span>내려놓다 참여형 설치미술 퍼포먼스</span></span><span class="it-row"><em>2017–2019</em><span>거리예술단체 ‘내려놓다’ 활동</span></span></span></li>
-            <li><b>분야</b><span class="list"><span class="it-row"><em></em><span>조소</span></span></span></li>
+            <li class="nd"><b>분야</b><span class="list"><span class="it-row nd"><span>조소</span></span></span></li>
           </ul>
         </div>
       </div>
@@ -1225,14 +1227,14 @@ autoStart();
     const r=await fetch('/api/teachers');if(!r.ok)return;const T=(await r.json()).teachers||[];if(!T.length)return;
     const e=x=>String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const wk=x=>e(x).replace(/〈([^〉]*)〉/g,"<b class='wk'>〈$1〉</b>");
-    const row=line=>{const f=line.split('|').map(v=>v.trim());const d=f[0]||'',txt=f[1]||'';if(!txt&&!d)return'';
+    const row=(line,nd)=>{const f=line.split('|').map(v=>v.trim());const d=f[0]||'',txt=f[1]||'';if(!txt&&!d)return'';
       const link=f.slice(2).find(v=>/^https?:\/\//.test(v)),place=f.slice(2).find(v=>v&&!/^https?:\/\//.test(v));
       const body=link?`<a href="${e(link)}" target="_blank" rel="noopener" class="exl">${e(txt)}</a>`:wk(txt);
-      return `<span class="it-row"><em>${e(d)}</em><span>${body}${place?` <i>${e(place)}</i>`:''}</span></span>`};
+      return `<span class="it-row${nd?' nd':''}">${nd?'':`<em>${e(d)}</em>`}<span>${body}${place?` <i>${e(place)}</i>`:''}</span></span>`};
     const SECS=['학력','전시','수상','소장','활동','분야'];
     const html=T.map(t=>`<div class="teacher"><div class="ph photo">${t.photo?`<img src="${e(t.photo)}" alt="${e(t.name)} 강사 프로필" loading="lazy">`:''}</div><div>
       <p class="tname">${e(t.name)}${t.sub?` <span class="tname-en">${e(t.sub)}</span>`:''}</p>${t.role?`<p class="trole">${e(t.role)}</p>`:''}
-      <ul class="hist">${SECS.map(k=>{const rows=String((t.sec||{})[k]||'').split('\n').map(row).filter(Boolean).join('');return rows?`<li><b>${k}</b><span class="list">${rows}</span></li>`:''}).join('')}</ul></div></div>`).join('');
+      <ul class="hist">${SECS.map(k=>{const L=String((t.sec||{})[k]||'').split('\n').filter(x=>x.trim());const nd=L.length&&L.every(x=>!x.split('|')[0].trim());const rows=L.map(x=>row(x,nd)).filter(Boolean).join('');return rows?`<li${nd?' class="nd"':''}><b>${k}</b><span class="list">${rows}</span></li>`:''}).join('')}</ul></div></div>`).join('');
     const box=document.querySelector('[data-sp="about-teacher"]');
     box.querySelectorAll('.teacher').forEach(x=>x.remove());box.insertAdjacentHTML('beforeend',html);
   }catch(_){}
